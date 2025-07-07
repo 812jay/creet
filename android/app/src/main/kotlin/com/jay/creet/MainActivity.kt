@@ -1,4 +1,4 @@
-package com.example.creet
+package com.jay.creet
 
 import io.flutter.embedding.android.FlutterActivity
 
