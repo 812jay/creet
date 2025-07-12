@@ -38,6 +38,24 @@ dependencies:
   firebase_auth: ^5.6.2
   google_sign_in: ^7.1.0
   flutter_dotenv: ^5.2.1
+  
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  
+  # Code Generation
+  build_runner: ^2.4.13
+  riverpod_generator: ^2.4.0
+  
+  # HTTP Client
+  dio: ^5.4.3
+  
+  # Local Storage
+  shared_preferences: ^2.2.3
+  
+  # Utils
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +67,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  
+  # Code Generation
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

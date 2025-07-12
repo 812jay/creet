@@ -1,0 +1,46 @@
+import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
+import 'package:creet/lib/domain/repositories/auth_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+// Firebase Auth Provider
+final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
+  return FirebaseAuth.instance;
+});
+
+// Google Sign In Provider
+final googleSignInProvider = Provider<GoogleSignIn>((ref) {
+  return GoogleSignIn.instance;
+});
+
+// Dio HTTP Client Provider
+final dioProvider = Provider<Dio>((ref) {
+  final dio = Dio();
+
+  // Add interceptors for logging, auth headers, etc.
+  dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+
+  return dio;
+});
+
+// SharedPreferences Provider
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('SharedPreferences must be initialized');
+});
+
+// SharedPreferences Future Provider
+final sharedPreferencesFutureProvider = FutureProvider<SharedPreferences>((
+  ref,
+) async {
+  return await SharedPreferences.getInstance();
+});
+
+// Repository Providers
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final firebaseAuth = ref.watch(firebaseAuthProvider);
+  final googleSignIn = ref.watch(googleSignInProvider);
+  return AuthRepositoryImpl(firebaseAuth, googleSignIn);
+});
