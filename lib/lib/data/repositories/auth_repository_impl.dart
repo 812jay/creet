@@ -1,3 +1,4 @@
+import 'package:creet/lib/core/mappers/user_mapper.dart';
 import 'package:creet/lib/data/datasources/user_dto.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
@@ -30,18 +31,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final AuthResponse response = await _supabaseClient.auth
           .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
 
-      final user = response.user;
-      if (user != null) {
-        final userDto = UserDto(
-          userId: user.id,
-          email: user.email ?? '',
-          displayName:
-              user.userMetadata?['full_name'] ?? user.userMetadata?['name'],
-          profileUrl: user.userMetadata?['avatar_url'],
-        );
-        return userDto.toEntity();
-      }
-      return null;
+      return UserMapper.fromAuth(response.user);
     } catch (e) {
       throw Exception('Google sign in failed: $e');
     }
