@@ -1,36 +1,43 @@
 import 'package:creet/lib/data/datasources/user_dto.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
+  final SupabaseClient _supabaseClient;
 
-  AuthRepositoryImpl(this._firebaseAuth, this._googleSignIn);
+  AuthRepositoryImpl(this._supabaseClient);
 
   @override
   Future<UserEntity?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      // Google Sign-In 초기화
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
+      // Google Sign-In 실행
+      final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
+
+      // idToken 획득
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
+      final String? idToken = googleAuth.idToken;
 
-      final UserCredential userCredential = await _firebaseAuth
-          .signInWithCredential(credential);
-      final User? user = userCredential.user;
+      if (idToken == null) {
+        throw Exception('Failed to get idToken from Google');
+      }
 
+      // Supabase에 idToken으로 로그인
+      final AuthResponse response = await _supabaseClient.auth
+          .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
+
+      final user = response.user;
       if (user != null) {
-        // Firebase User -> UserDto -> UserEntity
         final userDto = UserDto(
-          userId: user.uid,
+          userId: user.id,
           email: user.email ?? '',
-          displayName: user.displayName,
-          profileUrl: user.photoURL,
+          displayName:
+              user.userMetadata?['full_name'] ?? user.userMetadata?['name'],
+          profileUrl: user.userMetadata?['avatar_url'],
         );
         return userDto.toEntity();
       }
@@ -42,18 +49,19 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> signOut() async {
-    await Future.wait([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
+    await _supabaseClient.auth.signOut();
   }
 
   @override
   Future<UserEntity?> getCurrentUser() async {
-    final User? user = _firebaseAuth.currentUser;
+    final User? user = _supabaseClient.auth.currentUser;
     if (user != null) {
       final userDto = UserDto(
-        userId: user.uid,
+        userId: user.id,
         email: user.email ?? '',
-        displayName: user.displayName,
-        profileUrl: user.photoURL,
+        displayName:
+            user.userMetadata?['full_name'] ?? user.userMetadata?['name'],
+        profileUrl: user.userMetadata?['avatar_url'],
       );
       return userDto.toEntity();
     }
@@ -62,13 +70,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Stream<UserEntity?> get authStateChanges {
-    return _firebaseAuth.authStateChanges().map((User? user) {
+    return _supabaseClient.auth.onAuthStateChange.map((AuthState data) {
+      final user = data.session?.user;
       if (user != null) {
         final userDto = UserDto(
-          userId: user.uid,
+          userId: user.id,
           email: user.email ?? '',
-          displayName: user.displayName,
-          profileUrl: user.photoURL,
+          displayName:
+              user.userMetadata?['full_name'] ?? user.userMetadata?['name'],
+          profileUrl: user.userMetadata?['avatar_url'],
         );
         return userDto.toEntity();
       }
