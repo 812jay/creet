@@ -36,8 +36,13 @@ class SignInView extends ConsumerWidget {
                       text: 'Google 로그인',
                       onSignIn: () => authViewModel.signInWithGoogle(),
                     ),
-                    SizedBox(height: 10),
-                    SignInButton(text: 'Apple 로그인', onSignIn: () {}),
+                    if (authViewModel.isAppleSignInAvailable) ...[
+                      SizedBox(height: 10),
+                      SignInButton(
+                        text: 'Apple 로그인',
+                        onSignIn: () => authViewModel.signInWithApple(),
+                      ),
+                    ],
                   ],
                 );
               }
@@ -46,7 +51,7 @@ class SignInView extends ConsumerWidget {
             error:
                 (error, stack) => CustomErrorWidget(
                   message: error.toString(),
-                  onRetry: () => authViewModel.signInWithGoogle(),
+                  onRetry: () => authViewModel.retryLastSignIn(),
                 ),
           ),
         ),

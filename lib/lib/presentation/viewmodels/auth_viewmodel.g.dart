@@ -27,6 +27,27 @@ final signInWithGoogleUseCaseProvider =
 // ignore: unused_element
 typedef SignInWithGoogleUseCaseRef =
     AutoDisposeProviderRef<SignInWithGoogleUseCase>;
+String _$signInWithAppleUseCaseHash() =>
+    r'd386181d19324fc8839feab13a5d6315e4a6e36d';
+
+/// See also [signInWithAppleUseCase].
+@ProviderFor(signInWithAppleUseCase)
+final signInWithAppleUseCaseProvider =
+    AutoDisposeProvider<SignInWithAppleUseCase>.internal(
+      signInWithAppleUseCase,
+      name: r'signInWithAppleUseCaseProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$signInWithAppleUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SignInWithAppleUseCaseRef =
+    AutoDisposeProviderRef<SignInWithAppleUseCase>;
 String _$signOutUseCaseHash() => r'baae060fcad772bd05357c7df113c721bb910626';
 
 /// See also [signOutUseCase].
@@ -87,7 +108,7 @@ final getAuthStateChangesUseCaseProvider =
 // ignore: unused_element
 typedef GetAuthStateChangesUseCaseRef =
     AutoDisposeProviderRef<GetAuthStateChangesUseCase>;
-String _$authViewModelHash() => r'2ce43b84e56086c4079101dc509d10b1d4a81c9b';
+String _$authViewModelHash() => r'a0ba4e1318cfe3bb38c939232170950d088d959f';
 
 /// See also [AuthViewModel].
 @ProviderFor(AuthViewModel)

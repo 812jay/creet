@@ -2,7 +2,7 @@ import 'package:creet/lib/core/exceptions/auth_exceptions.dart'
     as auth_exceptions;
 import 'package:google_sign_in/google_sign_in.dart';
 
-class GoogleAuthService {
+class AuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   static Future<String?> signInWithGoogle() async {

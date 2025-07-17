@@ -6,6 +6,7 @@ import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -42,6 +43,30 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       throw Exception('Google sign in failed: $e');
     }
+  }
+
+  @override
+  Future<UserEntity?> signInWithApple() async {
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    final String idToken = credential.identityToken ?? '';
+
+    if (idToken == '') {
+      throw Exception('Failed to get idToken from Apple');
+    }
+
+    // Supabase에 idToken으로 로그인
+    final AuthResponse response = await _supabaseClient.auth.signInWithIdToken(
+      provider: OAuthProvider.apple,
+      idToken: idToken,
+    );
+
+    return UserMapper.fromAuth(response.user);
   }
 
   @override
