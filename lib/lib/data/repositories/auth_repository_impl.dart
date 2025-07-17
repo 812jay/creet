@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:creet/lib/core/mappers/user_mapper.dart';
 import 'package:creet/lib/data/datasources/user_dto.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,7 +18,11 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       // Google Sign-In 초기화
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-
+      unawaited(
+        googleSignIn.initialize(
+          serverClientId: dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '',
+        ),
+      );
       // Google Sign-In 실행
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
 

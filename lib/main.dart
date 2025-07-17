@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Supabase 초기화
   await SupabaseConfig.initialize();
 
   runApp(const ProviderScope(child: MyApp()));

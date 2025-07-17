@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleAuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
-  /// Google Sign-In을 실행하고 idToken을 반환합니다.
   static Future<String?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
@@ -16,12 +15,10 @@ class GoogleAuthService {
     }
   }
 
-  /// Google Sign-Out을 실행합니다.
   static Future<void> signOut() async {
     await _googleSignIn.signOut();
   }
 
-  /// 현재 Google 사용자 정보를 반환합니다.
   static Future<GoogleSignInAccount?> getCurrentUser() async {
     try {
       return await _googleSignIn.authenticate();
