@@ -1,4 +1,9 @@
 import 'package:creet/lib/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:creet/lib/presentation/widgets/auth/auth_app_bar.dart';
+import 'package:creet/lib/presentation/widgets/auth/user_profile_card.dart';
+import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
+import 'package:creet/lib/presentation/widgets/common/loading_indicator.dart';
+import 'package:creet/lib/presentation/widgets/common/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,78 +13,42 @@ class SignInView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authViewModelProvider);
+    final authViewModel = ref.read(authViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign-In'),
-        actions: [
-          if (authState.value != null)
-            IconButton(
-              onPressed:
-                  () => ref.read(authViewModelProvider.notifier).signOut(),
-              icon: const Icon(Icons.logout),
-            ),
-        ],
+      appBar: AuthAppBar(
+        isSignedIn: authState.value != null,
+        onSignOut: () => authViewModel.signOut(),
       ),
-      body: Center(
-        child: authState.when(
-          data: (user) {
-            if (user != null) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (user.photoURL != null)
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(user.photoURL!),
+      body: SingleChildScrollView(
+        child: Center(
+          child: authState.when(
+            data: (user) {
+              if (user != null) {
+                return UserProfileCard(
+                  user: user,
+                  onSignOut: () => authViewModel.signOut(),
+                );
+              } else {
+                return Column(
+                  children: [
+                    SignInButton(
+                      text: 'Google 로그인',
+                      onSignIn: () => authViewModel.signInWithGoogle(),
                     ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '환영합니다!',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.displayName ?? user.email,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed:
-                        () =>
-                            ref.read(authViewModelProvider.notifier).signOut(),
-                    child: const Text('로그아웃'),
-                  ),
-                ],
-              );
-            } else {
-              return ElevatedButton(
-                onPressed:
-                    () =>
-                        ref
-                            .read(authViewModelProvider.notifier)
-                            .signInWithGoogle(),
-                child: const Text('Google 로그인'),
-              );
-            }
-          },
-          loading: () => const CircularProgressIndicator(),
-          error:
-              (error, stack) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('오류: $error'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed:
-                        () =>
-                            ref
-                                .read(authViewModelProvider.notifier)
-                                .signInWithGoogle(),
-                    child: const Text('다시 시도'),
-                  ),
-                ],
-              ),
+                    SizedBox(height: 10),
+                    SignInButton(text: 'Apple 로그인', onSignIn: () {}),
+                  ],
+                );
+              }
+            },
+            loading: () => const LoadingIndicator(),
+            error:
+                (error, stack) => CustomErrorWidget(
+                  message: error.toString(),
+                  onRetry: () => authViewModel.signInWithGoogle(),
+                ),
+          ),
         ),
       ),
     );
