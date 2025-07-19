@@ -1,3 +1,5 @@
+import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:flutter/material.dart';
 
 class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -15,7 +17,11 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: AppTypo.body1Medium.colored(AppColors.textPrimary),
+      ),
+      backgroundColor: AppColors.backgroundDefault,
       actions: [
         if (isSignedIn)
           IconButton(

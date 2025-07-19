@@ -1,3 +1,4 @@
+import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
 import 'package:creet/lib/presentation/widgets/auth/auth_app_bar.dart';
 import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
@@ -25,6 +26,7 @@ class SignInView extends ConsumerWidget {
     });
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundDefault,
       appBar: AuthAppBar(
         isSignedIn: authViewModel.isSignedIn,
         onSignOut: () => authViewModel.signOut(),
@@ -45,14 +47,18 @@ class SignInView extends ConsumerWidget {
               const Text('로그인 중...', style: TextStyle(fontSize: 16)),
             ] else ...[
               SignInButton(
+                iconPath: 'assets/icons/google.svg',
                 text: 'Google 로그인',
-                onSignIn: () => authViewModel.signInWithGoogle(),
+                onTap: () => authViewModel.signInWithGoogle(),
               ),
               if (authViewModel.isAppleSignInAvailable) ...[
                 const SizedBox(height: 10),
                 SignInButton(
+                  iconPath: 'assets/icons/apple.svg',
+                  backgroundColor: AppColors.backgroundAppleSignInButton,
+                  textColor: AppColors.textInverse,
                   text: 'Apple 로그인',
-                  onSignIn: () => authViewModel.signInWithApple(),
+                  onTap: () => authViewModel.signInWithApple(),
                 ),
               ],
             ],

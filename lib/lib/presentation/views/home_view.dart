@@ -1,6 +1,7 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
+import 'package:creet/lib/presentation/widgets/auth/auth_app_bar.dart';
 import 'package:creet/lib/presentation/widgets/auth/user_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,18 +27,10 @@ class HomeView extends ConsumerWidget {
     return PopScope(
       canPop: false, // 뒤로가기 방지
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Home',
-            style: AppTypo.body1Bold.colored(AppColors.textPrimary),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => authViewModel.signOut(),
-              icon: const Icon(Icons.logout),
-              tooltip: '로그아웃',
-            ),
-          ],
+        backgroundColor: AppColors.backgroundDefault,
+        appBar: AuthAppBar(
+          isSignedIn: authViewModel.isSignedIn,
+          onSignOut: () => authViewModel.signOut(),
         ),
         body: authState.when(
           data: (user) {
