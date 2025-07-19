@@ -38,7 +38,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // Supabase에 idToken으로 로그인
       final AuthResponse response = await _supabaseClient.auth
           .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
-
+      
       return UserMapper.fromAuth(response.user);
     } catch (e) {
       throw Exception('Google sign in failed: $e');
@@ -47,26 +47,33 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserEntity?> signInWithApple() async {
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
 
-    final String idToken = credential.identityToken ?? '';
+      final String idToken = credential.identityToken ?? '';
 
-    if (idToken == '') {
-      throw Exception('Failed to get idToken from Apple');
+      if (idToken == '') {
+        return null; // 취소는 에러가 아닌 정상적인 상황
+      }
+
+      // Supabase에 idToken으로 로그인
+      final AuthResponse response = await _supabaseClient.auth
+          .signInWithIdToken(provider: OAuthProvider.apple, idToken: idToken);
+
+      return UserMapper.fromAuth(response.user);
+    } catch (e) {
+      // Apple 로그인 취소의 경우
+      if (e.toString().contains('CANCELLED') ||
+          e.toString().contains('NOT_INTERACTIVE')) {
+        return null; // 취소는 에러가 아닌 정상적인 상황
+      }
+      throw Exception('Apple sign in failed: $e');
     }
-
-    // Supabase에 idToken으로 로그인
-    final AuthResponse response = await _supabaseClient.auth.signInWithIdToken(
-      provider: OAuthProvider.apple,
-      idToken: idToken,
-    );
-
-    return UserMapper.fromAuth(response.user);
   }
 
   @override

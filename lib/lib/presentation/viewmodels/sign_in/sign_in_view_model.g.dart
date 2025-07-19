@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_viewmodel.dart';
+part of 'sign_in_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -108,22 +108,22 @@ final getAuthStateChangesUseCaseProvider =
 // ignore: unused_element
 typedef GetAuthStateChangesUseCaseRef =
     AutoDisposeProviderRef<GetAuthStateChangesUseCase>;
-String _$authViewModelHash() => r'a0ba4e1318cfe3bb38c939232170950d088d959f';
+String _$signInViewModelHash() => r'ce3b51c336993e13175b2e675782a0e563af7cea';
 
-/// See also [AuthViewModel].
-@ProviderFor(AuthViewModel)
-final authViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<AuthViewModel, UserEntity?>.internal(
-      AuthViewModel.new,
-      name: r'authViewModelProvider',
+/// See also [SignInViewModel].
+@ProviderFor(SignInViewModel)
+final signInViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<SignInViewModel, UserEntity?>.internal(
+      SignInViewModel.new,
+      name: r'signInViewModelProvider',
       debugGetCreateSourceHash:
           const bool.fromEnvironment('dart.vm.product')
               ? null
-              : _$authViewModelHash,
+              : _$signInViewModelHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$AuthViewModel = AutoDisposeAsyncNotifier<UserEntity?>;
+typedef _$SignInViewModel = AutoDisposeAsyncNotifier<UserEntity?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,11 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_viewmodel.g.dart';
+part 'sign_in_view_model.g.dart';
 
 @riverpod
-class AuthViewModel extends _$AuthViewModel {
+class SignInViewModel extends _$SignInViewModel {
   SignInMethod? _lastSignInMethod;
+  bool _isSigningIn = false;
 
   @override
   Future<UserEntity?> build() async {
@@ -19,26 +20,52 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> signInWithGoogle() async {
+    if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
+
     _lastSignInMethod = SignInMethod.google;
-    state = const AsyncValue.loading();
+    _isSigningIn = true;
+
     try {
       final useCase = ref.read(signInWithGoogleUseCaseProvider);
       final user = await useCase();
+
+      // 사용자가 취소한 경우 (user가 null)
+      if (user == null) {
+        // 이전 상태로 되돌리기 (로그인 전 상태)
+        return;
+      }
+
       state = AsyncValue.data(user);
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
+    } finally {
+      _isSigningIn = false;
     }
   }
 
   Future<void> signInWithApple() async {
+    if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
+
     _lastSignInMethod = SignInMethod.apple;
-    state = const AsyncValue.loading();
+    _isSigningIn = true;
+
     try {
       final useCase = ref.read(signInWithAppleUseCaseProvider);
       final user = await useCase();
+
+      // 사용자가 취소한 경우 (user가 null)
+      if (user == null) {
+        // 취소는 정상적인 상황이므로 이전 상태로 되돌리기
+        final currentUser = await ref.read(getCurrentUserUseCaseProvider)();
+        state = AsyncValue.data(currentUser);
+        return;
+      }
+
       state = AsyncValue.data(user);
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
+    } finally {
+      _isSigningIn = false;
     }
   }
 
@@ -54,6 +81,7 @@ class AuthViewModel extends _$AuthViewModel {
 
   bool get isSignedIn => state.value != null;
   UserEntity? get currentUser => state.value;
+  bool get isSigningIn => _isSigningIn; // 로그인 진행 중 상태
 
   // iOS에서만 Apple 로그인 사용 가능
   bool get isAppleSignInAvailable =>
