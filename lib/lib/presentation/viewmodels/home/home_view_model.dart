@@ -1,5 +1,6 @@
+import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
-import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
+import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_view_model.g.dart';
@@ -8,7 +9,7 @@ part 'home_view_model.g.dart';
 class HomeViewModel extends _$HomeViewModel {
   @override
   Future<HomeState> build() async {
-    final useCase = ref.read(getCurrentUserUseCaseProvider);
+    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
     final user = await useCase();
 
     return HomeState(user: user, isLoading: false);

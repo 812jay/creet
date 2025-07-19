@@ -23,11 +23,8 @@ class HomeView extends ConsumerWidget {
       }
     });
 
-    return WillPopScope(
-      onWillPop: () async {
-        // 로그인된 상태에서는 뒤로가기 방지
-        return false;
-      },
+    return PopScope(
+      canPop: false, // 뒤로가기 방지
       child: Scaffold(
         appBar: AppBar(
           title: Text(

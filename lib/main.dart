@@ -1,4 +1,5 @@
 import 'package:creet/lib/core/config/supabase_config.dart';
+import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Supabase 초기화
   await SupabaseConfig.initialize();
+
+  // Service Locator 초기화
+  await ServiceLocator.initialize();
 
   runApp(const ProviderScope(child: MyApp()));
 }

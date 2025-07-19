@@ -1,29 +1,40 @@
-import 'package:creet/lib/core/exceptions/auth_exceptions.dart'
-    as auth_exceptions;
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 
+/// GetIt을 사용하는 인증 서비스
 class AuthService {
-  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  static final AuthService _instance = AuthService._internal();
+  factory AuthService() => _instance;
+  AuthService._internal();
 
-  static Future<String?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      return googleAuth.idToken;
-    } catch (e) {
-      throw auth_exceptions.GoogleSignInException('Google Sign-In failed: $e');
-    }
+  /// 현재 사용자 가져오기
+  Future<UserEntity?> getCurrentUser() async {
+    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
+    return await useCase();
   }
 
-  static Future<void> signOut() async {
-    await _googleSignIn.signOut();
+  /// Google 로그인
+  Future<UserEntity?> signInWithGoogle() async {
+    final useCase = serviceLocator.get<SignInWithGoogleUseCase>();
+    return await useCase();
   }
 
-  static Future<GoogleSignInAccount?> getCurrentUser() async {
-    try {
-      return await _googleSignIn.authenticate();
-    } catch (e) {
-      return null;
-    }
+  /// Apple 로그인
+  Future<UserEntity?> signInWithApple() async {
+    final useCase = serviceLocator.get<SignInWithAppleUseCase>();
+    return await useCase();
+  }
+
+  /// 로그아웃
+  Future<void> signOut() async {
+    final useCase = serviceLocator.get<SignOutUseCase>();
+    await useCase();
+  }
+
+  /// 인증 상태 변화 스트림
+  Stream<UserEntity?> get authStateChanges {
+    final useCase = serviceLocator.get<GetAuthStateChangesUseCase>();
+    return useCase();
   }
 }

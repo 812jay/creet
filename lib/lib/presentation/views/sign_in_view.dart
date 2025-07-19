@@ -26,7 +26,7 @@ class SignInView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AuthAppBar(
-        isSignedIn: false,
+        isSignedIn: authViewModel.isSignedIn,
         onSignOut: () => authViewModel.signOut(),
       ),
       body: Center(

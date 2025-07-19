@@ -1,9 +1,8 @@
-import 'package:creet/lib/core/di/providers.dart';
 import 'package:creet/lib/core/constants/auth_enum.dart';
+import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_in_view_model.g.dart';
@@ -15,7 +14,7 @@ class SignInViewModel extends _$SignInViewModel {
 
   @override
   Future<UserEntity?> build() async {
-    final useCase = ref.read(getCurrentUserUseCaseProvider);
+    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
     return await useCase();
   }
 
@@ -26,7 +25,7 @@ class SignInViewModel extends _$SignInViewModel {
     _isSigningIn = true;
 
     try {
-      final useCase = ref.read(signInWithGoogleUseCaseProvider);
+      final useCase = serviceLocator.get<SignInWithGoogleUseCase>();
       final user = await useCase();
 
       // 사용자가 취소한 경우 (user가 null)
@@ -50,13 +49,13 @@ class SignInViewModel extends _$SignInViewModel {
     _isSigningIn = true;
 
     try {
-      final useCase = ref.read(signInWithAppleUseCaseProvider);
+      final useCase = serviceLocator.get<SignInWithAppleUseCase>();
       final user = await useCase();
 
       // 사용자가 취소한 경우 (user가 null)
       if (user == null) {
         // 취소는 정상적인 상황이므로 이전 상태로 되돌리기
-        final currentUser = await ref.read(getCurrentUserUseCaseProvider)();
+        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
         state = AsyncValue.data(currentUser);
         return;
       }
@@ -71,7 +70,7 @@ class SignInViewModel extends _$SignInViewModel {
 
   Future<void> signOut() async {
     try {
-      final useCase = ref.read(signOutUseCaseProvider);
+      final useCase = serviceLocator.get<SignOutUseCase>();
       await useCase();
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
@@ -100,35 +99,4 @@ class SignInViewModel extends _$SignInViewModel {
       }
     }
   }
-}
-
-// UseCase Providers
-@riverpod
-SignInWithGoogleUseCase signInWithGoogleUseCase(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return SignInWithGoogleUseCase(authRepository);
-}
-
-@riverpod
-SignInWithAppleUseCase signInWithAppleUseCase(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return SignInWithAppleUseCase(authRepository);
-}
-
-@riverpod
-SignOutUseCase signOutUseCase(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return SignOutUseCase(authRepository);
-}
-
-@riverpod
-GetCurrentUserUseCase getCurrentUserUseCase(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return GetCurrentUserUseCase(authRepository);
-}
-
-@riverpod
-GetAuthStateChangesUseCase getAuthStateChangesUseCase(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return GetAuthStateChangesUseCase(authRepository);
 }

@@ -1,6 +1,6 @@
+import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashView extends ConsumerStatefulWidget {
@@ -31,11 +31,13 @@ class _SplashViewState extends ConsumerState<SplashView> {
           // 2초 후에 네비게이션
           Future.delayed(const Duration(seconds: 2), () {
             if (mounted) {
-              if (user != null) {
-                context.go('/home');
-              } else {
-                context.go('/signin');
-              }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (user != null) {
+                  context.go('/home');
+                } else {
+                  context.go('/signin');
+                }
+              });
             }
           });
         }
