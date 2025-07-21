@@ -6,6 +6,7 @@ import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -37,10 +38,41 @@ class AuthRepositoryImpl implements AuthRepository {
       // Supabase에 idToken으로 로그인
       final AuthResponse response = await _supabaseClient.auth
           .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
-
+      
       return UserMapper.fromAuth(response.user);
     } catch (e) {
       throw Exception('Google sign in failed: $e');
+    }
+  }
+
+  @override
+  Future<UserEntity?> signInWithApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final String idToken = credential.identityToken ?? '';
+
+      if (idToken == '') {
+        return null; // 취소는 에러가 아닌 정상적인 상황
+      }
+
+      // Supabase에 idToken으로 로그인
+      final AuthResponse response = await _supabaseClient.auth
+          .signInWithIdToken(provider: OAuthProvider.apple, idToken: idToken);
+
+      return UserMapper.fromAuth(response.user);
+    } catch (e) {
+      // Apple 로그인 취소의 경우
+      if (e.toString().contains('CANCELLED') ||
+          e.toString().contains('NOT_INTERACTIVE')) {
+        return null; // 취소는 에러가 아닌 정상적인 상황
+      }
+      throw Exception('Apple sign in failed: $e');
     }
   }
 

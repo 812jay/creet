@@ -48,6 +48,7 @@
 	<!-- Google Sign-In -->
 	<key>GIDClientID</key>
 	<string>560055966553-nd7m2jrho9gl64i3n1vsl60uqkb1jmuo.apps.googleusercontent.com</string>
+	<!-- Apple Sign-In -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -56,6 +57,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 			<string>com.googleusercontent.apps.560055966553-nd7m2jrho9gl64i3n1vsl60uqkb1jmuo</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.jay.creet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.jay.creet</string>
 			</array>
 		</dict>
 	</array>

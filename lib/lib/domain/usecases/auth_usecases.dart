@@ -11,6 +11,16 @@ class SignInWithGoogleUseCase {
   }
 }
 
+class SignInWithAppleUseCase {
+  final AuthRepository _authRepository;
+
+  SignInWithAppleUseCase(this._authRepository);
+
+  Future<UserEntity?> call() async {
+    return await _authRepository.signInWithApple();
+  }
+}
+
 class SignOutUseCase {
   final AuthRepository _authRepository;
 

@@ -1,85 +1,63 @@
-import 'package:creet/lib/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
+import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
+import 'package:creet/lib/presentation/widgets/common/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInView extends ConsumerWidget {
   const SignInView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authViewModelProvider);
+    final authState = ref.watch(signInViewModelProvider);
+    final authViewModel = ref.read(signInViewModelProvider.notifier);
+    final isSigningIn = authViewModel.isSigningIn;
+
+    // 로그인 성공 시 Home으로 이동
+    authState.whenData((user) {
+      if (user != null && !isSigningIn) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.go('/home');
+        });
+      }
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign-In'),
-        actions: [
-          if (authState.value != null)
-            IconButton(
-              onPressed:
-                  () => ref.read(authViewModelProvider.notifier).signOut(),
-              icon: const Icon(Icons.logout),
-            ),
-        ],
-      ),
+      backgroundColor: AppColors.backgroundDefault,
       body: Center(
-        child: authState.when(
-          data: (user) {
-            if (user != null) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (user.photoURL != null)
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(user.photoURL!),
-                    ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '환영합니다!',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.displayName ?? user.email,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed:
-                        () =>
-                            ref.read(authViewModelProvider.notifier).signOut(),
-                    child: const Text('로그아웃'),
-                  ),
-                ],
-              );
-            } else {
-              return ElevatedButton(
-                onPressed:
-                    () =>
-                        ref
-                            .read(authViewModelProvider.notifier)
-                            .signInWithGoogle(),
-                child: const Text('Google 로그인'),
-              );
-            }
-          },
-          loading: () => const CircularProgressIndicator(),
-          error:
-              (error, stack) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('오류: $error'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed:
-                        () =>
-                            ref
-                                .read(authViewModelProvider.notifier)
-                                .signInWithGoogle(),
-                    child: const Text('다시 시도'),
-                  ),
-                ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Creet Sign In',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 40),
+            // 로그인 진행 중일 때만 로딩 인디케이터 표시
+            if (isSigningIn) ...[
+              const LoadingIndicator(),
+              const SizedBox(height: 20),
+              const Text('로그인 중...', style: TextStyle(fontSize: 16)),
+            ] else ...[
+              SignInButton(
+                iconPath: 'assets/icons/google.svg',
+                text: 'Google 로그인',
+                onTap: () => authViewModel.signInWithGoogle(),
               ),
+              if (authViewModel.isAppleSignInAvailable) ...[
+                const SizedBox(height: 10),
+                SignInButton(
+                  iconPath: 'assets/icons/apple.svg',
+                  backgroundColor: AppColors.backgroundAppleSignInButton,
+                  textColor: AppColors.textInverse,
+                  text: 'Apple 로그인',
+                  onTap: () => authViewModel.signInWithApple(),
+                ),
+              ],
+            ],
+          ],
         ),
       ),
     );
