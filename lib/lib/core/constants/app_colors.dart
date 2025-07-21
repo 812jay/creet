@@ -4,6 +4,7 @@ class AppColors {
   // Palette (private, 디자인 시스템 토큰과 1:1 매칭)
   static const Color _white = Color(0xFFFFFFFF);
   static const Color _black = Color(0xFF000000);
+  static const Color _mint = Color(0xFF00DDEC);
 
   static const Color _neutral100 = Color(0xFFF8F9FB);
   static const Color _neutral200 = Color(0xFFE8EBEE);

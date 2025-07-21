@@ -1,6 +1,5 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
-import 'package:creet/lib/presentation/widgets/auth/auth_app_bar.dart';
 import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
 import 'package:creet/lib/presentation/widgets/common/loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +26,6 @@ class SignInView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDefault,
-      appBar: AuthAppBar(
-        isSignedIn: authViewModel.isSignedIn,
-        onSignOut: () => authViewModel.signOut(),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

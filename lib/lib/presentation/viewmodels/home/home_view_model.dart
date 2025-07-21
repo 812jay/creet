@@ -14,6 +14,22 @@ class HomeViewModel extends _$HomeViewModel {
 
     return HomeState(user: user, isLoading: false);
   }
+
+  /// 로그아웃
+  Future<void> signOut() async {
+    try {
+      // 로딩 상태로 변경
+      state = const AsyncValue.loading();
+
+      final useCase = serviceLocator.get<SignOutUseCase>();
+      await useCase();
+
+      // 로그아웃 후 상태를 null로 변경
+      state = AsyncValue.data(const HomeState(user: null, isLoading: false));
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
 }
 
 class HomeState {

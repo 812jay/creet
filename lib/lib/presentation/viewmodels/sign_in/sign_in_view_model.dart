@@ -1,4 +1,3 @@
-import 'package:creet/lib/core/constants/auth_enum.dart';
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
@@ -9,7 +8,6 @@ part 'sign_in_view_model.g.dart';
 
 @riverpod
 class SignInViewModel extends _$SignInViewModel {
-  SignInMethod? _lastSignInMethod;
   bool _isSigningIn = false;
 
   @override
@@ -21,7 +19,6 @@ class SignInViewModel extends _$SignInViewModel {
   Future<void> signInWithGoogle() async {
     if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
 
-    _lastSignInMethod = SignInMethod.google;
     _isSigningIn = true;
 
     try {
@@ -45,7 +42,6 @@ class SignInViewModel extends _$SignInViewModel {
   Future<void> signInWithApple() async {
     if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
 
-    _lastSignInMethod = SignInMethod.apple;
     _isSigningIn = true;
 
     try {
@@ -68,35 +64,9 @@ class SignInViewModel extends _$SignInViewModel {
     }
   }
 
-  Future<void> signOut() async {
-    try {
-      final useCase = serviceLocator.get<SignOutUseCase>();
-      await useCase();
-      state = const AsyncValue.data(null);
-    } catch (error, stackTrace) {
-      state = AsyncValue.error(error, stackTrace);
-    }
-  }
-
-  bool get isSignedIn => state.value != null;
-  UserEntity? get currentUser => state.value;
   bool get isSigningIn => _isSigningIn; // 로그인 진행 중 상태
 
   // iOS에서만 Apple 로그인 사용 가능
   bool get isAppleSignInAvailable =>
       defaultTargetPlatform == TargetPlatform.iOS;
-
-  // 마지막 시도한 로그인 방법으로 재시도
-  Future<void> retryLastSignIn() async {
-    if (_lastSignInMethod != null) {
-      switch (_lastSignInMethod!) {
-        case SignInMethod.google:
-          await signInWithGoogle();
-          break;
-        case SignInMethod.apple:
-          await signInWithApple();
-          break;
-      }
-    }
-  }
 }
