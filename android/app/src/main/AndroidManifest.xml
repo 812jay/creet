@@ -30,7 +30,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="560055966553-r8qkbu2kot09nb7sbebcmtg9rml6sgrv.apps.googleusercontent.com" />
+                <data android:scheme="1058648733857-6k8bmkqg35m242t98833gillru4nqtke.apps.googleusercontent.com" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

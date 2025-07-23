@@ -1,6 +1,7 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:creet/lib/presentation/viewmodels/home/home_view_model.dart';
+import 'package:creet/lib/presentation/widgets/auth/user_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +13,7 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homeViewModelProvider);
+    final homeViewModel = ref.read(homeViewModelProvider.notifier);
 
     // 로그아웃 시 SignIn으로 이동
     homeState.whenData((state) {
@@ -33,11 +35,11 @@ class HomeView extends ConsumerWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      // UserProfileCard(
-                      //   user: state.user!,
-                      //   onSignOut: () => homeViewModel.signOut(),
-                      // ),
                       HomeAppBar(),
+                      UserProfileCard(
+                        user: state.user!,
+                        onSignOut: () => homeViewModel.signOut(),
+                      ),
                     ],
                   ),
                 ),
