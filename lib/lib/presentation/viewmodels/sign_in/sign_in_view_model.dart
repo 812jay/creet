@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/domain/entities/user_entity.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
@@ -12,14 +13,20 @@ class SignInViewModel extends _$SignInViewModel {
 
   @override
   Future<UserEntity?> build() async {
+    developer.log('SignInViewModel 초기화', name: 'SignInViewModel');
     final useCase = serviceLocator.get<GetCurrentUserUseCase>();
-    return await useCase();
+    final user = await useCase();
+    developer.log(
+      '현재 사용자 상태: ${user?.email ?? "로그인되지 않음"}',
+      name: 'SignInViewModel',
+    );
+    return user;
   }
 
   Future<void> signInWithGoogle() async {
-    if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
-
+    developer.log('Google 로그인 시작', name: 'SignInViewModel');
     _isSigningIn = true;
+    state = const AsyncValue.loading();
 
     try {
       final useCase = serviceLocator.get<SignInWithGoogleUseCase>();
@@ -27,12 +34,18 @@ class SignInViewModel extends _$SignInViewModel {
 
       // 사용자가 취소한 경우 (user가 null)
       if (user == null) {
+        developer.log('Google 로그인 취소됨', name: 'SignInViewModel');
         // 이전 상태로 되돌리기 (로그인 전 상태)
+        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
+        state = AsyncValue.data(currentUser);
         return;
       }
 
+      // 로그인 성공 시 상태 업데이트
+      developer.log('Google 로그인 성공: ${user.email}', name: 'SignInViewModel');
       state = AsyncValue.data(user);
     } catch (error, stackTrace) {
+      developer.log('Google 로그인 실패: $error', name: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;
@@ -40,9 +53,14 @@ class SignInViewModel extends _$SignInViewModel {
   }
 
   Future<void> signInWithApple() async {
-    if (_isSigningIn) return; // 이미 로그인 중이면 중복 실행 방지
+    if (_isSigningIn) {
+      developer.log('이미 로그인 중이므로 중복 실행 방지', name: 'SignInViewModel');
+      return;
+    }
 
+    developer.log('Apple 로그인 시작', name: 'SignInViewModel');
     _isSigningIn = true;
+    state = const AsyncValue.loading();
 
     try {
       final useCase = serviceLocator.get<SignInWithAppleUseCase>();
@@ -50,14 +68,18 @@ class SignInViewModel extends _$SignInViewModel {
 
       // 사용자가 취소한 경우 (user가 null)
       if (user == null) {
+        developer.log('Apple 로그인 취소됨', name: 'SignInViewModel');
         // 취소는 정상적인 상황이므로 이전 상태로 되돌리기
         final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
         state = AsyncValue.data(currentUser);
         return;
       }
 
+      // 로그인 성공 시 상태 업데이트
+      developer.log('Apple 로그인 성공: ${user.email}', name: 'SignInViewModel');
       state = AsyncValue.data(user);
     } catch (error, stackTrace) {
+      developer.log('Apple 로그인 실패: $error', name: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;
