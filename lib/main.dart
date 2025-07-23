@@ -1,11 +1,16 @@
+import 'package:creet/lib/core/config/app_flavor_config.dart';
 import 'package:creet/lib/core/config/supabase_config.dart';
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/core/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //  환경변수 설정
+  await AppFlavorConfig.setFlavorConfig();
 
   // Supabase 초기화
   await SupabaseConfig.initialize();
@@ -23,10 +28,13 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
 
-    return MaterialApp.router(
-      title: 'Creet',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      routerConfig: router,
+    return FlavorBanner(
+      child: MaterialApp.router(
+        title: 'Creet',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        routerConfig: router,
+      ),
     );
   }
 }
