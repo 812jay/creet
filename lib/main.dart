@@ -1,19 +1,40 @@
-import 'package:creet/lib/presentation/views/home_view.dart';
+import 'package:creet/lib/core/config/app_flavor_config.dart';
+import 'package:creet/lib/core/config/supabase_config.dart';
+import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/core/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //  환경변수 설정
+  await AppFlavorConfig.setFlavorConfig();
+
+  // Supabase 초기화
+  await SupabaseConfig.initialize();
+
+  // Service Locator 초기화
+  await ServiceLocator.initialize();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: HomeView(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return FlavorBanner(
+      child: MaterialApp.router(
+        title: 'Creet',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        routerConfig: router,
+      ),
     );
   }
 }

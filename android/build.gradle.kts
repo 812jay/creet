@@ -1,3 +1,7 @@
+plugins {
+  // Google Services plugin is declared in settings.gradle.kts
+}
+
 allprojects {
     repositories {
         google()
