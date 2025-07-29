@@ -33,7 +33,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
             if (mounted) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (user != null) {
-                  context.go('/home');
+                  context.go('/main');
                 } else {
                   context.go('/signin');
                 }

@@ -1,3 +1,6 @@
+import 'package:creet/lib/presentation/views/calendar_view.dart';
+import 'package:creet/lib/presentation/views/main_view.dart';
+import 'package:creet/lib/presentation/views/setting_view.dart';
 import 'package:creet/lib/presentation/views/sign_in_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +18,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SplashView(),
       ),
       GoRoute(
+        path: '/main',
+        name: 'main',
+        builder: (context, state) => MainView(),
+      ),
+      GoRoute(
         path: '/signin',
         name: 'signin',
         builder: (context, state) => const SignInView(),
@@ -23,6 +31,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/home',
         name: 'home',
         builder: (context, state) => const HomeView(),
+      ),
+      GoRoute(
+        path: '/calendar',
+        name: 'calendar',
+        builder: (context, state) => const CalendarView(),
+      ),
+      GoRoute(
+        path: '/setting',
+        name: 'setting',
+        builder: (context, state) => const SettingView(),
       ),
     ],
   );
