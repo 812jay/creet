@@ -1,5 +1,5 @@
 import 'package:creet/lib/core/di/service_locator.dart';
-import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -33,12 +33,12 @@ class HomeViewModel extends _$HomeViewModel {
 }
 
 class HomeState {
-  final UserEntity? user;
+  final UserDto? user;
   final bool isLoading;
 
   const HomeState({this.user, this.isLoading = false});
 
-  HomeState copyWith({UserEntity? user, bool? isLoading}) {
+  HomeState copyWith({UserDto? user, bool? isLoading}) {
     return HomeState(
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,

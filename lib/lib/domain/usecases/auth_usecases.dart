@@ -1,4 +1,4 @@
-import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 
 class SignInWithGoogleUseCase {
@@ -6,7 +6,7 @@ class SignInWithGoogleUseCase {
 
   SignInWithGoogleUseCase(this._authRepository);
 
-  Future<UserEntity?> call() async {
+  Future<UserDto?> call() async {
     return await _authRepository.signInWithGoogle();
   }
 }
@@ -16,7 +16,7 @@ class SignInWithAppleUseCase {
 
   SignInWithAppleUseCase(this._authRepository);
 
-  Future<UserEntity?> call() async {
+  Future<UserDto?> call() async {
     return await _authRepository.signInWithApple();
   }
 }
@@ -36,7 +36,7 @@ class GetCurrentUserUseCase {
 
   GetCurrentUserUseCase(this._authRepository);
 
-  Future<UserEntity?> call() async {
+  Future<UserDto?> call() async {
     return await _authRepository.getCurrentUser();
   }
 }
@@ -46,7 +46,7 @@ class GetAuthStateChangesUseCase {
 
   GetAuthStateChangesUseCase(this._authRepository);
 
-  Stream<UserEntity?> call() {
+  Stream<UserDto?> call() {
     return _authRepository.authStateChanges;
   }
 }

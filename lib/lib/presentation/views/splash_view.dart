@@ -55,7 +55,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
             const SizedBox(height: 24),
             // 앱 이름
             const Text(
-              'Creet',
+              'Creet!',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

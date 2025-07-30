@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:creet/lib/core/di/service_locator.dart';
-import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +12,7 @@ class SignInViewModel extends _$SignInViewModel {
   bool _isSigningIn = false;
 
   @override
-  Future<UserEntity?> build() async {
+  Future<UserDto?> build() async {
     developer.log('SignInViewModel 초기화', name: 'SignInViewModel');
     final useCase = serviceLocator.get<GetCurrentUserUseCase>();
     final user = await useCase();

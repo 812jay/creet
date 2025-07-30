@@ -1,9 +1,9 @@
-import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 
 abstract class AuthRepository {
-  Future<UserEntity?> signInWithGoogle();
-  Future<UserEntity?> signInWithApple();
+  Future<UserDto?> signInWithGoogle();
+  Future<UserDto?> signInWithApple();
   Future<void> signOut();
-  Future<UserEntity?> getCurrentUser();
-  Stream<UserEntity?> get authStateChanges;
+  Future<UserDto?> getCurrentUser();
+  Stream<UserDto?> get authStateChanges;
 }

@@ -1,8 +1,8 @@
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:flutter/material.dart';
-import 'package:creet/lib/domain/entities/user_entity.dart';
 
 class UserProfileCard extends StatelessWidget {
-  final UserEntity user;
+  final UserDto user;
   final VoidCallback onSignOut;
 
   const UserProfileCard({

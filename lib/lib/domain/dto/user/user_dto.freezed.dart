@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_entity.dart';
+part of 'user_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,34 +15,31 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-UserEntity _$UserEntityFromJson(Map<String, dynamic> json) {
-  return _UserEntity.fromJson(json);
+UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
+  return _UserDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UserEntity {
+mixin _$UserDto {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
   bool get isEmailVerified => throw _privateConstructorUsedError;
 
-  /// Serializes this UserEntity to a JSON map.
+  /// Serializes this UserDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of UserEntity
+  /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $UserEntityCopyWith<UserEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $UserDtoCopyWith<UserDto> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserEntityCopyWith<$Res> {
-  factory $UserEntityCopyWith(
-    UserEntity value,
-    $Res Function(UserEntity) then,
-  ) = _$UserEntityCopyWithImpl<$Res, UserEntity>;
+abstract class $UserDtoCopyWith<$Res> {
+  factory $UserDtoCopyWith(UserDto value, $Res Function(UserDto) then) =
+      _$UserDtoCopyWithImpl<$Res, UserDto>;
   @useResult
   $Res call({
     String id,
@@ -54,16 +51,16 @@ abstract class $UserEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
-    implements $UserEntityCopyWith<$Res> {
-  _$UserEntityCopyWithImpl(this._value, this._then);
+class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
+    implements $UserDtoCopyWith<$Res> {
+  _$UserDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UserEntity
+  /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -108,12 +105,11 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
 }
 
 /// @nodoc
-abstract class _$$UserEntityImplCopyWith<$Res>
-    implements $UserEntityCopyWith<$Res> {
-  factory _$$UserEntityImplCopyWith(
-    _$UserEntityImpl value,
-    $Res Function(_$UserEntityImpl) then,
-  ) = __$$UserEntityImplCopyWithImpl<$Res>;
+abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
+  factory _$$UserDtoImplCopyWith(
+    _$UserDtoImpl value,
+    $Res Function(_$UserDtoImpl) then,
+  ) = __$$UserDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -126,15 +122,15 @@ abstract class _$$UserEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UserEntityImplCopyWithImpl<$Res>
-    extends _$UserEntityCopyWithImpl<$Res, _$UserEntityImpl>
-    implements _$$UserEntityImplCopyWith<$Res> {
-  __$$UserEntityImplCopyWithImpl(
-    _$UserEntityImpl _value,
-    $Res Function(_$UserEntityImpl) _then,
+class __$$UserDtoImplCopyWithImpl<$Res>
+    extends _$UserDtoCopyWithImpl<$Res, _$UserDtoImpl>
+    implements _$$UserDtoImplCopyWith<$Res> {
+  __$$UserDtoImplCopyWithImpl(
+    _$UserDtoImpl _value,
+    $Res Function(_$UserDtoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of UserEntity
+  /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -146,7 +142,7 @@ class __$$UserEntityImplCopyWithImpl<$Res>
     Object? isEmailVerified = null,
   }) {
     return _then(
-      _$UserEntityImpl(
+      _$UserDtoImpl(
         id:
             null == id
                 ? _value.id
@@ -179,8 +175,8 @@ class __$$UserEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserEntityImpl implements _UserEntity {
-  const _$UserEntityImpl({
+class _$UserDtoImpl implements _UserDto {
+  const _$UserDtoImpl({
     required this.id,
     required this.email,
     this.displayName,
@@ -188,8 +184,8 @@ class _$UserEntityImpl implements _UserEntity {
     this.isEmailVerified = false,
   });
 
-  factory _$UserEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserEntityImplFromJson(json);
+  factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserDtoImplFromJson(json);
 
   @override
   final String id;
@@ -205,14 +201,14 @@ class _$UserEntityImpl implements _UserEntity {
 
   @override
   String toString() {
-    return 'UserEntity(id: $id, email: $email, displayName: $displayName, photoURL: $photoURL, isEmailVerified: $isEmailVerified)';
+    return 'UserDto(id: $id, email: $email, displayName: $displayName, photoURL: $photoURL, isEmailVerified: $isEmailVerified)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserEntityImpl &&
+            other is _$UserDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.displayName, displayName) ||
@@ -234,31 +230,30 @@ class _$UserEntityImpl implements _UserEntity {
     isEmailVerified,
   );
 
-  /// Create a copy of UserEntity
+  /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserEntityImplCopyWith<_$UserEntityImpl> get copyWith =>
-      __$$UserEntityImplCopyWithImpl<_$UserEntityImpl>(this, _$identity);
+  _$$UserDtoImplCopyWith<_$UserDtoImpl> get copyWith =>
+      __$$UserDtoImplCopyWithImpl<_$UserDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserEntityImplToJson(this);
+    return _$$UserDtoImplToJson(this);
   }
 }
 
-abstract class _UserEntity implements UserEntity {
-  const factory _UserEntity({
+abstract class _UserDto implements UserDto {
+  const factory _UserDto({
     required final String id,
     required final String email,
     final String? displayName,
     final String? photoURL,
     final bool isEmailVerified,
-  }) = _$UserEntityImpl;
+  }) = _$UserDtoImpl;
 
-  factory _UserEntity.fromJson(Map<String, dynamic> json) =
-      _$UserEntityImpl.fromJson;
+  factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
 
   @override
   String get id;
@@ -271,10 +266,10 @@ abstract class _UserEntity implements UserEntity {
   @override
   bool get isEmailVerified;
 
-  /// Create a copy of UserEntity
+  /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UserEntityImplCopyWith<_$UserEntityImpl> get copyWith =>
+  _$$UserDtoImplCopyWith<_$UserDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
