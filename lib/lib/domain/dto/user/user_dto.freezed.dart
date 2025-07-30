@@ -23,9 +23,12 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
 mixin _$UserDto {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  String? get photoURL => throw _privateConstructorUsedError;
-  bool get isEmailVerified => throw _privateConstructorUsedError;
+  String get provider => throw _privateConstructorUsedError;
+  String get providerId => throw _privateConstructorUsedError;
+  String? get nickname => throw _privateConstructorUsedError;
+  String? get avatarUrl => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,9 +47,12 @@ abstract class $UserDtoCopyWith<$Res> {
   $Res call({
     String id,
     String email,
-    String? displayName,
-    String? photoURL,
-    bool isEmailVerified,
+    String provider,
+    String providerId,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -67,9 +73,12 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
   $Res call({
     Object? id = null,
     Object? email = null,
-    Object? displayName = freezed,
-    Object? photoURL = freezed,
-    Object? isEmailVerified = null,
+    Object? provider = null,
+    Object? providerId = null,
+    Object? nickname = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -83,21 +92,36 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
                     ? _value.email
                     : email // ignore: cast_nullable_to_non_nullable
                         as String,
-            displayName:
-                freezed == displayName
-                    ? _value.displayName
-                    : displayName // ignore: cast_nullable_to_non_nullable
+            provider:
+                null == provider
+                    ? _value.provider
+                    : provider // ignore: cast_nullable_to_non_nullable
+                        as String,
+            providerId:
+                null == providerId
+                    ? _value.providerId
+                    : providerId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            nickname:
+                freezed == nickname
+                    ? _value.nickname
+                    : nickname // ignore: cast_nullable_to_non_nullable
                         as String?,
-            photoURL:
-                freezed == photoURL
-                    ? _value.photoURL
-                    : photoURL // ignore: cast_nullable_to_non_nullable
+            avatarUrl:
+                freezed == avatarUrl
+                    ? _value.avatarUrl
+                    : avatarUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
-            isEmailVerified:
-                null == isEmailVerified
-                    ? _value.isEmailVerified
-                    : isEmailVerified // ignore: cast_nullable_to_non_nullable
-                        as bool,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
           )
           as $Val,
     );
@@ -115,9 +139,12 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   $Res call({
     String id,
     String email,
-    String? displayName,
-    String? photoURL,
-    bool isEmailVerified,
+    String provider,
+    String providerId,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -137,9 +164,12 @@ class __$$UserDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? email = null,
-    Object? displayName = freezed,
-    Object? photoURL = freezed,
-    Object? isEmailVerified = null,
+    Object? provider = null,
+    Object? providerId = null,
+    Object? nickname = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$UserDtoImpl(
@@ -153,21 +183,36 @@ class __$$UserDtoImplCopyWithImpl<$Res>
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                     as String,
-        displayName:
-            freezed == displayName
-                ? _value.displayName
-                : displayName // ignore: cast_nullable_to_non_nullable
+        provider:
+            null == provider
+                ? _value.provider
+                : provider // ignore: cast_nullable_to_non_nullable
+                    as String,
+        providerId:
+            null == providerId
+                ? _value.providerId
+                : providerId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        nickname:
+            freezed == nickname
+                ? _value.nickname
+                : nickname // ignore: cast_nullable_to_non_nullable
                     as String?,
-        photoURL:
-            freezed == photoURL
-                ? _value.photoURL
-                : photoURL // ignore: cast_nullable_to_non_nullable
+        avatarUrl:
+            freezed == avatarUrl
+                ? _value.avatarUrl
+                : avatarUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
-        isEmailVerified:
-            null == isEmailVerified
-                ? _value.isEmailVerified
-                : isEmailVerified // ignore: cast_nullable_to_non_nullable
-                    as bool,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
       ),
     );
   }
@@ -179,9 +224,12 @@ class _$UserDtoImpl implements _UserDto {
   const _$UserDtoImpl({
     required this.id,
     required this.email,
-    this.displayName,
-    this.photoURL,
-    this.isEmailVerified = false,
+    required this.provider,
+    required this.providerId,
+    this.nickname,
+    this.avatarUrl,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -192,16 +240,21 @@ class _$UserDtoImpl implements _UserDto {
   @override
   final String email;
   @override
-  final String? displayName;
+  final String provider;
   @override
-  final String? photoURL;
+  final String providerId;
   @override
-  @JsonKey()
-  final bool isEmailVerified;
+  final String? nickname;
+  @override
+  final String? avatarUrl;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'UserDto(id: $id, email: $email, displayName: $displayName, photoURL: $photoURL, isEmailVerified: $isEmailVerified)';
+    return 'UserDto(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -211,12 +264,18 @@ class _$UserDtoImpl implements _UserDto {
             other is _$UserDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.photoURL, photoURL) ||
-                other.photoURL == photoURL) &&
-            (identical(other.isEmailVerified, isEmailVerified) ||
-                other.isEmailVerified == isEmailVerified));
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
+            (identical(other.providerId, providerId) ||
+                other.providerId == providerId) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                other.avatarUrl == avatarUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -225,9 +284,12 @@ class _$UserDtoImpl implements _UserDto {
     runtimeType,
     id,
     email,
-    displayName,
-    photoURL,
-    isEmailVerified,
+    provider,
+    providerId,
+    nickname,
+    avatarUrl,
+    createdAt,
+    updatedAt,
   );
 
   /// Create a copy of UserDto
@@ -248,9 +310,12 @@ abstract class _UserDto implements UserDto {
   const factory _UserDto({
     required final String id,
     required final String email,
-    final String? displayName,
-    final String? photoURL,
-    final bool isEmailVerified,
+    required final String provider,
+    required final String providerId,
+    final String? nickname,
+    final String? avatarUrl,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
   }) = _$UserDtoImpl;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
@@ -260,11 +325,17 @@ abstract class _UserDto implements UserDto {
   @override
   String get email;
   @override
-  String? get displayName;
+  String get provider;
   @override
-  String? get photoURL;
+  String get providerId;
   @override
-  bool get isEmailVerified;
+  String? get nickname;
+  @override
+  String? get avatarUrl;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
 
   /// Create a copy of UserDto
   /// with the given fields replaced by the non-null parameter values.

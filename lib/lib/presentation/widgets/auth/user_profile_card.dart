@@ -16,16 +16,16 @@ class UserProfileCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (user.photoURL != null)
+        if (user.avatarUrl != null)
           CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(user.photoURL!),
+            backgroundImage: NetworkImage(user.avatarUrl!),
           ),
         const SizedBox(height: 16),
         Text('환영합니다!', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 8),
         Text(
-          user.displayName ?? user.email,
+          user.nickname ?? user.email,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 24),

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:creet/lib/data/datasources/auth/auth_credential_entity.dart';
 import 'package:creet/lib/data/datasources/user/user_entity.dart';
+import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,9 +15,8 @@ class AuthRepositoryImpl implements AuthRepository {
   final SupabaseClient _supabaseClient;
 
   AuthRepositoryImpl(this._supabaseClient);
-
   @override
-  Future<UserDto?> signInWithGoogle() async {
+  Future<AuthCredentialDto?> signinWithGoogle() async {
     try {
       developer.log('Google Sign-In 시작', name: 'AuthRepository');
 
@@ -36,37 +37,42 @@ class AuthRepositoryImpl implements AuthRepository {
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
-        developer.log('Google idToken 획득 실패', name: 'AuthRepository');
+        developer.log(
+          'Google idToken 획득 실패',
+          name: 'AuthRepository[authWithGoogle]',
+        );
         throw Exception('Failed to get idToken from Google');
       }
 
-      developer.log(
-        'Google idToken 획득 성공, Supabase 로그인 시도',
-        name: 'AuthRepository',
+      final response = await _supabaseClient.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
       );
-      // Supabase에 idToken으로 로그인
-      final AuthResponse response = await _supabaseClient.auth
-          .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
+      final authUser = response.user!;
 
-      developer.log(
-        'Supabase 로그인 성공: ${response.user?.email}',
-        name: 'AuthRepository',
+      final entity = AuthCredentialEntity(
+        idToken: idToken,
+        providerId: authUser.id,
+        provider: OAuthProvider.google.name,
+        email: authUser.email,
+        displayName: authUser.userMetadata?['name'] ?? '',
+        photoURL: authUser.userMetadata?['picture'] ?? '',
       );
-      final user = response.user;
-      developer.log('user: ${user?.toJson()}', name: 'AuthRepository');
-      if (user == null) return null;
-      final entity = UserEntity.fromSupabaseUser(user);
-      return entity.toDto();
+      final dto = entity.toDto();
+      return dto;
     } catch (e) {
-      developer.log('Google Sign-In 실패: $e', name: 'AuthRepository');
+      developer.log(
+        'Google Sign-In 실패: $e',
+        name: 'AuthRepository[authWithGoogle]',
+      );
       throw Exception('Google sign in failed: $e');
     }
   }
 
   @override
-  Future<UserDto?> signInWithApple() async {
+  Future<AuthCredentialDto?> signinWithApple() async {
     try {
-      developer.log('Apple Sign-In 시작', name: 'AuthRepository');
+      developer.log('Apple Sign-In 시작', name: 'AuthRepository[authWithApple]');
 
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -78,52 +84,81 @@ class AuthRepositoryImpl implements AuthRepository {
       final String idToken = credential.identityToken ?? '';
 
       if (idToken == '') {
-        developer.log('Apple Sign-In 취소됨', name: 'AuthRepository');
+        developer.log(
+          'Apple Sign-In 취소됨',
+          name: 'AuthRepository[authWithApple]',
+        );
         return null; // 취소는 에러가 아닌 정상적인 상황
       }
 
-      developer.log(
-        'Apple idToken 획득 성공, Supabase 로그인 시도',
-        name: 'AuthRepository',
+      final auth = await _supabaseClient.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
       );
-      // Supabase에 idToken으로 로그인
-      final AuthResponse response = await _supabaseClient.auth
-          .signInWithIdToken(provider: OAuthProvider.apple, idToken: idToken);
+      if (auth.user == null) {
+        developer.log('Supabase 로그인 실패', name: 'AuthRepository[authWithApple]');
+        return null;
+      }
+      final authUser = auth.user!;
 
-      developer.log(
-        'Supabase Apple 로그인 성공: ${response.user?.email}',
-        name: 'AuthRepository',
+      final entity = AuthCredentialEntity(
+        idToken: idToken,
+        providerId: authUser.id,
+        provider: OAuthProvider.apple.name,
+        email: authUser.email,
+        displayName: authUser.userMetadata?['name'] ?? '',
+        photoURL: authUser.userMetadata?['picture'] ?? '',
       );
-      final entity = UserEntity.fromSupabaseUser(response.user);
-      return entity.toDto();
+      developer.log(
+        'Apple idToken 획득 성공: $entity',
+        name: 'AuthRepository[authWithApple]',
+      );
+      final dto = entity.toDto();
+      return dto;
     } catch (e) {
       // Apple 로그인 취소의 경우
       if (e.toString().contains('CANCELLED') ||
           e.toString().contains('NOT_INTERACTIVE')) {
-        developer.log('Apple Sign-In 취소됨', name: 'AuthRepository');
+        developer.log(
+          'Apple Sign-In 취소됨',
+          name: 'AuthRepository[authWithApple]',
+        );
         return null; // 취소는 에러가 아닌 정상적인 상황
       }
-      developer.log('Apple Sign-In 실패: $e', name: 'AuthRepository');
+      developer.log(
+        'Apple Sign-In 실패: $e',
+        name: 'AuthRepository[authWithApple]',
+      );
       throw Exception('Apple sign in failed: $e');
     }
   }
 
   @override
   Future<void> signOut() async {
-    developer.log('로그아웃 시작', name: 'AuthRepository');
+    developer.log('로그아웃 시작', name: 'AuthRepository[signOut]');
     await _supabaseClient.auth.signOut();
-    developer.log('로그아웃 완료', name: 'AuthRepository');
+    developer.log('로그아웃 완료', name: 'AuthRepository[signOut]');
   }
 
   @override
   Future<UserDto?> getCurrentUser() async {
-    final User? user = _supabaseClient.auth.currentUser;
-    if (user != null) {
-      developer.log('현재 사용자 확인: ${user.email}', name: 'AuthRepository');
-      final entity = UserEntity.fromSupabaseUser(user);
-      return entity.toDto();
+    final String? userId = _supabaseClient.auth.currentUser?.id;
+    if (userId != null) {
+      developer.log(
+        '현재 사용자 확인: $userId',
+        name: 'AuthRepository[getCurrentUser]',
+      );
+      final userData =
+          await _supabaseClient
+              .from('users')
+              .select()
+              .eq('id', userId)
+              .single();
+      if (userData.isNotEmpty) {
+        return UserEntity.fromJson(userData).toDto();
+      }
     }
-    developer.log('현재 사용자 없음', name: 'AuthRepository');
+    developer.log('현재 사용자 없음', name: 'AuthRepository[getCurrentUser]');
     return null;
   }
 
@@ -132,11 +167,17 @@ class AuthRepositoryImpl implements AuthRepository {
     return _supabaseClient.auth.onAuthStateChange.map((AuthState data) {
       final user = data.session?.user;
       if (user != null) {
-        developer.log('인증 상태 변경: 로그인됨 - ${user.email}', name: 'AuthRepository');
-        final entity = UserEntity.fromSupabaseUser(user);
+        developer.log(
+          '인증 상태 변경: 로그인됨 - ${user.email}',
+          name: 'AuthRepository[authStateChanges]',
+        );
+        final entity = UserEntity.fromJson(user.toJson());
         return entity.toDto();
       }
-      developer.log('인증 상태 변경: 로그아웃됨', name: 'AuthRepository');
+      developer.log(
+        '인증 상태 변경: 로그아웃됨',
+        name: 'AuthRepository[authStateChanges]',
+      );
       return null;
     });
   }

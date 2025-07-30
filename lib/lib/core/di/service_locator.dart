@@ -1,4 +1,3 @@
-import 'package:creet/lib/core/services/auth_service.dart';
 import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
@@ -43,9 +42,6 @@ class ServiceLocator {
     serviceLocator.registerLazySingletonAsync<SharedPreferences>(
       () async => await SharedPreferences.getInstance(),
     );
-
-    // Auth Service
-    serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
   }
 
   /// Repositories 등록
@@ -65,10 +61,6 @@ class ServiceLocator {
 
     serviceLocator.registerLazySingleton<SignInWithAppleUseCase>(
       () => SignInWithAppleUseCase(serviceLocator<AuthRepository>()),
-    );
-
-    serviceLocator.registerLazySingleton<SignOutUseCase>(
-      () => SignOutUseCase(serviceLocator<AuthRepository>()),
     );
 
     serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(

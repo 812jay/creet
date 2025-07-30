@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:creet/lib/core/di/service_locator.dart';
-import 'package:creet/lib/domain/dto/user/user_dto.dart';
+import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,15 +12,10 @@ class SignInViewModel extends _$SignInViewModel {
   bool _isSigningIn = false;
 
   @override
-  Future<UserDto?> build() async {
+  Future<AuthCredentialDto?> build() async {
     developer.log('SignInViewModel 초기화', name: 'SignInViewModel');
-    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
-    final user = await useCase();
-    developer.log(
-      '현재 사용자 상태: ${user?.email ?? "로그인되지 않음"}',
-      name: 'SignInViewModel',
-    );
-    return user;
+    // 초기 상태는 null (인증되지 않은 상태)
+    return null;
   }
 
   Future<void> signInWithGoogle() async {
@@ -30,22 +25,23 @@ class SignInViewModel extends _$SignInViewModel {
 
     try {
       final useCase = serviceLocator.get<SignInWithGoogleUseCase>();
-      final user = await useCase();
+      final credential = await useCase();
 
-      // 사용자가 취소한 경우 (user가 null)
-      if (user == null) {
-        developer.log('Google 로그인 취소됨', name: 'SignInViewModel');
-        // 이전 상태로 되돌리기 (로그인 전 상태)
-        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
-        state = AsyncValue.data(currentUser);
-        return;
+      if (credential == null) {
+        throw Exception('Google 인증 실패');
       }
 
-      // 로그인 성공 시 상태 업데이트
-      developer.log('Google 로그인 성공: ${user.email}', name: 'SignInViewModel');
-      state = AsyncValue.data(user);
+      // 인증 성공 시 이용약관 페이지로 이동
+      developer.log(
+        'Google 인증 성공: ${credential.email ?? "이메일 없음"}',
+        name: 'SignInViewModel',
+      );
+      state = AsyncValue.data(credential);
+
+      // 이용약관 페이지로 이동 (context가 필요하므로 별도 메서드로 처리)
+      _navigateToTermsOfService(credential);
     } catch (error, stackTrace) {
-      developer.log('Google 로그인 실패: $error', name: 'SignInViewModel');
+      developer.log('Google 인증 실패: $error', name: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;
@@ -54,7 +50,7 @@ class SignInViewModel extends _$SignInViewModel {
 
   Future<void> signInWithApple() async {
     if (_isSigningIn) {
-      developer.log('이미 로그인 중이므로 중복 실행 방지', name: 'SignInViewModel');
+      developer.log('이미 인증 중이므로 중복 실행 방지', name: 'SignInViewModel');
       return;
     }
 
@@ -64,29 +60,36 @@ class SignInViewModel extends _$SignInViewModel {
 
     try {
       final useCase = serviceLocator.get<SignInWithAppleUseCase>();
-      final user = await useCase();
+      final credential = await useCase();
 
-      // 사용자가 취소한 경우 (user가 null)
-      if (user == null) {
-        developer.log('Apple 로그인 취소됨', name: 'SignInViewModel');
-        // 취소는 정상적인 상황이므로 이전 상태로 되돌리기
-        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
-        state = AsyncValue.data(currentUser);
-        return;
+      if (credential == null) {
+        throw Exception('Apple 인증 실패');
       }
 
-      // 로그인 성공 시 상태 업데이트
-      developer.log('Apple 로그인 성공: ${user.email}', name: 'SignInViewModel');
-      state = AsyncValue.data(user);
+      // 인증 성공 시 이용약관 페이지로 이동
+      developer.log(
+        'Apple 인증 성공: ${credential.email}',
+        name: 'SignInViewModel',
+      );
+      state = AsyncValue.data(credential);
+
+      // 이용약관 페이지로 이동
+      _navigateToTermsOfService(credential);
     } catch (error, stackTrace) {
-      developer.log('Apple 로그인 실패: $error', name: 'SignInViewModel');
+      developer.log('Apple 인증 실패: $error', name: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;
     }
   }
 
-  bool get isSigningIn => _isSigningIn; // 로그인 진행 중 상태
+  void _navigateToTermsOfService(AuthCredentialDto credential) {
+    // TODO: 실제 네비게이션 구현
+    // Navigator.of(context).pushNamed('/terms', arguments: {'credential': credential});
+    developer.log('이용약관 페이지로 이동 예정', name: 'SignInViewModel');
+  }
+
+  bool get isSigningIn => _isSigningIn; // 인증 진행 중 상태
 
   // iOS에서만 Apple 로그인 사용 가능
   bool get isAppleSignInAvailable =>

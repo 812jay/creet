@@ -8,9 +8,12 @@ class UserDto with _$UserDto {
   const factory UserDto({
     required String id,
     required String email,
-    String? displayName,
-    String? photoURL,
-    @Default(false) bool isEmailVerified,
+    required String provider,
+    required String providerId,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

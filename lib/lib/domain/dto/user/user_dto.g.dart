@@ -10,16 +10,28 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
     _$UserDtoImpl(
       id: json['id'] as String,
       email: json['email'] as String,
-      displayName: json['displayName'] as String?,
-      photoURL: json['photoURL'] as String?,
-      isEmailVerified: json['isEmailVerified'] as bool? ?? false,
+      provider: json['provider'] as String,
+      providerId: json['providerId'] as String,
+      nickname: json['nickname'] as String?,
+      avatarUrl: json['avatarUrl'] as String?,
+      createdAt:
+          json['createdAt'] == null
+              ? null
+              : DateTime.parse(json['createdAt'] as String),
+      updatedAt:
+          json['updatedAt'] == null
+              ? null
+              : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
-      'displayName': instance.displayName,
-      'photoURL': instance.photoURL,
-      'isEmailVerified': instance.isEmailVerified,
+      'provider': instance.provider,
+      'providerId': instance.providerId,
+      'nickname': instance.nickname,
+      'avatarUrl': instance.avatarUrl,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };

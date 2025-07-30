@@ -13,11 +13,12 @@ class SignInView extends ConsumerWidget {
     final authState = ref.watch(signInViewModelProvider);
     final authViewModel = ref.read(signInViewModelProvider.notifier);
     final isSigningIn = authViewModel.isSigningIn;
-    // 로그인 성공 시 Home으로 이동
-    authState.whenData((user) {
-      if (user != null && !isSigningIn) {
+
+    // 인증 성공 시 이용약관 페이지로 이동
+    authState.whenData((credential) {
+      if (credential != null && !isSigningIn) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.go('/home');
+          context.go('/terms', extra: {'credential': credential});
         });
       }
     });

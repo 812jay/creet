@@ -21,13 +21,14 @@ UserEntity _$UserEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserEntity {
-  @JsonKey(name: 'user_id')
-  String get userId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'display_name')
-  String? get displayName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'profile_url')
-  String? get profileUrl => throw _privateConstructorUsedError;
+  String get provider => throw _privateConstructorUsedError;
+  String get providerId => throw _privateConstructorUsedError;
+  String? get nickname => throw _privateConstructorUsedError;
+  String? get avatarUrl => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,10 +48,14 @@ abstract class $UserEntityCopyWith<$Res> {
   ) = _$UserEntityCopyWithImpl<$Res, UserEntity>;
   @useResult
   $Res call({
-    @JsonKey(name: 'user_id') String userId,
+    String id,
     String email,
-    @JsonKey(name: 'display_name') String? displayName,
-    @JsonKey(name: 'profile_url') String? profileUrl,
+    String provider,
+    String providerId,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -69,33 +74,57 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? id = null,
     Object? email = null,
-    Object? displayName = freezed,
-    Object? profileUrl = freezed,
+    Object? provider = null,
+    Object? providerId = null,
+    Object? nickname = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
-            userId:
-                null == userId
-                    ? _value.userId
-                    : userId // ignore: cast_nullable_to_non_nullable
+            id:
+                null == id
+                    ? _value.id
+                    : id // ignore: cast_nullable_to_non_nullable
                         as String,
             email:
                 null == email
                     ? _value.email
                     : email // ignore: cast_nullable_to_non_nullable
                         as String,
-            displayName:
-                freezed == displayName
-                    ? _value.displayName
-                    : displayName // ignore: cast_nullable_to_non_nullable
+            provider:
+                null == provider
+                    ? _value.provider
+                    : provider // ignore: cast_nullable_to_non_nullable
+                        as String,
+            providerId:
+                null == providerId
+                    ? _value.providerId
+                    : providerId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            nickname:
+                freezed == nickname
+                    ? _value.nickname
+                    : nickname // ignore: cast_nullable_to_non_nullable
                         as String?,
-            profileUrl:
-                freezed == profileUrl
-                    ? _value.profileUrl
-                    : profileUrl // ignore: cast_nullable_to_non_nullable
+            avatarUrl:
+                freezed == avatarUrl
+                    ? _value.avatarUrl
+                    : avatarUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
           )
           as $Val,
     );
@@ -112,10 +141,14 @@ abstract class _$$UserEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'user_id') String userId,
+    String id,
     String email,
-    @JsonKey(name: 'display_name') String? displayName,
-    @JsonKey(name: 'profile_url') String? profileUrl,
+    String provider,
+    String providerId,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -133,33 +166,57 @@ class __$$UserEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? id = null,
     Object? email = null,
-    Object? displayName = freezed,
-    Object? profileUrl = freezed,
+    Object? provider = null,
+    Object? providerId = null,
+    Object? nickname = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$UserEntityImpl(
-        userId:
-            null == userId
-                ? _value.userId
-                : userId // ignore: cast_nullable_to_non_nullable
+        id:
+            null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
                     as String,
         email:
             null == email
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                     as String,
-        displayName:
-            freezed == displayName
-                ? _value.displayName
-                : displayName // ignore: cast_nullable_to_non_nullable
+        provider:
+            null == provider
+                ? _value.provider
+                : provider // ignore: cast_nullable_to_non_nullable
+                    as String,
+        providerId:
+            null == providerId
+                ? _value.providerId
+                : providerId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        nickname:
+            freezed == nickname
+                ? _value.nickname
+                : nickname // ignore: cast_nullable_to_non_nullable
                     as String?,
-        profileUrl:
-            freezed == profileUrl
-                ? _value.profileUrl
-                : profileUrl // ignore: cast_nullable_to_non_nullable
+        avatarUrl:
+            freezed == avatarUrl
+                ? _value.avatarUrl
+                : avatarUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
       ),
     );
   }
@@ -169,49 +226,87 @@ class __$$UserEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserEntityImpl implements _UserEntity {
   const _$UserEntityImpl({
-    @JsonKey(name: 'user_id') required this.userId,
+    required this.id,
     required this.email,
-    @JsonKey(name: 'display_name') this.displayName,
-    @JsonKey(name: 'profile_url') this.profileUrl,
+    required this.provider,
+    required this.providerId,
+    this.nickname,
+    this.avatarUrl,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory _$UserEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserEntityImplFromJson(json);
 
   @override
-  @JsonKey(name: 'user_id')
-  final String userId;
+  final String id;
   @override
   final String email;
   @override
-  @JsonKey(name: 'display_name')
-  final String? displayName;
+  final String provider;
   @override
-  @JsonKey(name: 'profile_url')
-  final String? profileUrl;
+  final String providerId;
+  @override
+  final String? nickname;
+  @override
+  final String? avatarUrl;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'UserEntity(userId: $userId, email: $email, displayName: $displayName, profileUrl: $profileUrl)';
+    return 'UserEntity(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
+
+  @override
+  UserDto toDto() => UserDto(
+    id: id,
+    email: email,
+    provider: provider,
+    providerId: providerId,
+    nickname: nickname,
+    avatarUrl: avatarUrl,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserEntityImpl &&
-            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.profileUrl, profileUrl) ||
-                other.profileUrl == profileUrl));
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
+            (identical(other.providerId, providerId) ||
+                other.providerId == providerId) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                other.avatarUrl == avatarUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userId, email, displayName, profileUrl);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    email,
+    provider,
+    providerId,
+    nickname,
+    avatarUrl,
+    createdAt,
+    updatedAt,
+  );
 
   /// Create a copy of UserEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -225,40 +320,39 @@ class _$UserEntityImpl implements _UserEntity {
   Map<String, dynamic> toJson() {
     return _$$UserEntityImplToJson(this);
   }
-
-  @override
-  UserDto toDto() {
-    return UserDto(
-      id: userId,
-      email: email,
-      displayName: displayName ?? '',
-      photoURL: profileUrl,
-    );
-  }
 }
 
 abstract class _UserEntity implements UserEntity {
   const factory _UserEntity({
-    @JsonKey(name: 'user_id') required final String userId,
+    required final String id,
     required final String email,
-    @JsonKey(name: 'display_name') final String? displayName,
-    @JsonKey(name: 'profile_url') final String? profileUrl,
+    required final String provider,
+    required final String providerId,
+    final String? nickname,
+    final String? avatarUrl,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
   }) = _$UserEntityImpl;
 
   factory _UserEntity.fromJson(Map<String, dynamic> json) =
       _$UserEntityImpl.fromJson;
 
   @override
-  @JsonKey(name: 'user_id')
-  String get userId;
+  String get id;
   @override
   String get email;
   @override
-  @JsonKey(name: 'display_name')
-  String? get displayName;
+  String get provider;
   @override
-  @JsonKey(name: 'profile_url')
-  String? get profileUrl;
+  String get providerId;
+  @override
+  String? get nickname;
+  @override
+  String? get avatarUrl;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
 
   /// Create a copy of UserEntity
   /// with the given fields replaced by the non-null parameter values.
