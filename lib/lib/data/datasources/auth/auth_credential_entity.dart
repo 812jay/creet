@@ -7,12 +7,12 @@ part 'auth_credential_entity.g.dart';
 @freezed
 class AuthCredentialEntity with _$AuthCredentialEntity {
   const factory AuthCredentialEntity({
-    required String idToken,
-    required String provider,
-    required String providerId,
-    String? email,
-    String? displayName,
-    String? photoURL,
+    @JsonKey(name: 'id_token') required String idToken,
+    @JsonKey(name: 'provider') required String provider,
+    @JsonKey(name: 'provider_id') required String providerId,
+    @JsonKey(name: 'email') String? email,
+    @JsonKey(name: 'display_name') String? displayName,
+    @JsonKey(name: 'photo_url') String? photoURL,
   }) = _AuthCredentialEntity;
 
   factory AuthCredentialEntity.fromJson(Map<String, dynamic> json) =>

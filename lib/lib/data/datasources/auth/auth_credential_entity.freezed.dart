@@ -21,11 +21,17 @@ AuthCredentialEntity _$AuthCredentialEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthCredentialEntity {
+  @JsonKey(name: 'id_token')
   String get idToken => throw _privateConstructorUsedError;
-  String get providerId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'provider')
   String get provider => throw _privateConstructorUsedError;
+  @JsonKey(name: 'provider_id')
+  String get providerId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'email')
   String? get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'display_name')
   String? get displayName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'photo_url')
   String? get photoURL => throw _privateConstructorUsedError;
 
   /// Serializes this AuthCredentialEntity to a JSON map.
@@ -46,12 +52,12 @@ abstract class $AuthCredentialEntityCopyWith<$Res> {
   ) = _$AuthCredentialEntityCopyWithImpl<$Res, AuthCredentialEntity>;
   @useResult
   $Res call({
-    String idToken,
-    String providerId,
-    String provider,
-    String? email,
-    String? displayName,
-    String? photoURL,
+    @JsonKey(name: 'id_token') String idToken,
+    @JsonKey(name: 'provider') String provider,
+    @JsonKey(name: 'provider_id') String providerId,
+    @JsonKey(name: 'email') String? email,
+    @JsonKey(name: 'display_name') String? displayName,
+    @JsonKey(name: 'photo_url') String? photoURL,
   });
 }
 
@@ -74,8 +80,8 @@ class _$AuthCredentialEntityCopyWithImpl<
   @override
   $Res call({
     Object? idToken = null,
-    Object? providerId = null,
     Object? provider = null,
+    Object? providerId = null,
     Object? email = freezed,
     Object? displayName = freezed,
     Object? photoURL = freezed,
@@ -87,15 +93,15 @@ class _$AuthCredentialEntityCopyWithImpl<
                     ? _value.idToken
                     : idToken // ignore: cast_nullable_to_non_nullable
                         as String,
-            providerId:
-                null == providerId
-                    ? _value.providerId
-                    : providerId // ignore: cast_nullable_to_non_nullable
-                        as String,
             provider:
                 null == provider
                     ? _value.provider
                     : provider // ignore: cast_nullable_to_non_nullable
+                        as String,
+            providerId:
+                null == providerId
+                    ? _value.providerId
+                    : providerId // ignore: cast_nullable_to_non_nullable
                         as String,
             email:
                 freezed == email
@@ -128,12 +134,12 @@ abstract class _$$AuthCredentialEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    String idToken,
-    String providerId,
-    String provider,
-    String? email,
-    String? displayName,
-    String? photoURL,
+    @JsonKey(name: 'id_token') String idToken,
+    @JsonKey(name: 'provider') String provider,
+    @JsonKey(name: 'provider_id') String providerId,
+    @JsonKey(name: 'email') String? email,
+    @JsonKey(name: 'display_name') String? displayName,
+    @JsonKey(name: 'photo_url') String? photoURL,
   });
 }
 
@@ -152,8 +158,8 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? idToken = null,
-    Object? providerId = null,
     Object? provider = null,
+    Object? providerId = null,
     Object? email = freezed,
     Object? displayName = freezed,
     Object? photoURL = freezed,
@@ -165,15 +171,15 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
                 ? _value.idToken
                 : idToken // ignore: cast_nullable_to_non_nullable
                     as String,
-        providerId:
-            null == providerId
-                ? _value.providerId
-                : providerId // ignore: cast_nullable_to_non_nullable
-                    as String,
         provider:
             null == provider
                 ? _value.provider
                 : provider // ignore: cast_nullable_to_non_nullable
+                    as String,
+        providerId:
+            null == providerId
+                ? _value.providerId
+                : providerId // ignore: cast_nullable_to_non_nullable
                     as String,
         email:
             freezed == email
@@ -199,36 +205,41 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
   const _$AuthCredentialEntityImpl({
-    required this.idToken,
-    required this.providerId,
-    required this.provider,
-    this.email,
-    this.displayName,
-    this.photoURL,
+    @JsonKey(name: 'id_token') required this.idToken,
+    @JsonKey(name: 'provider') required this.provider,
+    @JsonKey(name: 'provider_id') required this.providerId,
+    @JsonKey(name: 'email') this.email,
+    @JsonKey(name: 'display_name') this.displayName,
+    @JsonKey(name: 'photo_url') this.photoURL,
   });
 
   factory _$AuthCredentialEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthCredentialEntityImplFromJson(json);
 
   @override
+  @JsonKey(name: 'id_token')
   final String idToken;
   @override
-  final String providerId;
-  @override
+  @JsonKey(name: 'provider')
   final String provider;
   @override
+  @JsonKey(name: 'provider_id')
+  final String providerId;
+  @override
+  @JsonKey(name: 'email')
   final String? email;
   @override
+  @JsonKey(name: 'display_name')
   final String? displayName;
   @override
+  @JsonKey(name: 'photo_url')
   final String? photoURL;
 
   @override
   String toString() {
-    return 'AuthCredentialEntity(idToken: $idToken, providerId: $providerId, provider: $provider, email: $email, displayName: $displayName, photoURL: $photoURL)';
+    return 'AuthCredentialEntity(idToken: $idToken, provider: $provider, providerId: $providerId, email: $email, displayName: $displayName, photoURL: $photoURL)';
   }
 
-  @override
   AuthCredentialDto toDto() => AuthCredentialDto(
     idToken: idToken,
     provider: provider,
@@ -244,10 +255,10 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
         (other.runtimeType == runtimeType &&
             other is _$AuthCredentialEntityImpl &&
             (identical(other.idToken, idToken) || other.idToken == idToken) &&
-            (identical(other.providerId, providerId) ||
-                other.providerId == providerId) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
+            (identical(other.providerId, providerId) ||
+                other.providerId == providerId) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
@@ -260,8 +271,8 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
   int get hashCode => Object.hash(
     runtimeType,
     idToken,
-    providerId,
     provider,
+    providerId,
     email,
     displayName,
     photoURL,
@@ -287,28 +298,34 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
 
 abstract class _AuthCredentialEntity implements AuthCredentialEntity {
   const factory _AuthCredentialEntity({
-    required final String idToken,
-    required final String providerId,
-    required final String provider,
-    final String? email,
-    final String? displayName,
-    final String? photoURL,
+    @JsonKey(name: 'id_token') required final String idToken,
+    @JsonKey(name: 'provider') required final String provider,
+    @JsonKey(name: 'provider_id') required final String providerId,
+    @JsonKey(name: 'email') final String? email,
+    @JsonKey(name: 'display_name') final String? displayName,
+    @JsonKey(name: 'photo_url') final String? photoURL,
   }) = _$AuthCredentialEntityImpl;
 
   factory _AuthCredentialEntity.fromJson(Map<String, dynamic> json) =
       _$AuthCredentialEntityImpl.fromJson;
 
   @override
+  @JsonKey(name: 'id_token')
   String get idToken;
   @override
-  String get providerId;
-  @override
+  @JsonKey(name: 'provider')
   String get provider;
   @override
+  @JsonKey(name: 'provider_id')
+  String get providerId;
+  @override
+  @JsonKey(name: 'email')
   String? get email;
   @override
+  @JsonKey(name: 'display_name')
   String? get displayName;
   @override
+  @JsonKey(name: 'photo_url')
   String? get photoURL;
 
   /// Create a copy of AuthCredentialEntity

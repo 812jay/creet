@@ -1,149 +1,216 @@
+import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/core/constants/app_typo.dart';
+import 'package:creet/lib/presentation/viewmodels/terms_of_service/terms_of_service_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 
-class TermsOfServiceView extends ConsumerStatefulWidget {
-  final AuthCredentialDto credential;
-
+class TermsOfServiceView extends StatelessWidget {
   const TermsOfServiceView({super.key, required this.credential});
-
-  @override
-  ConsumerState<TermsOfServiceView> createState() => _TermsOfServiceViewState();
-}
-
-class _TermsOfServiceViewState extends ConsumerState<TermsOfServiceView> {
-  bool _isAgreed = false;
-  bool _isLoading = false;
+  final AuthCredentialDto credential;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('이용약관 동의'),
-        automaticallyImplyLeading: false, // 뒤로가기 버튼 숨기기
-      ),
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(widget.credential.toJson().toString()),
-            const Text(
-              '이용약관',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const SingleChildScrollView(
-                  child: Text('''
-제1조 (목적)
-이 약관은 [서비스명]이 제공하는 서비스의 이용과 관련하여 서비스와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+            const SizedBox(height: 70),
+            const _HeaderSection(),
+            const SizedBox(height: 50),
+            const _AllAgreementSection(),
+            const SizedBox(height: 30),
+            const _PrivacyAgreementSection(),
+            const SizedBox(height: 20),
+            const _TermsAgreementSection(),
+            const Spacer(),
+            _SignUpButton(credential: credential),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-제2조 (정의)
-1. "서비스"라 함은 [서비스명]이 제공하는 모든 서비스를 의미합니다.
-2. "이용자"라 함은 이 약관에 따라 서비스를 이용하는 회원을 의미합니다.
+class _HeaderSection extends StatelessWidget {
+  const _HeaderSection();
 
-제3조 (약관의 효력 및 변경)
-1. 이 약관은 서비스 이용을 신청한 이용자에 대하여 효력을 발생합니다.
-2. 서비스는 필요한 경우 관련법령을 위배하지 않는 범위에서 이 약관을 변경할 수 있습니다.
+  @override
+  Widget build(BuildContext context) {
+    return const Text('서비스 이용을 위한\n이용약관 동의', style: AppTypo.title1Bold);
+  }
+}
 
-[이하 생략...]
-                    ''', style: TextStyle(fontSize: 14, height: 1.5)),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Checkbox(
-                  value: _isAgreed,
-                  onChanged: (value) {
-                    setState(() {
-                      _isAgreed = value ?? false;
-                    });
-                  },
-                ),
-                const Expanded(
-                  child: Text('이용약관에 동의합니다', style: TextStyle(fontSize: 16)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _isAgreed && !_isLoading ? _onAgree : null,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: _isAgreed ? Colors.blue : Colors.grey,
-              ),
-              child:
-                  _isLoading
-                      ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                      )
-                      : const Text(
-                        '동의하고 계속하기',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-            ),
-            const SizedBox(height: 12),
-            TextButton(
-              onPressed: _isLoading ? null : _onCancel,
-              child: const Text('취소', style: TextStyle(fontSize: 16)),
+class _AllAgreementSection extends ConsumerWidget {
+  const _AllAgreementSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(termsOfServiceViewModelProvider);
+    final viewModel = ref.watch(termsOfServiceViewModelProvider.notifier);
+
+    return Row(
+      children: [
+        Text('다음 약관에 모두 동의', style: AppTypo.body1Bold),
+        const Spacer(),
+        _AgreementCheckbox(
+          isChecked: state.isAgreed,
+          onTap: () => viewModel.toggleAllAgreement(),
+        ),
+      ],
+    );
+  }
+}
+
+class _PrivacyAgreementSection extends ConsumerWidget {
+  const _PrivacyAgreementSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(termsOfServiceViewModelProvider);
+    final viewModel = ref.watch(termsOfServiceViewModelProvider.notifier);
+
+    return Row(
+      children: [
+        Expanded(
+          child: _AgreementText(
+            title: '개인정보수집 및 이용에 대한 안내',
+            isRequired: true,
+            onTap: () {},
+          ),
+        ),
+        const SizedBox(width: 10),
+        _AgreementCheckbox(
+          isChecked: state.privacyAgreed,
+          onTap: () => viewModel.togglePrivacyAgreement(),
+        ),
+      ],
+    );
+  }
+}
+
+class _TermsAgreementSection extends ConsumerWidget {
+  const _TermsAgreementSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(termsOfServiceViewModelProvider);
+    final viewModel = ref.watch(termsOfServiceViewModelProvider.notifier);
+
+    return Row(
+      children: [
+        Expanded(
+          child: _AgreementText(
+            title: '크립 이용약관 동의',
+            isRequired: true,
+            onTap: () {},
+          ),
+        ),
+        const SizedBox(width: 10),
+        _AgreementCheckbox(
+          isChecked: state.termsAgreed,
+          onTap: () => viewModel.toggleTermsAgreement(),
+        ),
+      ],
+    );
+  }
+}
+
+class _AgreementText extends StatelessWidget {
+  const _AgreementText({
+    required this.title,
+    required this.isRequired,
+    required this.onTap,
+  });
+
+  final String title;
+  final bool isRequired;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: RichText(
+        text: TextSpan(
+          text: title,
+          style: AppTypo.body1Regular.copyWith(
+            decoration: TextDecoration.underline,
+          ),
+          children: [
+            TextSpan(
+              text: isRequired ? ' (필수)' : '',
+              style: AppTypo.body1Regular,
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  void _onAgree() async {
-    setState(() {
-      _isLoading = true;
-    });
+class _AgreementCheckbox extends StatelessWidget {
+  const _AgreementCheckbox({this.onTap, required this.isChecked});
 
-    try {
-      // TODO: Supabase 가입 로직 호출
-      // final useCase = serviceLocator.get<SignUpWithSupabaseUseCase>();
-      // final user = await useCase(widget.credential);
+  final bool isChecked;
+  final VoidCallback? onTap;
 
-      // 가입 성공 시 메인 화면으로 이동
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/main');
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('가입 중 오류가 발생했습니다: $e')));
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: isChecked ? AppColors.primary : Colors.grey,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.check, color: Colors.white, size: 16),
+      ),
+    );
   }
+}
 
-  void _onCancel() {
-    // 로그인 화면으로 돌아가기
-    Navigator.of(context).pop();
+class _SignUpButton extends ConsumerWidget {
+  const _SignUpButton({required this.credential});
+
+  final AuthCredentialDto credential;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(termsOfServiceViewModelProvider);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: state.isAgreed ? AppColors.primary : Colors.grey,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+        ),
+        child: _ButtonText(),
+      ),
+    );
+  }
+}
+
+class _ButtonText extends StatelessWidget {
+  const _ButtonText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '동의하고 시작하기',
+      style: AppTypo.body1Bold.copyWith(color: Colors.white),
+    );
   }
 }

@@ -9,21 +9,21 @@ part of 'auth_credential_entity.dart';
 _$AuthCredentialEntityImpl _$$AuthCredentialEntityImplFromJson(
   Map<String, dynamic> json,
 ) => _$AuthCredentialEntityImpl(
-  idToken: json['idToken'] as String,
-  providerId: json['providerId'] as String,
+  idToken: json['id_token'] as String,
   provider: json['provider'] as String,
+  providerId: json['provider_id'] as String,
   email: json['email'] as String?,
-  displayName: json['displayName'] as String?,
-  photoURL: json['photoURL'] as String?,
+  displayName: json['display_name'] as String?,
+  photoURL: json['photo_url'] as String?,
 );
 
 Map<String, dynamic> _$$AuthCredentialEntityImplToJson(
   _$AuthCredentialEntityImpl instance,
 ) => <String, dynamic>{
-  'idToken': instance.idToken,
-  'providerId': instance.providerId,
+  'id_token': instance.idToken,
   'provider': instance.provider,
+  'provider_id': instance.providerId,
   'email': instance.email,
-  'displayName': instance.displayName,
-  'photoURL': instance.photoURL,
+  'display_name': instance.displayName,
+  'photo_url': instance.photoURL,
 };

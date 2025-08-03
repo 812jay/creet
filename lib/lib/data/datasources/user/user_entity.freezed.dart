@@ -21,13 +21,21 @@ UserEntity _$UserEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserEntity {
+  @JsonKey(name: 'id')
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'email')
   String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'provider')
   String get provider => throw _privateConstructorUsedError;
+  @JsonKey(name: 'provider_id')
   String get providerId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'nickname')
   String? get nickname => throw _privateConstructorUsedError;
+  @JsonKey(name: 'avatar_url')
   String? get avatarUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserEntity to a JSON map.
@@ -48,14 +56,14 @@ abstract class $UserEntityCopyWith<$Res> {
   ) = _$UserEntityCopyWithImpl<$Res, UserEntity>;
   @useResult
   $Res call({
-    String id,
-    String email,
-    String provider,
-    String providerId,
-    String? nickname,
-    String? avatarUrl,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'id') String id,
+    @JsonKey(name: 'email') String email,
+    @JsonKey(name: 'provider') String provider,
+    @JsonKey(name: 'provider_id') String providerId,
+    @JsonKey(name: 'nickname') String? nickname,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   });
 }
 
@@ -141,14 +149,14 @@ abstract class _$$UserEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    String id,
-    String email,
-    String provider,
-    String providerId,
-    String? nickname,
-    String? avatarUrl,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'id') String id,
+    @JsonKey(name: 'email') String email,
+    @JsonKey(name: 'provider') String provider,
+    @JsonKey(name: 'provider_id') String providerId,
+    @JsonKey(name: 'nickname') String? nickname,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   });
 }
 
@@ -226,34 +234,42 @@ class __$$UserEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserEntityImpl implements _UserEntity {
   const _$UserEntityImpl({
-    required this.id,
-    required this.email,
-    required this.provider,
-    required this.providerId,
-    this.nickname,
-    this.avatarUrl,
-    this.createdAt,
-    this.updatedAt,
+    @JsonKey(name: 'id') required this.id,
+    @JsonKey(name: 'email') required this.email,
+    @JsonKey(name: 'provider') required this.provider,
+    @JsonKey(name: 'provider_id') required this.providerId,
+    @JsonKey(name: 'nickname') this.nickname,
+    @JsonKey(name: 'avatar_url') this.avatarUrl,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
   });
 
   factory _$UserEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserEntityImplFromJson(json);
 
   @override
+  @JsonKey(name: 'id')
   final String id;
   @override
+  @JsonKey(name: 'email')
   final String email;
   @override
+  @JsonKey(name: 'provider')
   final String provider;
   @override
+  @JsonKey(name: 'provider_id')
   final String providerId;
   @override
+  @JsonKey(name: 'nickname')
   final String? nickname;
   @override
+  @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
 
   @override
@@ -261,7 +277,6 @@ class _$UserEntityImpl implements _UserEntity {
     return 'UserEntity(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
-  @override
   UserDto toDto() => UserDto(
     id: id,
     email: email,
@@ -272,7 +287,6 @@ class _$UserEntityImpl implements _UserEntity {
     createdAt: createdAt,
     updatedAt: updatedAt,
   );
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -324,34 +338,42 @@ class _$UserEntityImpl implements _UserEntity {
 
 abstract class _UserEntity implements UserEntity {
   const factory _UserEntity({
-    required final String id,
-    required final String email,
-    required final String provider,
-    required final String providerId,
-    final String? nickname,
-    final String? avatarUrl,
-    final DateTime? createdAt,
-    final DateTime? updatedAt,
+    @JsonKey(name: 'id') required final String id,
+    @JsonKey(name: 'email') required final String email,
+    @JsonKey(name: 'provider') required final String provider,
+    @JsonKey(name: 'provider_id') required final String providerId,
+    @JsonKey(name: 'nickname') final String? nickname,
+    @JsonKey(name: 'avatar_url') final String? avatarUrl,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
   }) = _$UserEntityImpl;
 
   factory _UserEntity.fromJson(Map<String, dynamic> json) =
       _$UserEntityImpl.fromJson;
 
   @override
+  @JsonKey(name: 'id')
   String get id;
   @override
+  @JsonKey(name: 'email')
   String get email;
   @override
+  @JsonKey(name: 'provider')
   String get provider;
   @override
+  @JsonKey(name: 'provider_id')
   String get providerId;
   @override
+  @JsonKey(name: 'nickname')
   String? get nickname;
   @override
+  @JsonKey(name: 'avatar_url')
   String? get avatarUrl;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
 
   /// Create a copy of UserEntity

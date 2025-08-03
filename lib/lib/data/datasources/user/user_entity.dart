@@ -7,14 +7,14 @@ part 'user_entity.g.dart';
 @freezed
 class UserEntity with _$UserEntity {
   const factory UserEntity({
-    required String id,
-    required String email,
-    required String provider,
-    required String providerId,
-    String? nickname,
-    String? avatarUrl,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'id') required String id,
+    @JsonKey(name: 'email') required String email,
+    @JsonKey(name: 'provider') required String provider,
+    @JsonKey(name: 'provider_id') required String providerId,
+    @JsonKey(name: 'nickname') String? nickname,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _UserEntity;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
