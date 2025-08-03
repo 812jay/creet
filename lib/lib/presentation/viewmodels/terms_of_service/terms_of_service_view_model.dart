@@ -1,4 +1,6 @@
+import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
+import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'terms_of_service_view_model.g.dart';
@@ -35,7 +37,7 @@ class TermsOfServiceState {
 
 @riverpod
 class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
-  late final AuthCredentialDto credential;
+  TermsOfServiceViewModel();
 
   @override
   TermsOfServiceState build() {
@@ -62,5 +64,10 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
   void toggleTermsAgreement() {
     state = state.copyWith(termsAgreed: !state.termsAgreed);
     print('toggleTermsAgreement: ${state.termsAgreed}');
+  }
+
+  Future<void> signUp(AuthCredentialDto credential) async {
+    final useCase = serviceLocator.get<SignUpUseCase>();
+    await useCase(credential);
   }
 }

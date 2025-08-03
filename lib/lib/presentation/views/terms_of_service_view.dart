@@ -184,12 +184,13 @@ class _SignUpButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(termsOfServiceViewModelProvider);
+    final viewModel = ref.watch(termsOfServiceViewModelProvider.notifier);
 
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: state.isAgreed ? () => viewModel.signUp(credential) : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: state.isAgreed ? AppColors.primary : Colors.grey,
           shadowColor: Colors.transparent,

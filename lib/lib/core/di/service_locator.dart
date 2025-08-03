@@ -1,6 +1,9 @@
 import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
+import 'package:creet/lib/data/repositories/user_repository_impl.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
+import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
+import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,6 +53,11 @@ class ServiceLocator {
     serviceLocator.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(serviceLocator<SupabaseClient>()),
     );
+
+    // User Repository
+    serviceLocator.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(serviceLocator<SupabaseClient>()),
+    );
   }
 
   /// Use Cases 등록
@@ -61,6 +69,10 @@ class ServiceLocator {
 
     serviceLocator.registerLazySingleton<SignInWithAppleUseCase>(
       () => SignInWithAppleUseCase(serviceLocator<AuthRepository>()),
+    );
+
+    serviceLocator.registerLazySingleton<SignUpUseCase>(
+      () => SignUpUseCase(serviceLocator<UserRepository>()),
     );
 
     serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(
