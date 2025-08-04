@@ -12,16 +12,27 @@ class SignInView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(signInViewModelProvider);
     final authViewModel = ref.read(signInViewModelProvider.notifier);
-    final isSigningIn = authViewModel.isSigningIn;
+    final navigationState = authViewModel.navigationState;
 
-    // 인증 성공 시 이용약관 페이지로 이동
-    authState.whenData((credential) {
-      if (credential != null && !isSigningIn) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.go('/terms', extra: {'credential': credential});
-        });
-      }
-    });
+    // 네비게이션 상태에 따라 페이지 이동
+    if (navigationState != SignInNavigationState.none) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        switch (navigationState) {
+          case SignInNavigationState.toMain:
+            context.go('/main');
+            break;
+          case SignInNavigationState.toTerms:
+            authState.whenData((credential) {
+              if (credential != null) {
+                context.go('/terms', extra: {'credential': credential});
+              }
+            });
+            break;
+          case SignInNavigationState.none:
+            break;
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDefault,

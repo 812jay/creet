@@ -82,6 +82,10 @@ class ServiceLocator {
     serviceLocator.registerLazySingleton<GetAuthStateChangesUseCase>(
       () => GetAuthStateChangesUseCase(serviceLocator<AuthRepository>()),
     );
+
+    serviceLocator.registerLazySingleton<SignOutUseCase>(
+      () => SignOutUseCase(serviceLocator<AuthRepository>()),
+    );
   }
 
   /// Service Locator 리셋 (테스트용)
