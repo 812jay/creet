@@ -1,3 +1,4 @@
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +23,7 @@ class ImageService {
 
       return await _saveToTempFile(imageData);
     } catch (e) {
-      _logError('URL을 File로 변환 실패', e);
+      Logger.error('URL을 File로 변환 실패', tag: 'ImageService');
       return null;
     }
   }
@@ -44,10 +45,10 @@ class ImageService {
 
       await _uploadToStorage(filePath, optimizedBytes);
 
-      _logSuccess('이미지 업로드 성공: $filePath');
+      Logger.info('이미지 업로드 성공: $filePath', tag: 'ImageService');
       return filePath;
     } catch (e) {
-      _logError('이미지 업로드 실패', e);
+      Logger.error('이미지 업로드 실패', tag: 'ImageService');
       return null;
     }
   }
@@ -69,10 +70,10 @@ class ImageService {
   User? _getCurrentUser() {
     final user = _supabase.auth.currentUser;
     if (user == null) {
-      _logError('사용자가 로그인되어 있지 않습니다.', null);
+      Logger.error('사용자가 로그인되어 있지 않습니다.', tag: 'ImageService');
       return null;
     }
-    _logInfo('현재 로그인된 사용자: ${user.id}');
+    Logger.info('현재 로그인된 사용자: ${user.id}', tag: 'ImageService');
     return user;
   }
 
@@ -95,10 +96,10 @@ class ImageService {
     try {
       final filePath = _generateAvatarPath(userId);
       await _supabase.storage.from(_bucketName).remove([filePath]);
-      _logInfo('기존 아바타 이미지 삭제 완료: $filePath');
+      Logger.info('기존 아바타 이미지 삭제 완료: $filePath', tag: 'ImageService');
     } catch (e) {
       // 파일이 없으면 무시 (정상적인 경우)
-      _logInfo('기존 아바타 이미지가 없습니다: avatars/$userId.jpg');
+      Logger.info('기존 아바타 이미지가 없습니다: avatars/$userId.jpg', tag: 'ImageService');
     }
   }
 
@@ -108,19 +109,22 @@ class ImageService {
       final imageBytes = await image.readAsBytes();
       final optimizedBytes = await _optimizeImage(imageBytes);
 
-      _logInfo('최적화된 이미지 크기: ${optimizedBytes.length} bytes');
+      Logger.info(
+        '최적화된 이미지 크기: ${optimizedBytes.length} bytes',
+        tag: 'ImageService',
+      );
 
       if (optimizedBytes.length > _maxFileSizeInBytes) {
-        _logError(
+        Logger.error(
           '이미지 파일이 너무 큽니다: ${optimizedBytes.length} bytes (제한: $_maxFileSizeInBytes bytes)',
-          null,
+          tag: 'ImageService',
         );
         return null;
       }
 
       return optimizedBytes;
     } catch (e) {
-      _logError('이미지 파일 최적화 실패', e);
+      Logger.error('이미지 파일 최적화 실패', tag: 'ImageService');
       return null;
     }
   }
@@ -139,7 +143,7 @@ class ImageService {
 
       return img.encodeJpg(resizedImage, quality: _jpegQuality);
     } catch (e) {
-      _logError('이미지 최적화 실패', e);
+      Logger.error('이미지 최적화 실패', tag: 'ImageService');
       return bytes; // 최적화 실패 시 원본 반환
     }
   }
@@ -166,11 +170,14 @@ class ImageService {
       if (response.statusCode == 200) {
         return _validateImageResponse(response);
       } else {
-        _logError('이미지 다운로드 실패: ${response.statusCode}', null);
+        Logger.error(
+          '이미지 다운로드 실패: ${response.statusCode}',
+          tag: 'ImageService',
+        );
         return null;
       }
     } catch (e) {
-      _logError('이미지 다운로드 에러', e);
+      Logger.error('이미지 다운로드 에러', tag: 'ImageService');
       return null;
     }
   }
@@ -192,14 +199,8 @@ class ImageService {
     if (contentType?.first.startsWith('image/') == true) {
       return response.data as Uint8List;
     } else {
-      _logError('응답이 이미지가 아닙니다: $contentType', null);
+      Logger.error('응답이 이미지가 아닙니다: $contentType', tag: 'ImageService');
       return null;
     }
   }
-
-  // Logging methods
-  void _logInfo(String message) => print('ImageService: $message');
-  void _logSuccess(String message) => print('ImageService: ✅ $message');
-  void _logError(String message, dynamic error) =>
-      print('ImageService: ❌ $message - $error');
 }

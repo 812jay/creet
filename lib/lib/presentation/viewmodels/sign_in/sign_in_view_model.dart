@@ -1,5 +1,5 @@
-import 'dart:developer' as developer;
 import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
@@ -17,7 +17,7 @@ class SignInViewModel extends _$SignInViewModel {
 
   @override
   Future<AuthCredentialDto?> build() async {
-    developer.log('SignInViewModel 초기화', name: 'SignInViewModel');
+    Logger.info('SignInViewModel 초기화', tag: 'SignInViewModel');
     // 초기 상태는 null (인증되지 않은 상태)
     return null;
   }
@@ -25,7 +25,7 @@ class SignInViewModel extends _$SignInViewModel {
   SignInNavigationState get navigationState => _navigationState;
 
   Future<void> signInWithGoogle() async {
-    developer.log('Google 로그인 시작', name: 'SignInViewModel');
+    Logger.info('Google 로그인 시작', tag: 'SignInViewModel');
     _isSigningIn = true;
     state = const AsyncValue.loading();
 
@@ -36,14 +36,14 @@ class SignInViewModel extends _$SignInViewModel {
       final credential = await signInWithGoogleUseCase();
 
       if (credential == null) {
-        developer.log('Google 인증 실패', name: 'SignInViewModel');
+        Logger.error('Google 인증 실패', tag: 'SignInViewModel');
         return;
       }
 
       // 인증 성공 후 users 테이블에서 사용자 확인
-      developer.log(
+      Logger.info(
         'Google 인증 성공: ${credential.email ?? "이메일 없음"}',
-        name: 'SignInViewModel',
+        tag: 'SignInViewModel',
       );
 
       // users 테이블에서 기존 사용자인지 확인
@@ -51,20 +51,20 @@ class SignInViewModel extends _$SignInViewModel {
 
       if (existingUser != null) {
         // 기존 사용자: 메인 페이지로 이동
-        developer.log(
+        Logger.info(
           '기존 사용자 확인됨: ${existingUser.email}',
-          name: 'SignInViewModel',
+          tag: 'SignInViewModel',
         );
         state = AsyncValue.data(credential);
         _navigationState = SignInNavigationState.toMain;
       } else {
         // 새 사용자: 이용약관 페이지로 이동
-        developer.log('새 사용자: 이용약관 페이지로 이동', name: 'SignInViewModel');
+        Logger.info('새 사용자: 이용약관 페이지로 이동', tag: 'SignInViewModel');
         state = AsyncValue.data(credential);
         _navigationState = SignInNavigationState.toTerms;
       }
     } catch (error, stackTrace) {
-      developer.log('Google 인증 실패: $error', name: 'SignInViewModel');
+      Logger.error('Google 인증 실패: $error', tag: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;
@@ -73,11 +73,11 @@ class SignInViewModel extends _$SignInViewModel {
 
   Future<void> signInWithApple() async {
     if (_isSigningIn) {
-      developer.log('이미 인증 중이므로 중복 실행 방지', name: 'SignInViewModel');
+      Logger.info('이미 인증 중이므로 중복 실행 방지', tag: 'SignInViewModel');
       return;
     }
 
-    developer.log('Apple 로그인 시작', name: 'SignInViewModel');
+    Logger.info('Apple 로그인 시작', tag: 'SignInViewModel');
     _isSigningIn = true;
     state = const AsyncValue.loading();
 
@@ -88,35 +88,32 @@ class SignInViewModel extends _$SignInViewModel {
       final credential = await signInWithAppleUseCase();
 
       if (credential == null) {
-        developer.log('Apple 인증 실패', name: 'SignInViewModel');
+        Logger.error('Apple 인증 실패', tag: 'SignInViewModel');
         return;
       }
 
       // 인증 성공 후 users 테이블에서 사용자 확인
-      developer.log(
-        'Apple 인증 성공: ${credential.email}',
-        name: 'SignInViewModel',
-      );
+      Logger.info('Apple 인증 성공: ${credential.email}', tag: 'SignInViewModel');
 
       // users 테이블에서 기존 사용자인지 확인
       final existingUser = await userUseCase();
 
       if (existingUser != null) {
         // 기존 사용자: 메인 페이지로 이동
-        developer.log(
+        Logger.info(
           '기존 사용자 확인됨: ${existingUser.email}',
-          name: 'SignInViewModel',
+          tag: 'SignInViewModel',
         );
         state = AsyncValue.data(credential);
         _navigationState = SignInNavigationState.toMain;
       } else {
         // 새 사용자: 이용약관 페이지로 이동
-        developer.log('새 사용자: 이용약관 페이지로 이동', name: 'SignInViewModel');
+        Logger.info('새 사용자: 이용약관 페이지로 이동', tag: 'SignInViewModel');
         state = AsyncValue.data(credential);
         _navigationState = SignInNavigationState.toTerms;
       }
     } catch (error, stackTrace) {
-      developer.log('Apple 인증 실패: $error', name: 'SignInViewModel');
+      Logger.error('Apple 인증 실패: $error', tag: 'SignInViewModel');
       state = AsyncValue.error(error, stackTrace);
     } finally {
       _isSigningIn = false;

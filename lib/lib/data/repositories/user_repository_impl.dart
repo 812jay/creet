@@ -1,7 +1,6 @@
-import 'dart:developer' as developer;
-
 import 'package:creet/lib/core/service/image_service.dart';
 import 'package:creet/lib/core/utils/exceptions/async_wrapper.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/data/datasources/user/user_entity.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
@@ -50,7 +49,7 @@ class UserRepositoryImpl implements UserRepository {
           'updated_at': DateTime.now().toIso8601String(),
         });
 
-        print('signUp: $response');
+        Logger.info('signUp: $response', tag: 'UserRepository');
       },
       operationName: 'User Sign Up',
       errorMessage: '회원가입에 실패했습니다',
@@ -62,10 +61,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<UserDto?> getCurrentUser() async {
     final String? providerId = _supabaseClient.auth.currentUser?.id;
     if (providerId != null) {
-      developer.log(
-        '현재 사용자 확인: $providerId',
-        name: 'AuthRepository[getCurrentUser]',
-      );
+      Logger.info('현재 사용자 확인: $providerId', tag: 'UserRepository');
 
       return AsyncWrapper.wrap(
         () async {
@@ -84,7 +80,7 @@ class UserRepositoryImpl implements UserRepository {
         errorMessage: '사용자 데이터 조회에 실패했습니다',
       );
     }
-    developer.log('현재 사용자 없음', name: 'AuthRepository[getCurrentUser]');
+    Logger.info('현재 사용자 없음', tag: 'UserRepository');
     return null;
   }
 }

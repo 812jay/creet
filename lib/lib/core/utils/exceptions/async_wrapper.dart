@@ -1,12 +1,10 @@
-import 'dart:developer' as developer;
 import 'package:creet/lib/core/utils/exceptions/custom_exception.dart';
 import 'package:creet/lib/core/utils/exceptions/exception_utils.dart';
 import 'package:creet/lib/core/utils/exceptions/result.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 
 /// 비동기 작업을 안전하게 처리하는 래퍼 클래스
 class AsyncWrapper {
-  static const String _tag = 'AsyncWrapper';
-
   /// 안전한 비동기 함수 실행을 위한 래퍼
   static Future<T?> wrap<T>(
     Future<T> Function() operation, {
@@ -20,9 +18,9 @@ class AsyncWrapper {
     } catch (e, stackTrace) {
       // 사용자 취소 처리
       if (handleUserCancellation && ExceptionUtils.isUserCancelled(e)) {
-        developer.log(
+        Logger.info(
           '${operationName ?? 'Operation'} cancelled by user',
-          name: _tag,
+          tag: 'AsyncWrapper',
         );
         return null;
       }
@@ -32,9 +30,9 @@ class AsyncWrapper {
         originalException: e is Exception ? e : Exception(e.toString()),
       );
 
-      developer.log(
+      Logger.error(
         '${operationName ?? 'Operation'} failed: ${exception.message}',
-        name: _tag,
+        tag: 'AsyncWrapper',
         error: e,
         stackTrace: stackTrace,
       );
@@ -59,9 +57,9 @@ class AsyncWrapper {
     } catch (e, stackTrace) {
       // 사용자 취소 처리
       if (handleUserCancellation && ExceptionUtils.isUserCancelled(e)) {
-        developer.log(
+        Logger.info(
           '${operationName ?? 'Operation'} cancelled by user',
-          name: _tag,
+          tag: 'AsyncWrapper',
         );
         return Result.failure('사용자가 취소했습니다');
       }
@@ -71,9 +69,9 @@ class AsyncWrapper {
         originalException: e is Exception ? e : Exception(e.toString()),
       );
 
-      developer.log(
+      Logger.error(
         '${operationName ?? 'Operation'} failed: ${exception.message}',
-        name: _tag,
+        tag: 'AsyncWrapper',
         error: e,
         stackTrace: stackTrace,
       );

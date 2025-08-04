@@ -1,4 +1,5 @@
 import 'package:creet/lib/core/service/image_service.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class UserProfileCard extends StatelessWidget {
             radius: 50,
             backgroundImage: NetworkImage(avatarUrl),
             onBackgroundImageError: (exception, stackTrace) {
-              print('이미지 로드 실패: $exception');
+              Logger.error('이미지 로드 실패: $exception', tag: 'UserProfileCard');
             },
           )
         else

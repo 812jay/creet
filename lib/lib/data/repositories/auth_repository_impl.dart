@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:creet/lib/core/utils/exceptions/async_wrapper.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/data/datasources/auth/auth_credential_entity.dart';
 import 'package:creet/lib/data/datasources/user/user_entity.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
@@ -20,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthCredentialDto?> signinWithGoogle() async {
     return AsyncWrapper.wrap(
       () async {
-        developer.log('Google Sign-In 시작', name: 'AuthRepository');
+        Logger.info('Google Sign-In 시작', tag: 'AuthRepository');
 
         // Google Sign-In 초기화
         final GoogleSignIn googleSignIn = GoogleSignIn.instance;
@@ -30,7 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
           ),
         );
 
-        developer.log('Google Sign-In 인증 시도', name: 'AuthRepository');
+        Logger.info('Google Sign-In 인증 시도', tag: 'AuthRepository');
         // Google Sign-In 실행
         final GoogleSignInAccount googleUser =
             await googleSignIn.authenticate();
@@ -40,10 +40,7 @@ class AuthRepositoryImpl implements AuthRepository {
         final String? idToken = googleAuth.idToken;
 
         if (idToken == null) {
-          developer.log(
-            'Google idToken 획득 실패',
-            name: 'AuthRepository[authWithGoogle]',
-          );
+          Logger.warning('Google idToken 획득 실패', tag: 'AuthRepository');
           throw Exception('Google idToken 획득 실패');
         }
 
@@ -73,10 +70,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthCredentialDto?> signinWithApple() async {
     return AsyncWrapper.wrap(
       () async {
-        developer.log(
-          'Apple Sign-In 시작',
-          name: 'AuthRepository[authWithApple]',
-        );
+        Logger.info('Apple Sign-In 시작', tag: 'AuthRepository');
 
         final credential = await SignInWithApple.getAppleIDCredential(
           scopes: [
@@ -88,10 +82,7 @@ class AuthRepositoryImpl implements AuthRepository {
         final String idToken = credential.identityToken ?? '';
 
         if (idToken == '') {
-          developer.log(
-            'Apple Sign-In 취소됨',
-            name: 'AuthRepository[authWithApple]',
-          );
+          Logger.info('Apple Sign-In 취소됨', tag: 'AuthRepository');
           throw Exception('Apple Sign-In 취소됨');
         }
 
@@ -100,10 +91,7 @@ class AuthRepositoryImpl implements AuthRepository {
           idToken: idToken,
         );
         if (auth.user == null) {
-          developer.log(
-            'Supabase 로그인 실패',
-            name: 'AuthRepository[authWithApple]',
-          );
+          Logger.error('Supabase 로그인 실패', tag: 'AuthRepository');
           throw Exception('Supabase 로그인 실패');
         }
         final authUser = auth.user!;
@@ -116,10 +104,7 @@ class AuthRepositoryImpl implements AuthRepository {
           displayName: authUser.userMetadata?['name'] ?? '',
           photoURL: authUser.userMetadata?['picture'] ?? '',
         );
-        developer.log(
-          'Apple idToken 획득 성공: $entity',
-          name: 'AuthRepository[authWithApple]',
-        );
+        Logger.info('Apple idToken 획득 성공: $entity', tag: 'AuthRepository');
         final dto = entity.toDto();
         return dto;
       },
@@ -133,9 +118,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() async {
     await AsyncWrapper.wrap(
       () async {
-        developer.log('로그아웃 시작', name: 'AuthRepository[signOut]');
+        Logger.info('로그아웃 시작', tag: 'AuthRepository');
         await _supabaseClient.auth.signOut();
-        developer.log('로그아웃 완료', name: 'AuthRepository[signOut]');
+        Logger.info('로그아웃 완료', tag: 'AuthRepository');
       },
       operationName: 'Sign Out',
       errorMessage: '로그아웃에 실패했습니다',
@@ -148,17 +133,11 @@ class AuthRepositoryImpl implements AuthRepository {
     return _supabaseClient.auth.onAuthStateChange.map((AuthState data) {
       final user = data.session?.user;
       if (user != null) {
-        developer.log(
-          '인증 상태 변경: 로그인됨 - ${user.email}',
-          name: 'AuthRepository[authStateChanges]',
-        );
+        Logger.info('인증 상태 변경: 로그인됨 - ${user.email}', tag: 'AuthRepository');
         final entity = UserEntity.fromJson(user.toJson());
         return entity.toDto();
       }
-      developer.log(
-        '인증 상태 변경: 로그아웃됨',
-        name: 'AuthRepository[authStateChanges]',
-      );
+      Logger.info('인증 상태 변경: 로그아웃됨', tag: 'AuthRepository');
       return null;
     });
   }

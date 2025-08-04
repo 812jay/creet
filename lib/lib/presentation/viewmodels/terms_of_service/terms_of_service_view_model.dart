@@ -1,4 +1,5 @@
 import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -57,18 +58,27 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
   void toggleAllAgreement() {
     final newValue = !state.isAgreed; // 현재 "모두 동의" 상태의 반대
     state = state.copyWith(privacyAgreed: newValue, termsAgreed: newValue);
-    print('toggleAllAgreement: ${state.isAgreed}');
+    Logger.info(
+      'toggleAllAgreement: ${state.isAgreed}',
+      tag: 'TermsOfServiceViewModel',
+    );
   }
 
   // 개별 체크박스 클릭 시: 해당 체크박스만 변경
   void togglePrivacyAgreement() {
     state = state.copyWith(privacyAgreed: !state.privacyAgreed);
-    print('togglePrivacyAgreement: ${state.privacyAgreed}');
+    Logger.info(
+      'togglePrivacyAgreement: ${state.privacyAgreed}',
+      tag: 'TermsOfServiceViewModel',
+    );
   }
 
   void toggleTermsAgreement() {
     state = state.copyWith(termsAgreed: !state.termsAgreed);
-    print('toggleTermsAgreement: ${state.termsAgreed}');
+    Logger.info(
+      'toggleTermsAgreement: ${state.termsAgreed}',
+      tag: 'TermsOfServiceViewModel',
+    );
   }
 
   Future<void> signUp(AuthCredentialDto credential) async {
@@ -80,10 +90,10 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
 
       // 성공 시 상태 초기화 및 네비게이션 플래그 설정
       state = state.copyWith(isLoading: false, shouldNavigate: true);
-      print('SignUp 성공!');
+      Logger.info('SignUp 성공!', tag: 'TermsOfServiceViewModel');
     } catch (e) {
       state = state.copyWith(isLoading: false);
-      print('SignUp 실패: $e');
+      Logger.error('SignUp 실패: $e', tag: 'TermsOfServiceViewModel');
       // 에러 처리 (필요시)
     }
   }
