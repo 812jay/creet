@@ -36,7 +36,8 @@ class SignInViewModel extends _$SignInViewModel {
       final credential = await signInWithGoogleUseCase();
 
       if (credential == null) {
-        throw Exception('Google 인증 실패');
+        developer.log('Google 인증 실패', name: 'SignInViewModel');
+        return;
       }
 
       // 인증 성공 후 users 테이블에서 사용자 확인
@@ -87,7 +88,8 @@ class SignInViewModel extends _$SignInViewModel {
       final credential = await signInWithAppleUseCase();
 
       if (credential == null) {
-        throw Exception('Apple 인증 실패');
+        developer.log('Apple 인증 실패', name: 'SignInViewModel');
+        return;
       }
 
       // 인증 성공 후 users 테이블에서 사용자 확인
