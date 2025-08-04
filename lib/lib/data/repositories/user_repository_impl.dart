@@ -1,8 +1,9 @@
 import 'dart:developer' as developer;
-import 'dart:io';
 
 import 'package:creet/lib/core/service/image_service.dart';
+import 'package:creet/lib/data/datasources/user/user_entity.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,11 +16,6 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> signUp(AuthCredentialDto credential) async {
     try {
-      developer.log(
-        'signUp: ${credential.toJson()}',
-        name: 'UserRepositoryImpl',
-      );
-
       String? avatarFileName;
 
       // 프로필 이미지가 있으면 처리
@@ -57,5 +53,34 @@ class UserRepositoryImpl implements UserRepository {
       print('signUp error: $e');
       rethrow;
     }
+  }
+
+  @override
+  Future<UserDto?> getCurrentUser() async {
+    final String? providerId = _supabaseClient.auth.currentUser?.id;
+    if (providerId != null) {
+      developer.log(
+        '현재 사용자 확인: $providerId',
+        name: 'AuthRepository[getCurrentUser]',
+      );
+      try {
+        final userData =
+            await _supabaseClient
+                .from('users')
+                .select()
+                .eq('provider_id', providerId)
+                .maybeSingle();
+        if (userData != null) {
+          return UserEntity.fromJson(userData).toDto();
+        }
+      } catch (e) {
+        developer.log(
+          '사용자 데이터 조회 실패: $e',
+          name: 'AuthRepository[getCurrentUser]',
+        );
+      }
+    }
+    developer.log('현재 사용자 없음', name: 'AuthRepository[getCurrentUser]');
+    return null;
   }
 }

@@ -76,7 +76,7 @@ class ServiceLocator {
     );
 
     serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(serviceLocator<AuthRepository>()),
+      () => GetCurrentUserUseCase(serviceLocator<UserRepository>()),
     );
 
     serviceLocator.registerLazySingleton<GetAuthStateChangesUseCase>(

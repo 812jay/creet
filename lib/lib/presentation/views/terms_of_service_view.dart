@@ -4,6 +4,7 @@ import 'package:creet/lib/presentation/viewmodels/terms_of_service/terms_of_serv
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
+import 'package:go_router/go_router.dart';
 
 class TermsOfServiceView extends StatelessWidget {
   const TermsOfServiceView({super.key, required this.credential});
@@ -186,32 +187,50 @@ class _SignUpButton extends ConsumerWidget {
     final state = ref.watch(termsOfServiceViewModelProvider);
     final viewModel = ref.watch(termsOfServiceViewModelProvider.notifier);
 
+    // shouldNavigate 상태 변화 감지하여 네비게이션 처리
+    if (state.shouldNavigate) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/main');
+        // 네비게이션 후 플래그 리셋
+        viewModel.resetNavigationFlag();
+      });
+    }
+
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: state.isAgreed ? () => viewModel.signUp(credential) : null,
+        onPressed:
+            state.isAgreed && !state.isLoading
+                ? () => viewModel.signUp(credential)
+                : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: state.isAgreed ? AppColors.primary : Colors.grey,
+          backgroundColor:
+              state.isAgreed && !state.isLoading
+                  ? AppColors.primary
+                  : Colors.grey,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),
         ),
-        child: _ButtonText(),
+        child:
+            state.isLoading
+                ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+                : Text(
+                  '동의하고 시작하기',
+                  style: AppTypo.body1Bold.copyWith(
+                    color: AppColors.textInverse,
+                  ),
+                ),
       ),
-    );
-  }
-}
-
-class _ButtonText extends StatelessWidget {
-  const _ButtonText();
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '동의하고 시작하기',
-      style: AppTypo.body1Bold.copyWith(color: Colors.white),
     );
   }
 }

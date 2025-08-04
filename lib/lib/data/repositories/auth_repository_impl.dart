@@ -140,27 +140,7 @@ class AuthRepositoryImpl implements AuthRepository {
     developer.log('로그아웃 완료', name: 'AuthRepository[signOut]');
   }
 
-  @override
-  Future<UserDto?> getCurrentUser() async {
-    final String? userId = _supabaseClient.auth.currentUser?.id;
-    if (userId != null) {
-      developer.log(
-        '현재 사용자 확인: $userId',
-        name: 'AuthRepository[getCurrentUser]',
-      );
-      final userData =
-          await _supabaseClient
-              .from('users')
-              .select()
-              .eq('id', userId)
-              .single();
-      if (userData.isNotEmpty) {
-        return UserEntity.fromJson(userData).toDto();
-      }
-    }
-    developer.log('현재 사용자 없음', name: 'AuthRepository[getCurrentUser]');
-    return null;
-  }
+
 
   @override
   Stream<UserDto?> get authStateChanges {

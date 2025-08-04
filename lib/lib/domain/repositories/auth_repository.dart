@@ -5,6 +5,5 @@ abstract class AuthRepository {
   Future<AuthCredentialDto?> signinWithGoogle();
   Future<AuthCredentialDto?> signinWithApple();
   Future<void> signOut();
-  Future<UserDto?> getCurrentUser();
   Stream<UserDto?> get authStateChanges;
 }

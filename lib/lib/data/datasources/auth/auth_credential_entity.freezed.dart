@@ -240,14 +240,17 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
     return 'AuthCredentialEntity(idToken: $idToken, provider: $provider, providerId: $providerId, email: $email, displayName: $displayName, photoURL: $photoURL)';
   }
 
-  AuthCredentialDto toDto() => AuthCredentialDto(
-    idToken: idToken,
-    provider: provider,
-    providerId: providerId,
-    email: email,
-    displayName: displayName,
-    photoURL: photoURL,
-  );
+  @override
+  AuthCredentialDto toDto() {
+    return AuthCredentialDto(
+      idToken: idToken,
+      provider: provider,
+      providerId: providerId,
+      email: email,
+      displayName: displayName,
+      photoURL: photoURL,
+    );
+  }
 
   @override
   bool operator ==(Object other) {

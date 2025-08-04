@@ -32,15 +32,6 @@ class SignOutUseCase {
   }
 }
 
-class GetCurrentUserUseCase {
-  final AuthRepository _authRepository;
-
-  GetCurrentUserUseCase(this._authRepository);
-
-  Future<UserDto?> call() async {
-    return await _authRepository.getCurrentUser();
-  }
-}
 
 class GetAuthStateChangesUseCase {
   final AuthRepository _authRepository;

@@ -11,11 +11,13 @@ class TermsOfServiceState {
     required this.isLoading,
     required this.privacyAgreed,
     required this.termsAgreed,
+    required this.shouldNavigate,
   });
 
   final bool isLoading;
   final bool privacyAgreed;
   final bool termsAgreed;
+  final bool shouldNavigate;
 
   // "모두 동의"는 계산된 값
   bool get isAgreed => privacyAgreed && termsAgreed;
@@ -26,11 +28,13 @@ class TermsOfServiceState {
     bool? isLoading,
     bool? privacyAgreed,
     bool? termsAgreed,
+    bool? shouldNavigate,
   }) {
     return TermsOfServiceState(
       isLoading: isLoading ?? this.isLoading,
       privacyAgreed: privacyAgreed ?? this.privacyAgreed,
       termsAgreed: termsAgreed ?? this.termsAgreed,
+      shouldNavigate: shouldNavigate ?? this.shouldNavigate,
     );
   }
 }
@@ -45,6 +49,7 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
       isLoading: false,
       privacyAgreed: false,
       termsAgreed: false,
+      shouldNavigate: false,
     );
   }
 
@@ -67,7 +72,24 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
   }
 
   Future<void> signUp(AuthCredentialDto credential) async {
-    final useCase = serviceLocator.get<SignUpUseCase>();
-    await useCase(credential);
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final useCase = serviceLocator.get<SignUpUseCase>();
+      await useCase(credential);
+
+      // 성공 시 상태 초기화 및 네비게이션 플래그 설정
+      state = state.copyWith(isLoading: false, shouldNavigate: true);
+      print('SignUp 성공!');
+    } catch (e) {
+      state = state.copyWith(isLoading: false);
+      print('SignUp 실패: $e');
+      // 에러 처리 (필요시)
+    }
+  }
+
+  // 네비게이션 플래그 리셋
+  void resetNavigationFlag() {
+    state = state.copyWith(shouldNavigate: false);
   }
 }

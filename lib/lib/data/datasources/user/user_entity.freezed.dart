@@ -277,16 +277,20 @@ class _$UserEntityImpl implements _UserEntity {
     return 'UserEntity(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
-  UserDto toDto() => UserDto(
-    id: id,
-    email: email,
-    provider: provider,
-    providerId: providerId,
-    nickname: nickname,
-    avatarUrl: avatarUrl,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  );
+  @override
+  UserDto toDto() {
+    return UserDto(
+      id: id,
+      email: email,
+      provider: provider,
+      providerId: providerId,
+      nickname: nickname,
+      avatarUrl: avatarUrl,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
