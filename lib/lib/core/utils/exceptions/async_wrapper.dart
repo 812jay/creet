@@ -22,7 +22,7 @@ class AsyncWrapper {
           '${operationName ?? 'Operation'} cancelled by user',
           tag: 'AsyncWrapper',
         );
-        return null;
+        throw const CustomException('사용자가 취소했습니다', code: 'USER_CANCELLED');
       }
 
       final exception = CustomException(

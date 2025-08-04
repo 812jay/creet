@@ -18,3 +18,13 @@ class CustomException implements Exception {
     return buffer.toString();
   }
 }
+
+// /// 사용자 취소를 나타내는 예외 클래스
+// class UserCancelledException implements Exception {
+//   final String message;
+
+//   const UserCancelledException([this.message = '사용자가 취소했습니다']);
+
+//   @override
+//   String toString() => 'UserCancelledException: $message';
+// } 

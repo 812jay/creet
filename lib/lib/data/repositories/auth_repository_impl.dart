@@ -63,6 +63,7 @@ class AuthRepositoryImpl implements AuthRepository {
       },
       operationName: 'Google Sign-In',
       errorMessage: 'Google 로그인에 실패했습니다',
+      handleUserCancellation: true,
     );
   }
 

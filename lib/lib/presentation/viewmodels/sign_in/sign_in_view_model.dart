@@ -1,4 +1,5 @@
 import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/core/utils/exceptions/custom_exception.dart';
 import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
@@ -37,6 +38,7 @@ class SignInViewModel extends _$SignInViewModel {
 
       if (credential == null) {
         Logger.error('Google 인증 실패', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
         return;
       }
 
@@ -64,8 +66,14 @@ class SignInViewModel extends _$SignInViewModel {
         _navigationState = SignInNavigationState.toTerms;
       }
     } catch (error, stackTrace) {
-      Logger.error('Google 인증 실패: $error', tag: 'SignInViewModel');
-      state = AsyncValue.error(error, stackTrace);
+      // 사용자 취소는 에러가 아닌 정상적인 상황
+      if (error is CustomException && error.code == 'USER_CANCELLED') {
+        Logger.info('Google 로그인 취소됨', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
+      } else {
+        Logger.error('Google 인증 실패: $error', tag: 'SignInViewModel');
+        state = AsyncValue.error(error, stackTrace);
+      }
     } finally {
       _isSigningIn = false;
     }
@@ -89,6 +97,7 @@ class SignInViewModel extends _$SignInViewModel {
 
       if (credential == null) {
         Logger.error('Apple 인증 실패', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
         return;
       }
 
@@ -113,8 +122,14 @@ class SignInViewModel extends _$SignInViewModel {
         _navigationState = SignInNavigationState.toTerms;
       }
     } catch (error, stackTrace) {
-      Logger.error('Apple 인증 실패: $error', tag: 'SignInViewModel');
-      state = AsyncValue.error(error, stackTrace);
+      // 사용자 취소는 에러가 아닌 정상적인 상황
+      if (error is CustomException && error.code == 'USER_CANCELLED') {
+        Logger.info('Apple 로그인 취소됨', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
+      } else {
+        Logger.error('Apple 인증 실패: $error', tag: 'SignInViewModel');
+        state = AsyncValue.error(error, stackTrace);
+      }
     } finally {
       _isSigningIn = false;
     }

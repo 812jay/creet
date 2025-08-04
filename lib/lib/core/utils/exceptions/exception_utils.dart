@@ -1,12 +1,25 @@
 /// 예외 타입을 확인하는 유틸리티 메서드들
 class ExceptionUtils {
-  /// 사용자 취소 관련 예외인지 확인 (Apple Sign-In 등)
+  /// 사용자 취소 관련 예외인지 확인 (Apple Sign-In, Google Sign-In 등)
   static bool isUserCancelled(dynamic exception) {
     final message = exception.toString().toLowerCase();
-    return message.contains('cancelled') ||
+
+    // Google Sign-In 취소 확인
+    if (message.contains('googlesigninexception') &&
+        message.contains('canceled') &&
+        message.contains('cancelled by user')) {
+      return true;
+    }
+
+    // Apple Sign-In 취소 확인
+    if (message.contains('cancelled') ||
         message.contains('not_interactive') ||
         message.contains('user_cancelled') ||
-        message.contains('apple sign-in 취소됨');
+        message.contains('apple sign-in 취소됨')) {
+      return true;
+    }
+
+    return false;
   }
 
   /// 네트워크 관련 예외인지 확인

@@ -50,6 +50,7 @@ class SignInView extends ConsumerWidget {
                 SignInButton(
                   iconPath: 'assets/icons/google.svg',
                   text: 'Google 로그인',
+                  isLoading: authViewModel.isSigningIn,
                   onTap: () => authViewModel.signInWithGoogle(),
                 ),
                 if (authViewModel.isAppleSignInAvailable) ...[
@@ -59,6 +60,7 @@ class SignInView extends ConsumerWidget {
                     backgroundColor: AppColors.backgroundAppleSignInButton,
                     textColor: AppColors.textInverse,
                     text: 'Apple 로그인',
+                    isLoading: authViewModel.isSigningIn,
                     onTap: () => authViewModel.signInWithApple(),
                   ),
                 ],
