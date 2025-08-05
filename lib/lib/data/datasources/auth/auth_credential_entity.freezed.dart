@@ -241,18 +241,6 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
   }
 
   @override
-  AuthCredentialDto toDto() {
-    return AuthCredentialDto(
-      idToken: idToken,
-      provider: provider,
-      providerId: providerId,
-      email: email,
-      displayName: displayName,
-      photoURL: photoURL,
-    );
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&

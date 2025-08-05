@@ -17,7 +17,9 @@ class AuthCredentialEntity with _$AuthCredentialEntity {
 
   factory AuthCredentialEntity.fromJson(Map<String, dynamic> json) =>
       _$AuthCredentialEntityFromJson(json);
+}
 
+extension AuthCredentialEntityExtensions on AuthCredentialEntity {
   AuthCredentialDto toDto() => AuthCredentialDto(
     idToken: idToken,
     provider: provider,
