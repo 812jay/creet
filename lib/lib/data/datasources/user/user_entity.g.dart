@@ -11,7 +11,6 @@ _$UserEntityImpl _$$UserEntityImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       email: json['email'] as String,
       provider: json['provider'] as String,
-      providerId: json['provider_id'] as String,
       nickname: json['nickname'] as String?,
       avatarUrl: json['avatar_url'] as String?,
       createdAt:
@@ -29,7 +28,6 @@ Map<String, dynamic> _$$UserEntityImplToJson(_$UserEntityImpl instance) =>
       'id': instance.id,
       'email': instance.email,
       'provider': instance.provider,
-      'provider_id': instance.providerId,
       'nickname': instance.nickname,
       'avatar_url': instance.avatarUrl,
       'created_at': instance.createdAt?.toIso8601String(),

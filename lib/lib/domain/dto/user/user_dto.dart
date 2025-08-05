@@ -9,7 +9,6 @@ class UserDto with _$UserDto {
     required String id,
     required String email,
     required String provider,
-    required String providerId,
     String? nickname,
     String? avatarUrl,
     DateTime? createdAt,

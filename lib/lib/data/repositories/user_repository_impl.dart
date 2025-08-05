@@ -40,9 +40,9 @@ class UserRepositoryImpl implements UserRepository {
 
         // 3. 사용자 정보 저장 (avatar_url에 파일명 저장)
         final response = await _supabaseClient.from('users').insert({
+          'id': credential.providerId, // Supabase Auth의 ID와 동일하게 설정
           'email': credential.email,
           'provider': credential.provider,
-          'provider_id': credential.providerId,
           'nickname': credential.displayName,
           'avatar_url': avatarFileName,
           'created_at': DateTime.now().toIso8601String(),
@@ -65,12 +65,16 @@ class UserRepositoryImpl implements UserRepository {
 
       return AsyncWrapper.wrap(
         () async {
+          Logger.info('검색할 provider_id: "$providerId"', tag: 'UserRepository');
+
+          // provider_id 대신 다른 컬럼명 시도
           final userData =
               await _supabaseClient
                   .from('users')
                   .select()
-                  .eq('provider_id', providerId)
+                  .eq('id', providerId) // provider_id 대신 id로 시도
                   .maybeSingle();
+
           if (userData != null) {
             return UserEntity.fromJson(userData).toDto();
           }

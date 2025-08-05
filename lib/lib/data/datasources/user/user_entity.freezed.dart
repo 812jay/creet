@@ -27,8 +27,6 @@ mixin _$UserEntity {
   String get email => throw _privateConstructorUsedError;
   @JsonKey(name: 'provider')
   String get provider => throw _privateConstructorUsedError;
-  @JsonKey(name: 'provider_id')
-  String get providerId => throw _privateConstructorUsedError;
   @JsonKey(name: 'nickname')
   String? get nickname => throw _privateConstructorUsedError;
   @JsonKey(name: 'avatar_url')
@@ -59,7 +57,6 @@ abstract class $UserEntityCopyWith<$Res> {
     @JsonKey(name: 'id') String id,
     @JsonKey(name: 'email') String email,
     @JsonKey(name: 'provider') String provider,
-    @JsonKey(name: 'provider_id') String providerId,
     @JsonKey(name: 'nickname') String? nickname,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -85,7 +82,6 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
     Object? id = null,
     Object? email = null,
     Object? provider = null,
-    Object? providerId = null,
     Object? nickname = freezed,
     Object? avatarUrl = freezed,
     Object? createdAt = freezed,
@@ -107,11 +103,6 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
                 null == provider
                     ? _value.provider
                     : provider // ignore: cast_nullable_to_non_nullable
-                        as String,
-            providerId:
-                null == providerId
-                    ? _value.providerId
-                    : providerId // ignore: cast_nullable_to_non_nullable
                         as String,
             nickname:
                 freezed == nickname
@@ -152,7 +143,6 @@ abstract class _$$UserEntityImplCopyWith<$Res>
     @JsonKey(name: 'id') String id,
     @JsonKey(name: 'email') String email,
     @JsonKey(name: 'provider') String provider,
-    @JsonKey(name: 'provider_id') String providerId,
     @JsonKey(name: 'nickname') String? nickname,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -177,7 +167,6 @@ class __$$UserEntityImplCopyWithImpl<$Res>
     Object? id = null,
     Object? email = null,
     Object? provider = null,
-    Object? providerId = null,
     Object? nickname = freezed,
     Object? avatarUrl = freezed,
     Object? createdAt = freezed,
@@ -199,11 +188,6 @@ class __$$UserEntityImplCopyWithImpl<$Res>
             null == provider
                 ? _value.provider
                 : provider // ignore: cast_nullable_to_non_nullable
-                    as String,
-        providerId:
-            null == providerId
-                ? _value.providerId
-                : providerId // ignore: cast_nullable_to_non_nullable
                     as String,
         nickname:
             freezed == nickname
@@ -237,7 +221,6 @@ class _$UserEntityImpl implements _UserEntity {
     @JsonKey(name: 'id') required this.id,
     @JsonKey(name: 'email') required this.email,
     @JsonKey(name: 'provider') required this.provider,
-    @JsonKey(name: 'provider_id') required this.providerId,
     @JsonKey(name: 'nickname') this.nickname,
     @JsonKey(name: 'avatar_url') this.avatarUrl,
     @JsonKey(name: 'created_at') this.createdAt,
@@ -257,9 +240,6 @@ class _$UserEntityImpl implements _UserEntity {
   @JsonKey(name: 'provider')
   final String provider;
   @override
-  @JsonKey(name: 'provider_id')
-  final String providerId;
-  @override
   @JsonKey(name: 'nickname')
   final String? nickname;
   @override
@@ -274,7 +254,7 @@ class _$UserEntityImpl implements _UserEntity {
 
   @override
   String toString() {
-    return 'UserEntity(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserEntity(id: $id, email: $email, provider: $provider, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -286,8 +266,6 @@ class _$UserEntityImpl implements _UserEntity {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.providerId, providerId) ||
-                other.providerId == providerId) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
             (identical(other.avatarUrl, avatarUrl) ||
@@ -305,7 +283,6 @@ class _$UserEntityImpl implements _UserEntity {
     id,
     email,
     provider,
-    providerId,
     nickname,
     avatarUrl,
     createdAt,
@@ -331,7 +308,6 @@ abstract class _UserEntity implements UserEntity {
     @JsonKey(name: 'id') required final String id,
     @JsonKey(name: 'email') required final String email,
     @JsonKey(name: 'provider') required final String provider,
-    @JsonKey(name: 'provider_id') required final String providerId,
     @JsonKey(name: 'nickname') final String? nickname,
     @JsonKey(name: 'avatar_url') final String? avatarUrl,
     @JsonKey(name: 'created_at') final DateTime? createdAt,
@@ -350,9 +326,6 @@ abstract class _UserEntity implements UserEntity {
   @override
   @JsonKey(name: 'provider')
   String get provider;
-  @override
-  @JsonKey(name: 'provider_id')
-  String get providerId;
   @override
   @JsonKey(name: 'nickname')
   String? get nickname;

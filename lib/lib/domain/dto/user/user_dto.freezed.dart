@@ -24,7 +24,6 @@ mixin _$UserDto {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get provider => throw _privateConstructorUsedError;
-  String get providerId => throw _privateConstructorUsedError;
   String? get nickname => throw _privateConstructorUsedError;
   String? get avatarUrl => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -48,7 +47,6 @@ abstract class $UserDtoCopyWith<$Res> {
     String id,
     String email,
     String provider,
-    String providerId,
     String? nickname,
     String? avatarUrl,
     DateTime? createdAt,
@@ -74,7 +72,6 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
     Object? id = null,
     Object? email = null,
     Object? provider = null,
-    Object? providerId = null,
     Object? nickname = freezed,
     Object? avatarUrl = freezed,
     Object? createdAt = freezed,
@@ -96,11 +93,6 @@ class _$UserDtoCopyWithImpl<$Res, $Val extends UserDto>
                 null == provider
                     ? _value.provider
                     : provider // ignore: cast_nullable_to_non_nullable
-                        as String,
-            providerId:
-                null == providerId
-                    ? _value.providerId
-                    : providerId // ignore: cast_nullable_to_non_nullable
                         as String,
             nickname:
                 freezed == nickname
@@ -140,7 +132,6 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
     String id,
     String email,
     String provider,
-    String providerId,
     String? nickname,
     String? avatarUrl,
     DateTime? createdAt,
@@ -165,7 +156,6 @@ class __$$UserDtoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? email = null,
     Object? provider = null,
-    Object? providerId = null,
     Object? nickname = freezed,
     Object? avatarUrl = freezed,
     Object? createdAt = freezed,
@@ -187,11 +177,6 @@ class __$$UserDtoImplCopyWithImpl<$Res>
             null == provider
                 ? _value.provider
                 : provider // ignore: cast_nullable_to_non_nullable
-                    as String,
-        providerId:
-            null == providerId
-                ? _value.providerId
-                : providerId // ignore: cast_nullable_to_non_nullable
                     as String,
         nickname:
             freezed == nickname
@@ -225,7 +210,6 @@ class _$UserDtoImpl implements _UserDto {
     required this.id,
     required this.email,
     required this.provider,
-    required this.providerId,
     this.nickname,
     this.avatarUrl,
     this.createdAt,
@@ -242,8 +226,6 @@ class _$UserDtoImpl implements _UserDto {
   @override
   final String provider;
   @override
-  final String providerId;
-  @override
   final String? nickname;
   @override
   final String? avatarUrl;
@@ -254,7 +236,7 @@ class _$UserDtoImpl implements _UserDto {
 
   @override
   String toString() {
-    return 'UserDto(id: $id, email: $email, provider: $provider, providerId: $providerId, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserDto(id: $id, email: $email, provider: $provider, nickname: $nickname, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -266,8 +248,6 @@ class _$UserDtoImpl implements _UserDto {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.providerId, providerId) ||
-                other.providerId == providerId) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
             (identical(other.avatarUrl, avatarUrl) ||
@@ -285,7 +265,6 @@ class _$UserDtoImpl implements _UserDto {
     id,
     email,
     provider,
-    providerId,
     nickname,
     avatarUrl,
     createdAt,
@@ -311,7 +290,6 @@ abstract class _UserDto implements UserDto {
     required final String id,
     required final String email,
     required final String provider,
-    required final String providerId,
     final String? nickname,
     final String? avatarUrl,
     final DateTime? createdAt,
@@ -326,8 +304,6 @@ abstract class _UserDto implements UserDto {
   String get email;
   @override
   String get provider;
-  @override
-  String get providerId;
   @override
   String? get nickname;
   @override

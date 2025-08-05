@@ -11,7 +11,6 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       email: json['email'] as String,
       provider: json['provider'] as String,
-      providerId: json['providerId'] as String,
       nickname: json['nickname'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
       createdAt:
@@ -29,7 +28,6 @@ Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
       'id': instance.id,
       'email': instance.email,
       'provider': instance.provider,
-      'providerId': instance.providerId,
       'nickname': instance.nickname,
       'avatarUrl': instance.avatarUrl,
       'createdAt': instance.createdAt?.toIso8601String(),

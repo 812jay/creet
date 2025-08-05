@@ -10,7 +10,6 @@ class UserEntity with _$UserEntity {
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'email') required String email,
     @JsonKey(name: 'provider') required String provider,
-    @JsonKey(name: 'provider_id') required String providerId,
     @JsonKey(name: 'nickname') String? nickname,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
     @JsonKey(name: 'created_at') DateTime? createdAt,
@@ -26,7 +25,6 @@ extension UserEntityExtensions on UserEntity {
     id: id,
     email: email,
     provider: provider,
-    providerId: providerId,
     nickname: nickname,
     avatarUrl: avatarUrl,
     createdAt: createdAt,
@@ -35,7 +33,7 @@ extension UserEntityExtensions on UserEntity {
 
   /// UserEntity를 간단한 UserDto로 변환 (필수 필드만)
   UserDto toSimpleDto() =>
-      UserDto(id: id, email: email, provider: provider, providerId: providerId);
+      UserDto(id: id, email: email, provider: provider);
 
   /// 사용자 표시명 반환 (nickname이 있으면 nickname, 없으면 email)
   String get displayName => nickname ?? email;
