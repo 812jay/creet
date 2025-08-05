@@ -1,52 +1,79 @@
-import 'dart:developer' as developer;
 import 'package:creet/lib/core/di/service_locator.dart';
-import 'package:creet/lib/domain/entities/user_entity.dart';
+import 'package:creet/lib/core/utils/exceptions/custom_exception.dart';
+import 'package:creet/lib/core/utils/logger.dart';
+import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
+import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_in_view_model.g.dart';
 
+enum SignInNavigationState { none, toMain, toTerms }
+
 @riverpod
 class SignInViewModel extends _$SignInViewModel {
   bool _isSigningIn = false;
+  SignInNavigationState _navigationState = SignInNavigationState.none;
 
   @override
-  Future<UserEntity?> build() async {
-    developer.log('SignInViewModel 초기화', name: 'SignInViewModel');
-    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
-    final user = await useCase();
-    developer.log(
-      '현재 사용자 상태: ${user?.email ?? "로그인되지 않음"}',
-      name: 'SignInViewModel',
-    );
-    return user;
+  Future<AuthCredentialDto?> build() async {
+    Logger.info('SignInViewModel 초기화', tag: 'SignInViewModel');
+    // 초기 상태는 null (인증되지 않은 상태)
+    return null;
   }
 
+  SignInNavigationState get navigationState => _navigationState;
+
   Future<void> signInWithGoogle() async {
-    developer.log('Google 로그인 시작', name: 'SignInViewModel');
+    Logger.info('Google 로그인 시작', tag: 'SignInViewModel');
     _isSigningIn = true;
     state = const AsyncValue.loading();
 
     try {
-      final useCase = serviceLocator.get<SignInWithGoogleUseCase>();
-      final user = await useCase();
+      final signInWithGoogleUseCase =
+          serviceLocator.get<SignInWithGoogleUseCase>();
+      final userUseCase = serviceLocator.get<GetCurrentUserUseCase>();
+      final credential = await signInWithGoogleUseCase();
 
-      // 사용자가 취소한 경우 (user가 null)
-      if (user == null) {
-        developer.log('Google 로그인 취소됨', name: 'SignInViewModel');
-        // 이전 상태로 되돌리기 (로그인 전 상태)
-        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
-        state = AsyncValue.data(currentUser);
+      if (credential == null) {
+        Logger.error('Google 인증 실패', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
         return;
       }
 
-      // 로그인 성공 시 상태 업데이트
-      developer.log('Google 로그인 성공: ${user.email}', name: 'SignInViewModel');
-      state = AsyncValue.data(user);
+      // 인증 성공 후 users 테이블에서 사용자 확인
+      Logger.info(
+        'Google 인증 성공: ${credential.email ?? "이메일 없음"}',
+        tag: 'SignInViewModel',
+      );
+
+      // users 테이블에서 기존 사용자인지 확인
+      final existingUser = await userUseCase();
+
+      if (existingUser != null) {
+        // 기존 사용자: 메인 페이지로 이동
+        Logger.info(
+          '기존 사용자 확인됨: ${existingUser.email}',
+          tag: 'SignInViewModel',
+        );
+        state = AsyncValue.data(credential);
+        _navigationState = SignInNavigationState.toMain;
+      } else {
+        // 새 사용자: 이용약관 페이지로 이동
+        Logger.info('새 사용자: 이용약관 페이지로 이동', tag: 'SignInViewModel');
+        state = AsyncValue.data(credential);
+        _navigationState = SignInNavigationState.toTerms;
+      }
     } catch (error, stackTrace) {
-      developer.log('Google 로그인 실패: $error', name: 'SignInViewModel');
-      state = AsyncValue.error(error, stackTrace);
+      // 사용자 취소는 에러가 아닌 정상적인 상황
+      if (error is CustomException && error.code == 'USER_CANCELLED') {
+        Logger.info('Google 로그인 취소됨', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
+      } else {
+        Logger.error('Google 인증 실패: $error', tag: 'SignInViewModel');
+        state = AsyncValue.error(error, stackTrace);
+      }
     } finally {
       _isSigningIn = false;
     }
@@ -54,39 +81,61 @@ class SignInViewModel extends _$SignInViewModel {
 
   Future<void> signInWithApple() async {
     if (_isSigningIn) {
-      developer.log('이미 로그인 중이므로 중복 실행 방지', name: 'SignInViewModel');
+      Logger.info('이미 인증 중이므로 중복 실행 방지', tag: 'SignInViewModel');
       return;
     }
 
-    developer.log('Apple 로그인 시작', name: 'SignInViewModel');
+    Logger.info('Apple 로그인 시작', tag: 'SignInViewModel');
     _isSigningIn = true;
     state = const AsyncValue.loading();
 
     try {
-      final useCase = serviceLocator.get<SignInWithAppleUseCase>();
-      final user = await useCase();
+      final signInWithAppleUseCase =
+          serviceLocator.get<SignInWithAppleUseCase>();
+      final userUseCase = serviceLocator.get<GetCurrentUserUseCase>();
+      final credential = await signInWithAppleUseCase();
 
-      // 사용자가 취소한 경우 (user가 null)
-      if (user == null) {
-        developer.log('Apple 로그인 취소됨', name: 'SignInViewModel');
-        // 취소는 정상적인 상황이므로 이전 상태로 되돌리기
-        final currentUser = await serviceLocator.get<GetCurrentUserUseCase>()();
-        state = AsyncValue.data(currentUser);
+      if (credential == null) {
+        Logger.error('Apple 인증 실패', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
         return;
       }
 
-      // 로그인 성공 시 상태 업데이트
-      developer.log('Apple 로그인 성공: ${user.email}', name: 'SignInViewModel');
-      state = AsyncValue.data(user);
+      // 인증 성공 후 users 테이블에서 사용자 확인
+      Logger.info('Apple 인증 성공: ${credential.email}', tag: 'SignInViewModel');
+
+      // users 테이블에서 기존 사용자인지 확인
+      final existingUser = await userUseCase();
+
+      if (existingUser != null) {
+        // 기존 사용자: 메인 페이지로 이동
+        Logger.info(
+          '기존 사용자 확인됨: ${existingUser.email}',
+          tag: 'SignInViewModel',
+        );
+        state = AsyncValue.data(credential);
+        _navigationState = SignInNavigationState.toMain;
+      } else {
+        // 새 사용자: 이용약관 페이지로 이동
+        Logger.info('새 사용자: 이용약관 페이지로 이동', tag: 'SignInViewModel');
+        state = AsyncValue.data(credential);
+        _navigationState = SignInNavigationState.toTerms;
+      }
     } catch (error, stackTrace) {
-      developer.log('Apple 로그인 실패: $error', name: 'SignInViewModel');
-      state = AsyncValue.error(error, stackTrace);
+      // 사용자 취소는 에러가 아닌 정상적인 상황
+      if (error is CustomException && error.code == 'USER_CANCELLED') {
+        Logger.info('Apple 로그인 취소됨', tag: 'SignInViewModel');
+        state = const AsyncValue.data(null);
+      } else {
+        Logger.error('Apple 인증 실패: $error', tag: 'SignInViewModel');
+        state = AsyncValue.error(error, stackTrace);
+      }
     } finally {
       _isSigningIn = false;
     }
   }
 
-  bool get isSigningIn => _isSigningIn; // 로그인 진행 중 상태
+  bool get isSigningIn => _isSigningIn; // 인증 진행 중 상태
 
   // iOS에서만 Apple 로그인 사용 가능
   bool get isAppleSignInAvailable =>

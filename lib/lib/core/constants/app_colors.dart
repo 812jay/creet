@@ -95,6 +95,7 @@ class AppColors {
   static const Color backgroundDefault = _white;
   static const Color backgroundAlternative = _neutral100;
   static const Color backgroundAppleSignInButton = _black;
+  static const Color backgroundGoogleSignInButton = _neutral100;
 
   // Component / Fill
   static const Color componentFillPrimary = _white;

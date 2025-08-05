@@ -1,8 +1,10 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
 import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SignInView extends ConsumerWidget {
@@ -12,32 +14,48 @@ class SignInView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(signInViewModelProvider);
     final authViewModel = ref.read(signInViewModelProvider.notifier);
-    final isSigningIn = authViewModel.isSigningIn;
-    // 로그인 성공 시 Home으로 이동
-    authState.whenData((user) {
-      if (user != null && !isSigningIn) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.go('/home');
-        });
-      }
-    });
+    final navigationState = authViewModel.navigationState;
+
+    // 네비게이션 상태에 따라 페이지 이동
+    if (navigationState != SignInNavigationState.none) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        switch (navigationState) {
+          case SignInNavigationState.toMain:
+            context.go('/main');
+            break;
+          case SignInNavigationState.toTerms:
+            authState.whenData((credential) {
+              if (credential != null) {
+                context.go('/terms', extra: {'credential': credential});
+              }
+            });
+            break;
+          case SignInNavigationState.none:
+            break;
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.backgroundDefault,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Creet Sign In',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            SizedBox(height: 250),
+            SvgPicture.asset('assets/icons/logo.svg'),
+            SizedBox(height: 10),
+            Text(
+              '가계부 시작하기',
+              style: AppTypo.body1Regular.colored(AppColors.textSecondary),
             ),
-            const SizedBox(height: 40),
+            Spacer(),
             Column(
               children: [
                 SignInButton(
                   iconPath: 'assets/icons/google.svg',
-                  text: 'Google 로그인',
+                  text: '구글로 시작하기',
+                  backgroundColor: AppColors.backgroundGoogleSignInButton,
+                  isLoading: authViewModel.isSigningIn,
                   onTap: () => authViewModel.signInWithGoogle(),
                 ),
                 if (authViewModel.isAppleSignInAvailable) ...[
@@ -46,12 +64,14 @@ class SignInView extends ConsumerWidget {
                     iconPath: 'assets/icons/apple.svg',
                     backgroundColor: AppColors.backgroundAppleSignInButton,
                     textColor: AppColors.textInverse,
-                    text: 'Apple 로그인',
+                    text: 'Apple로 시작하기',
+                    isLoading: authViewModel.isSigningIn,
                     onTap: () => authViewModel.signInWithApple(),
                   ),
                 ],
               ],
             ),
+            SizedBox(height: 80),
           ],
         ),
       ),

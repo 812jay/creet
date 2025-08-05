@@ -1,8 +1,10 @@
+import 'package:creet/lib/core/service/image_service.dart';
+import 'package:creet/lib/core/utils/logger.dart';
+import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:flutter/material.dart';
-import 'package:creet/lib/domain/entities/user_entity.dart';
 
 class UserProfileCard extends StatelessWidget {
-  final UserEntity user;
+  final UserDto user;
   final VoidCallback onSignOut;
 
   const UserProfileCard({
@@ -13,19 +15,31 @@ class UserProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageService = ImageService();
+    final avatarUrl = imageService.getAvatarUrl(user.avatarUrl);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (user.photoURL != null)
+        if (avatarUrl != null)
           CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(user.photoURL!),
+            backgroundImage: NetworkImage(avatarUrl),
+            onBackgroundImageError: (exception, stackTrace) {
+              Logger.error('이미지 로드 실패: $exception', tag: 'UserProfileCard');
+            },
+          )
+        else
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey[300],
+            child: Icon(Icons.person, size: 50, color: Colors.grey[600]),
           ),
         const SizedBox(height: 16),
         Text('환영합니다!', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 8),
         Text(
-          user.displayName ?? user.email,
+          user.nickname ?? user.email,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 24),

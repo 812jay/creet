@@ -1,7 +1,9 @@
-import 'package:creet/lib/core/services/auth_service.dart';
 import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
+import 'package:creet/lib/data/repositories/user_repository_impl.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
+import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
+import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,9 +45,6 @@ class ServiceLocator {
     serviceLocator.registerLazySingletonAsync<SharedPreferences>(
       () async => await SharedPreferences.getInstance(),
     );
-
-    // Auth Service
-    serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
   }
 
   /// Repositories 등록
@@ -53,6 +52,11 @@ class ServiceLocator {
     // Auth Repository
     serviceLocator.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(serviceLocator<SupabaseClient>()),
+    );
+
+    // User Repository
+    serviceLocator.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(serviceLocator<SupabaseClient>()),
     );
   }
 
@@ -67,16 +71,20 @@ class ServiceLocator {
       () => SignInWithAppleUseCase(serviceLocator<AuthRepository>()),
     );
 
-    serviceLocator.registerLazySingleton<SignOutUseCase>(
-      () => SignOutUseCase(serviceLocator<AuthRepository>()),
+    serviceLocator.registerLazySingleton<SignUpUseCase>(
+      () => SignUpUseCase(serviceLocator<UserRepository>()),
     );
 
     serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(serviceLocator<AuthRepository>()),
+      () => GetCurrentUserUseCase(serviceLocator<UserRepository>()),
     );
 
     serviceLocator.registerLazySingleton<GetAuthStateChangesUseCase>(
       () => GetAuthStateChangesUseCase(serviceLocator<AuthRepository>()),
+    );
+
+    serviceLocator.registerLazySingleton<SignOutUseCase>(
+      () => SignOutUseCase(serviceLocator<AuthRepository>()),
     );
   }
 
