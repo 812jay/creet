@@ -1,8 +1,10 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:creet/lib/presentation/viewmodels/sign_in/sign_in_view_model.dart';
 import 'package:creet/lib/presentation/widgets/auth/sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SignInView extends ConsumerWidget {
@@ -38,18 +40,21 @@ class SignInView extends ConsumerWidget {
       backgroundColor: AppColors.backgroundDefault,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Creet Sign In',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            SizedBox(height: 250),
+            SvgPicture.asset('assets/icons/logo.svg'),
+            SizedBox(height: 10),
+            Text(
+              '가계부 시작하기',
+              style: AppTypo.body1Regular.colored(AppColors.textSecondary),
             ),
-            const SizedBox(height: 40),
+            Spacer(),
             Column(
               children: [
                 SignInButton(
                   iconPath: 'assets/icons/google.svg',
-                  text: 'Google 로그인',
+                  text: '구글로 시작하기',
+                  backgroundColor: AppColors.backgroundGoogleSignInButton,
                   isLoading: authViewModel.isSigningIn,
                   onTap: () => authViewModel.signInWithGoogle(),
                 ),
@@ -59,13 +64,14 @@ class SignInView extends ConsumerWidget {
                     iconPath: 'assets/icons/apple.svg',
                     backgroundColor: AppColors.backgroundAppleSignInButton,
                     textColor: AppColors.textInverse,
-                    text: 'Apple 로그인',
+                    text: 'Apple로 시작하기',
                     isLoading: authViewModel.isSigningIn,
                     onTap: () => authViewModel.signInWithApple(),
                   ),
                 ],
               ],
             ),
+            SizedBox(height: 80),
           ],
         ),
       ),
