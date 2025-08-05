@@ -5,6 +5,7 @@ import 'package:creet/lib/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,9 @@ void main() async {
 
   // Service Locator 초기화
   await ServiceLocator.initialize();
+
+  // 한국어 locale 초기화
+  await initializeDateFormatting('ko_KR', null);
 
   runApp(const ProviderScope(child: MyApp()));
 }
