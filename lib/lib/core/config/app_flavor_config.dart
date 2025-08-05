@@ -38,10 +38,16 @@ class AppFlavorConfig {
 AppFlavor _getCurrentFlavor() {
   const String flavorString = String.fromEnvironment(
     'FLAVOR',
-    defaultValue: 'prod',
+    defaultValue: 'release',
   );
-  final result = AppFlavor.values.firstWhere((e) => e.name == flavorString);
-  return result;
+
+  try {
+    final result = AppFlavor.values.firstWhere((e) => e.name == flavorString);
+    return result;
+  } catch (e) {
+    // 기본값으로 release 사용
+    return AppFlavor.release;
+  }
 }
 
 FlavorConfigData _getFlavorConfig(AppFlavor flavor) {
