@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'result.freezed.dart';
 
+/// 성공/실패 결과를 나타내는 타입
 @freezed
 class Result<T> with _$Result<T> {
   const factory Result.success(T data) = Success<T>;
@@ -13,7 +14,6 @@ extension ResultExtension<T> on Result<T> {
   bool get isFailure => this is Failure<T>;
 
   T? get data => when(success: (data) => data, failure: (_) => null);
-
   String? get errorMessage =>
       when(success: (_) => null, failure: (message) => message);
 }

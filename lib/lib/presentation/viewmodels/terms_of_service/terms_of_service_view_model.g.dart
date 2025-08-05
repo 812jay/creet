@@ -1,29 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sign_in_view_model.dart';
+part of 'terms_of_service_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$signInViewModelHash() => r'c826551cef1f534267a252ee5934833914a4c597';
+String _$termsOfServiceViewModelHash() =>
+    r'1c06ed990464a3b42152dd73e74d868d34f67b0b';
 
-/// See also [SignInViewModel].
-@ProviderFor(SignInViewModel)
-final signInViewModelProvider = AutoDisposeAsyncNotifierProvider<
-  SignInViewModel,
-  AuthCredentialDto?
+/// See also [TermsOfServiceViewModel].
+@ProviderFor(TermsOfServiceViewModel)
+final termsOfServiceViewModelProvider = AutoDisposeNotifierProvider<
+  TermsOfServiceViewModel,
+  TermsOfServiceState
 >.internal(
-  SignInViewModel.new,
-  name: r'signInViewModelProvider',
+  TermsOfServiceViewModel.new,
+  name: r'termsOfServiceViewModelProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$signInViewModelHash,
+          : _$termsOfServiceViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SignInViewModel = AutoDisposeAsyncNotifier<AuthCredentialDto?>;
+typedef _$TermsOfServiceViewModel = AutoDisposeNotifier<TermsOfServiceState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
