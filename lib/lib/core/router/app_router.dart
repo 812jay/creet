@@ -1,5 +1,5 @@
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
-import 'package:creet/lib/presentation/views/calendar_view.dart';
+import 'package:creet/lib/presentation/views/calendar/calendar_view.dart';
 import 'package:creet/lib/presentation/views/main_view.dart';
 import 'package:creet/lib/presentation/views/setting_view.dart';
 import 'package:creet/lib/presentation/views/sign_in_view.dart';

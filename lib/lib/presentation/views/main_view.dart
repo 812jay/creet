@@ -1,5 +1,5 @@
 import 'package:creet/lib/core/widgets/app_bottom_nav_bar.dart';
-import 'package:creet/lib/presentation/views/calendar_view.dart';
+import 'package:creet/lib/presentation/views/calendar/calendar_view.dart';
 import 'package:creet/lib/presentation/views/home_view.dart';
 import 'package:creet/lib/presentation/views/setting_view.dart';
 import 'package:flutter/material.dart';
