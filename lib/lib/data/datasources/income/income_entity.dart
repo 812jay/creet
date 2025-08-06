@@ -7,18 +7,26 @@ part 'income_entity.g.dart';
 @freezed
 class IncomeEntity with _$IncomeEntity {
   const factory IncomeEntity({
-    @JsonKey(name: 'id') required String id,
-    @JsonKey(name: 'user_id') required String userId,
-    @JsonKey(name: 'category_id') required String categoryId,
-    @JsonKey(name: 'amount') required String amount,
-    @JsonKey(name: 'date') required String date,
-    @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    required String id,
+    required String userId,
+    required String categoryId,
+    required String amount,
+    required String date,
+    String? description,
+    required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _IncomeEntity;
 
-  factory IncomeEntity.fromJson(Map<String, dynamic> json) =>
-      _$IncomeEntityFromJson(json);
+  factory IncomeEntity.fromJson(Map<String, dynamic> json) => IncomeEntity(
+    id: json['id'] as String,
+    userId: json['user_id'] as String,
+    categoryId: json['category_id'] as String,
+    amount: json['amount'] as String,
+    date: json['date'] as String,
+    description: json['description'] as String?,
+    createdAt: DateTime.parse(json['created_at'] as String),
+    updatedAt: DateTime.parse(json['updated_at'] as String),
+  );
 }
 
 extension IncomeEntityExtensions on IncomeEntity {

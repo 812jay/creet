@@ -7,17 +7,24 @@ part 'user_entity.g.dart';
 @freezed
 class UserEntity with _$UserEntity {
   const factory UserEntity({
-    @JsonKey(name: 'id') required String id,
-    @JsonKey(name: 'email') required String email,
-    @JsonKey(name: 'provider') required String provider,
-    @JsonKey(name: 'nickname') String? nickname,
-    @JsonKey(name: 'avatar_url') String? avatarUrl,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    required String id,
+    required String email,
+    required String provider,
+    String? nickname,
+    String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _UserEntity;
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) =>
-      _$UserEntityFromJson(json);
+  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
+    id: json['id'] as String,
+    email: json['email'] as String,
+    provider: json['provider'] as String,
+    nickname: json['nickname'] as String?,
+    avatarUrl: json['avatar_url'] as String?,
+    createdAt: json['created_at'] as DateTime?,
+    updatedAt: json['updated_at'] as DateTime?,
+  );
 }
 
 extension UserEntityExtensions on UserEntity {
@@ -32,8 +39,7 @@ extension UserEntityExtensions on UserEntity {
   );
 
   /// UserEntity를 간단한 UserDto로 변환 (필수 필드만)
-  UserDto toSimpleDto() =>
-      UserDto(id: id, email: email, provider: provider);
+  UserDto toSimpleDto() => UserDto(id: id, email: email, provider: provider);
 
   /// 사용자 표시명 반환 (nickname이 있으면 nickname, 없으면 email)
   String get displayName => nickname ?? email;

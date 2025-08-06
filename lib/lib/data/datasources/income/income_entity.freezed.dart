@@ -21,21 +21,13 @@ IncomeEntity _$IncomeEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$IncomeEntity {
-  @JsonKey(name: 'id')
   String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'category_id')
   String get categoryId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'amount')
   String get amount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'date')
   String get date => throw _privateConstructorUsedError;
-  @JsonKey(name: 'description')
   String? get description => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
-  @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this IncomeEntity to a JSON map.
@@ -56,14 +48,14 @@ abstract class $IncomeEntityCopyWith<$Res> {
   ) = _$IncomeEntityCopyWithImpl<$Res, IncomeEntity>;
   @useResult
   $Res call({
-    @JsonKey(name: 'id') String id,
-    @JsonKey(name: 'user_id') String userId,
-    @JsonKey(name: 'category_id') String categoryId,
-    @JsonKey(name: 'amount') String amount,
-    @JsonKey(name: 'date') String date,
-    @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'created_at') DateTime createdAt,
-    @JsonKey(name: 'updated_at') DateTime updatedAt,
+    String id,
+    String userId,
+    String categoryId,
+    String amount,
+    String date,
+    String? description,
+    DateTime createdAt,
+    DateTime updatedAt,
   });
 }
 
@@ -149,14 +141,14 @@ abstract class _$$IncomeEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'id') String id,
-    @JsonKey(name: 'user_id') String userId,
-    @JsonKey(name: 'category_id') String categoryId,
-    @JsonKey(name: 'amount') String amount,
-    @JsonKey(name: 'date') String date,
-    @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'created_at') DateTime createdAt,
-    @JsonKey(name: 'updated_at') DateTime updatedAt,
+    String id,
+    String userId,
+    String categoryId,
+    String amount,
+    String date,
+    String? description,
+    DateTime createdAt,
+    DateTime updatedAt,
   });
 }
 
@@ -234,42 +226,34 @@ class __$$IncomeEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$IncomeEntityImpl implements _IncomeEntity {
   const _$IncomeEntityImpl({
-    @JsonKey(name: 'id') required this.id,
-    @JsonKey(name: 'user_id') required this.userId,
-    @JsonKey(name: 'category_id') required this.categoryId,
-    @JsonKey(name: 'amount') required this.amount,
-    @JsonKey(name: 'date') required this.date,
-    @JsonKey(name: 'description') this.description,
-    @JsonKey(name: 'created_at') required this.createdAt,
-    @JsonKey(name: 'updated_at') required this.updatedAt,
+    required this.id,
+    required this.userId,
+    required this.categoryId,
+    required this.amount,
+    required this.date,
+    this.description,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory _$IncomeEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$IncomeEntityImplFromJson(json);
 
   @override
-  @JsonKey(name: 'id')
   final String id;
   @override
-  @JsonKey(name: 'user_id')
   final String userId;
   @override
-  @JsonKey(name: 'category_id')
   final String categoryId;
   @override
-  @JsonKey(name: 'amount')
   final String amount;
   @override
-  @JsonKey(name: 'date')
   final String date;
   @override
-  @JsonKey(name: 'description')
   final String? description;
   @override
-  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
-  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   @override
@@ -326,42 +310,34 @@ class _$IncomeEntityImpl implements _IncomeEntity {
 
 abstract class _IncomeEntity implements IncomeEntity {
   const factory _IncomeEntity({
-    @JsonKey(name: 'id') required final String id,
-    @JsonKey(name: 'user_id') required final String userId,
-    @JsonKey(name: 'category_id') required final String categoryId,
-    @JsonKey(name: 'amount') required final String amount,
-    @JsonKey(name: 'date') required final String date,
-    @JsonKey(name: 'description') final String? description,
-    @JsonKey(name: 'created_at') required final DateTime createdAt,
-    @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+    required final String id,
+    required final String userId,
+    required final String categoryId,
+    required final String amount,
+    required final String date,
+    final String? description,
+    required final DateTime createdAt,
+    required final DateTime updatedAt,
   }) = _$IncomeEntityImpl;
 
   factory _IncomeEntity.fromJson(Map<String, dynamic> json) =
       _$IncomeEntityImpl.fromJson;
 
   @override
-  @JsonKey(name: 'id')
   String get id;
   @override
-  @JsonKey(name: 'user_id')
   String get userId;
   @override
-  @JsonKey(name: 'category_id')
   String get categoryId;
   @override
-  @JsonKey(name: 'amount')
   String get amount;
   @override
-  @JsonKey(name: 'date')
   String get date;
   @override
-  @JsonKey(name: 'description')
   String? get description;
   @override
-  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
-  @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
 
   /// Create a copy of IncomeEntity

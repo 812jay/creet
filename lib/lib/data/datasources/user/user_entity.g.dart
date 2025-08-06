@@ -12,15 +12,15 @@ _$UserEntityImpl _$$UserEntityImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String,
       provider: json['provider'] as String,
       nickname: json['nickname'] as String?,
-      avatarUrl: json['avatar_url'] as String?,
+      avatarUrl: json['avatarUrl'] as String?,
       createdAt:
-          json['created_at'] == null
+          json['createdAt'] == null
               ? null
-              : DateTime.parse(json['created_at'] as String),
+              : DateTime.parse(json['createdAt'] as String),
       updatedAt:
-          json['updated_at'] == null
+          json['updatedAt'] == null
               ? null
-              : DateTime.parse(json['updated_at'] as String),
+              : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$$UserEntityImplToJson(_$UserEntityImpl instance) =>
@@ -29,7 +29,7 @@ Map<String, dynamic> _$$UserEntityImplToJson(_$UserEntityImpl instance) =>
       'email': instance.email,
       'provider': instance.provider,
       'nickname': instance.nickname,
-      'avatar_url': instance.avatarUrl,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'updated_at': instance.updatedAt?.toIso8601String(),
+      'avatarUrl': instance.avatarUrl,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };

@@ -21,17 +21,11 @@ AuthCredentialEntity _$AuthCredentialEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthCredentialEntity {
-  @JsonKey(name: 'id_token')
   String get idToken => throw _privateConstructorUsedError;
-  @JsonKey(name: 'provider')
   String get provider => throw _privateConstructorUsedError;
-  @JsonKey(name: 'provider_id')
   String get providerId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'email')
   String? get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'display_name')
   String? get displayName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'photo_url')
   String? get photoURL => throw _privateConstructorUsedError;
 
   /// Serializes this AuthCredentialEntity to a JSON map.
@@ -52,12 +46,12 @@ abstract class $AuthCredentialEntityCopyWith<$Res> {
   ) = _$AuthCredentialEntityCopyWithImpl<$Res, AuthCredentialEntity>;
   @useResult
   $Res call({
-    @JsonKey(name: 'id_token') String idToken,
-    @JsonKey(name: 'provider') String provider,
-    @JsonKey(name: 'provider_id') String providerId,
-    @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'display_name') String? displayName,
-    @JsonKey(name: 'photo_url') String? photoURL,
+    String idToken,
+    String provider,
+    String providerId,
+    String? email,
+    String? displayName,
+    String? photoURL,
   });
 }
 
@@ -134,12 +128,12 @@ abstract class _$$AuthCredentialEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: 'id_token') String idToken,
-    @JsonKey(name: 'provider') String provider,
-    @JsonKey(name: 'provider_id') String providerId,
-    @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'display_name') String? displayName,
-    @JsonKey(name: 'photo_url') String? photoURL,
+    String idToken,
+    String provider,
+    String providerId,
+    String? email,
+    String? displayName,
+    String? photoURL,
   });
 }
 
@@ -205,34 +199,28 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
   const _$AuthCredentialEntityImpl({
-    @JsonKey(name: 'id_token') required this.idToken,
-    @JsonKey(name: 'provider') required this.provider,
-    @JsonKey(name: 'provider_id') required this.providerId,
-    @JsonKey(name: 'email') this.email,
-    @JsonKey(name: 'display_name') this.displayName,
-    @JsonKey(name: 'photo_url') this.photoURL,
+    required this.idToken,
+    required this.provider,
+    required this.providerId,
+    this.email,
+    this.displayName,
+    this.photoURL,
   });
 
   factory _$AuthCredentialEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthCredentialEntityImplFromJson(json);
 
   @override
-  @JsonKey(name: 'id_token')
   final String idToken;
   @override
-  @JsonKey(name: 'provider')
   final String provider;
   @override
-  @JsonKey(name: 'provider_id')
   final String providerId;
   @override
-  @JsonKey(name: 'email')
   final String? email;
   @override
-  @JsonKey(name: 'display_name')
   final String? displayName;
   @override
-  @JsonKey(name: 'photo_url')
   final String? photoURL;
 
   @override
@@ -289,34 +277,28 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
 
 abstract class _AuthCredentialEntity implements AuthCredentialEntity {
   const factory _AuthCredentialEntity({
-    @JsonKey(name: 'id_token') required final String idToken,
-    @JsonKey(name: 'provider') required final String provider,
-    @JsonKey(name: 'provider_id') required final String providerId,
-    @JsonKey(name: 'email') final String? email,
-    @JsonKey(name: 'display_name') final String? displayName,
-    @JsonKey(name: 'photo_url') final String? photoURL,
+    required final String idToken,
+    required final String provider,
+    required final String providerId,
+    final String? email,
+    final String? displayName,
+    final String? photoURL,
   }) = _$AuthCredentialEntityImpl;
 
   factory _AuthCredentialEntity.fromJson(Map<String, dynamic> json) =
       _$AuthCredentialEntityImpl.fromJson;
 
   @override
-  @JsonKey(name: 'id_token')
   String get idToken;
   @override
-  @JsonKey(name: 'provider')
   String get provider;
   @override
-  @JsonKey(name: 'provider_id')
   String get providerId;
   @override
-  @JsonKey(name: 'email')
   String? get email;
   @override
-  @JsonKey(name: 'display_name')
   String? get displayName;
   @override
-  @JsonKey(name: 'photo_url')
   String? get photoURL;
 
   /// Create a copy of AuthCredentialEntity
