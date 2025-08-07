@@ -11,22 +11,21 @@ class CalendarView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final calendarAsync = ref.watch(calendarViewModelProvider);
+    final calendarState = ref.watch(calendarViewModelProvider);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundGray,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                _CalendarAppBar(calendarAsync: calendarAsync),
-                _CalendarContent(calendarAsync: calendarAsync),
-                const SizedBox(height: 20),
-                _SelectedDateInfo(calendarAsync: calendarAsync),
-              ],
-            ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              _CalendarAppBar(calendarAsync: calendarState),
+              _CalendarContent(calendarAsync: calendarState),
+              const SizedBox(height: 20),
+              _SelectedDateInfo(calendarAsync: calendarState),
+              Expanded(child: _ConsumptoinHistory()),
+            ],
           ),
         ),
       ),
@@ -57,11 +56,7 @@ class _CalendarAppBar extends StatelessWidget {
         children: [
           Text(
             monthFormat.format(focusedDay),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+            style: AppTypo.title1Bold.copyWith(color: AppColors.textPrimary),
           ),
           const Spacer(),
           _AppBarButton(
@@ -95,11 +90,7 @@ class _AppBarButton extends StatelessWidget {
       onTap: onTap,
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textPrimary,
-        ),
+        style: AppTypo.body1Medium.copyWith(color: AppColors.textPrimary),
       ),
     );
   }
@@ -151,7 +142,7 @@ class _ErrorMessage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             message,
-            style: TextStyle(color: AppColors.statusError, fontSize: 16),
+            style: AppTypo.body1Medium.copyWith(color: AppColors.statusError),
             textAlign: TextAlign.center,
           ),
         ],
@@ -208,6 +199,32 @@ class _SelectedDateCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ConsumptoinHistory extends StatelessWidget {
+  const _ConsumptoinHistory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      itemCount: 10,
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 16);
+      },
+      itemBuilder: (context, index) {
+        return Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: AppColors.componentFillPrimary,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.componentLineDefault),
+          ),
+          child: Center(child: Text('Item $index', style: AppTypo.body1Medium)),
+        );
+      },
     );
   }
 }

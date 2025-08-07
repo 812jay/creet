@@ -3,6 +3,8 @@ import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+enum CalendarType { none, today, outside }
+
 class CalendarWidget extends StatefulWidget {
   final DateTime selectedDay;
   final DateTime focusedDay;
@@ -85,16 +87,23 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   CalendarBuilders _buildCalendarBuilders() {
     return CalendarBuilders(
-      outsideBuilder: (context, day, focusedDay) => OutsideDateWidget(day: day),
+      outsideBuilder:
+          (context, day, focusedDay) => BaseDateWidget(
+            type: CalendarType.outside,
+            day: day,
+            isSelected: false,
+          ),
       todayBuilder:
-          (context, day, focusedDay) => TodayDateWidget(
+          (context, day, focusedDay) => BaseDateWidget(
+            type: CalendarType.today,
             day: day,
             isSelected: isSameDay(widget.selectedDay, day),
             onTap: () => _onDaySelected(day, day),
           ),
       dowBuilder: (context, day) => DayOfWeekWidget(day: day),
       defaultBuilder:
-          (context, day, focusedDay) => DefaultDateWidget(
+          (context, day, focusedDay) => BaseDateWidget(
+            type: CalendarType.none,
             day: day,
             isSelected: isSameDay(widget.selectedDay, day),
             onTap: () => _onDaySelected(day, day),
@@ -103,77 +112,104 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 }
 
-class OutsideDateWidget extends StatelessWidget {
-  final DateTime day;
-
-  const OutsideDateWidget({super.key, required this.day});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(2),
-      child: Text(
-        '${day.day}',
-        style: AppTypo.caption1Regular.copyWith(
-          color: AppColors.calendarOutsideDate,
-        ),
-      ),
-    );
-  }
-}
-
-class TodayDateWidget extends StatelessWidget {
+// 공통 레이아웃을 관리하는 기본 위젯
+class BaseDateWidget extends StatelessWidget {
+  final CalendarType type;
   final DateTime day;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final String? income;
+  final String? expense;
 
-  const TodayDateWidget({
+  const BaseDateWidget({
     super.key,
+    required this.type,
     required this.day,
     required this.isSelected,
-    required this.onTap,
+    this.onTap,
+    this.income,
+    this.expense,
   });
+
+  Color _getDayColor(int weekday) {
+    if (weekday == DateTime.saturday) return AppColors.calendarSaturday;
+    if (weekday == DateTime.sunday) return AppColors.calendarSunday;
+    return AppColors.textPrimary;
+  }
+
+  TextStyle _getDayTextStyle() {
+    switch (type) {
+      case CalendarType.outside:
+        return AppTypo.caption1Regular.copyWith(
+          color: AppColors.calendarOutsideDate,
+        );
+      case CalendarType.today:
+      case CalendarType.none:
+        return AppTypo.body1Medium.copyWith(color: _getDayColor(day.weekday));
+    }
+  }
+
+  String _getDayText() {
+    switch (type) {
+      case CalendarType.today:
+        return '오늘';
+      case CalendarType.outside:
+      case CalendarType.none:
+        return '${day.day}';
+    }
+  }
+
+  Widget _buildContent() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          _getDayText(),
+          style: _getDayTextStyle(),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 2),
+        Text(
+          income != null ? '+$income' : '',
+          style: AppTypo.caption1Regular.copyWith(
+            color: AppColors.calendarIncome,
+          ),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Text(
+          expense != null ? '-$expense' : '',
+          style: AppTypo.caption1Regular.copyWith(
+            color: AppColors.calendarExpense,
+          ),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(4),
-        decoration:
-            isSelected
-                ? BoxDecoration(
-                  color: AppColors.backgroundSelectedCalendar,
-                  borderRadius: BorderRadius.circular(8),
-                )
-                : null,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              '오늘',
-              style: AppTypo.caption1Medium.copyWith(
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              '+111,200',
-              style: AppTypo.caption1Regular.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            Text(
-              '-52,200',
-              style: AppTypo.caption1Regular.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
+    final widget = Container(
+      width: double.infinity,
+      height: double.infinity,
+      alignment: Alignment.topCenter,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      margin: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: isSelected ? AppColors.backgroundSelectedCalendar : null,
+        borderRadius: BorderRadius.circular(8),
       ),
+      child: _buildContent(),
     );
+
+    if (onTap != null) {
+      return GestureDetector(onTap: onTap, child: widget);
+    }
+
+    return widget;
   }
 }
 
@@ -201,58 +237,6 @@ class DayOfWeekWidget extends StatelessWidget {
         _getDayName(day.weekday),
         style: AppTypo.body1Medium.copyWith(color: _getDayColor(day.weekday)),
         textAlign: TextAlign.center,
-        overflow: TextOverflow.visible,
-      ),
-    );
-  }
-}
-
-class DefaultDateWidget extends StatelessWidget {
-  final DateTime day;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const DefaultDateWidget({
-    super.key,
-    required this.day,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  Color _getDayColor(int weekday) {
-    if (weekday == DateTime.saturday) return AppColors.calendarSaturday;
-    if (weekday == DateTime.sunday) return AppColors.calendarSunday;
-    return AppColors.textPrimary;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isSelected) {
-      return GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: AppColors.backgroundSelectedCalendar,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            '${day.day}',
-            style: AppTypo.body1Medium.copyWith(color: AppColors.textPrimary),
-          ),
-        ),
-      );
-    }
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.all(2),
-        child: Text(
-          '${day.day}',
-          style: AppTypo.body1Medium.copyWith(color: _getDayColor(day.weekday)),
-        ),
       ),
     );
   }
