@@ -1,7 +1,10 @@
+import 'package:creet/lib/core/constants/app_colors.dart';
+import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:creet/lib/presentation/viewmodels/calendar/calendar_view_model.dart';
 import 'package:creet/lib/presentation/views/calendar/widget/calendar_widget.dart';
+import 'package:intl/intl.dart';
 
 class CalendarView extends ConsumerWidget {
   const CalendarView({super.key});
@@ -11,66 +14,200 @@ class CalendarView extends ConsumerWidget {
     final calendarAsync = ref.watch(calendarViewModelProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundGray,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            calendarAsync.when(
-              data:
-                  (calendarState) => CalendarWidget(
-                    selectedDay: calendarState.selectedDay,
-                    focusedDay: calendarState.focusedDay,
-                    onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                      ref
-                          .read(calendarViewModelProvider.notifier)
-                          .selectDay(selectedDay);
-                    },
-                    onPageChanged: (DateTime focusedDay) {
-                      ref
-                          .read(calendarViewModelProvider.notifier)
-                          .changeFocusedDay(focusedDay);
-                    },
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error:
-                  (error, stack) => Center(child: Text('오류가 발생했습니다: $error')),
+        child: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                _CalendarAppBar(calendarAsync: calendarAsync),
+                _CalendarContent(calendarAsync: calendarAsync),
+                const SizedBox(height: 20),
+                _SelectedDateInfo(calendarAsync: calendarAsync),
+              ],
             ),
-            const SizedBox(height: 20),
-            _buildSelectedDateInfo(ref),
-          ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildSelectedDateInfo(WidgetRef ref) {
-    final calendarAsync = ref.watch(calendarViewModelProvider);
+class _CalendarAppBar extends StatelessWidget {
+  final AsyncValue<CalendarState> calendarAsync;
 
+  const _CalendarAppBar({required this.calendarAsync});
+
+  @override
+  Widget build(BuildContext context) {
     return calendarAsync.when(
-      data:
-          (calendarState) => Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.blue.withOpacity(0.3)),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.calendar_today, color: Colors.blue),
-                const SizedBox(width: 12),
-                Text(
-                  '선택된 날짜: ${calendarState.selectedDay.year}년 ${calendarState.selectedDay.month}월 ${calendarState.selectedDay.day}일',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+      data: (calendarState) => _buildAppBar(calendarState.focusedDay),
+      loading: () => _buildAppBar(DateTime.now()),
+      error: (error, stack) => _buildAppBar(DateTime.now()),
+    );
+  }
+
+  Widget _buildAppBar(DateTime focusedDay) {
+    final monthFormat = DateFormat('yyyy년 M월', 'ko_KR');
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Text(
+            monthFormat.format(focusedDay),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
           ),
+          const Spacer(),
+          _AppBarButton(
+            text: '고정지출',
+            onTap: () {
+              // TODO: 고정지출 페이지로 이동
+            },
+          ),
+          const SizedBox(width: 16),
+          _AppBarButton(
+            text: '통계',
+            onTap: () {
+              // TODO: 통계 페이지로 이동
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppBarButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  const _AppBarButton({required this.text, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.textPrimary,
+        ),
+      ),
+    );
+  }
+}
+
+class _CalendarContent extends ConsumerWidget {
+  final AsyncValue<CalendarState> calendarAsync;
+
+  const _CalendarContent({required this.calendarAsync});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return calendarAsync.when(
+      data:
+          (calendarState) => CalendarWidget(
+            selectedDay: calendarState.selectedDay,
+            focusedDay: calendarState.focusedDay,
+            onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+              ref
+                  .read(calendarViewModelProvider.notifier)
+                  .selectDay(selectedDay);
+            },
+            onPageChanged: (DateTime focusedDay) {
+              ref
+                  .read(calendarViewModelProvider.notifier)
+                  .changeFocusedDay(focusedDay);
+            },
+          ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error:
+          (error, stack) =>
+              Center(child: _ErrorMessage(message: '오류가 발생했습니다: $error')),
+    );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  final String message;
+
+  const _ErrorMessage({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Icon(Icons.error_outline, color: AppColors.statusError, size: 48),
+          const SizedBox(height: 8),
+          Text(
+            message,
+            style: TextStyle(color: AppColors.statusError, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SelectedDateInfo extends StatelessWidget {
+  final AsyncValue<CalendarState> calendarAsync;
+
+  const _SelectedDateInfo({required this.calendarAsync});
+
+  @override
+  Widget build(BuildContext context) {
+    return calendarAsync.when(
+      data:
+          (calendarState) =>
+              _SelectedDateCard(selectedDay: calendarState.selectedDay),
       loading: () => const SizedBox.shrink(),
       error: (error, stack) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _SelectedDateCard extends StatelessWidget {
+  final DateTime selectedDay;
+
+  const _SelectedDateCard({required this.selectedDay});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.componentFillAlternative,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.componentLineDefault),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.calendar_today,
+            color: AppColors.statusInformative,
+            size: 20,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '선택된 날짜: ${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
+              style: AppTypo.body1Medium,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
