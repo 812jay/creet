@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_credential_entity.dart';
+part of 'auth_credential_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthCredentialEntityImpl _$$AuthCredentialEntityImplFromJson(
+_$AuthCredentialDtoImpl _$$AuthCredentialDtoImplFromJson(
   Map<String, dynamic> json,
-) => _$AuthCredentialEntityImpl(
+) => _$AuthCredentialDtoImpl(
   idToken: json['idToken'] as String,
   provider: json['provider'] as String,
   providerId: json['providerId'] as String,
@@ -17,8 +17,8 @@ _$AuthCredentialEntityImpl _$$AuthCredentialEntityImplFromJson(
   photoURL: json['photoURL'] as String?,
 );
 
-Map<String, dynamic> _$$AuthCredentialEntityImplToJson(
-  _$AuthCredentialEntityImpl instance,
+Map<String, dynamic> _$$AuthCredentialDtoImplToJson(
+  _$AuthCredentialDtoImpl instance,
 ) => <String, dynamic>{
   'idToken': instance.idToken,
   'provider': instance.provider,

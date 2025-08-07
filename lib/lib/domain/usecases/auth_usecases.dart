@@ -32,7 +32,6 @@ class SignOutUseCase {
   }
 }
 
-
 class GetAuthStateChangesUseCase {
   final AuthRepository _authRepository;
 

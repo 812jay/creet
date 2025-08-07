@@ -16,6 +16,14 @@ class IncomeDto with _$IncomeDto {
     required DateTime updatedAt,
   }) = _IncomeDto;
 
-  factory IncomeDto.fromJson(Map<String, dynamic> json) =>
-      _$IncomeDtoFromJson(json);
+  factory IncomeDto.fromJson(Map<String, dynamic> json) => IncomeDto(
+    id: json['id'] as String,
+    userId: json['user_id'] as String,
+    categoryId: json['category_id'] as String,
+    amount: json['amount'] as String,
+    date: json['date'] as String,
+    description: json['description'] as String?,
+    createdAt: DateTime.parse(json['created_at'] as String),
+    updatedAt: DateTime.parse(json['updated_at'] as String),
+  );
 }

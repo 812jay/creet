@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:creet/lib/core/utils/exceptions/async_wrapper.dart';
 import 'package:creet/lib/core/utils/logger.dart';
-import 'package:creet/lib/data/datasources/auth/auth_credential_entity.dart';
-import 'package:creet/lib/data/datasources/user/user_entity.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
@@ -16,6 +14,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final SupabaseClient _supabaseClient;
 
   AuthRepositoryImpl(this._supabaseClient);
+
   @override
   Future<AuthCredentialDto?> signinWithGoogle() async {
     return AsyncWrapper.wrap(
@@ -50,7 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
         );
         final authUser = response.user!;
 
-        final entity = AuthCredentialEntity(
+        final credential = AuthCredentialDto(
           idToken: idToken,
           providerId: authUser.id,
           provider: OAuthProvider.google.name,
@@ -58,8 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
           displayName: authUser.userMetadata?['name'] ?? '',
           photoURL: authUser.userMetadata?['picture'] ?? '',
         );
-        final dto = entity.toDto();
-        return dto;
+        return credential;
       },
       operationName: 'Google Sign-In',
       errorMessage: 'Google 로그인에 실패했습니다',
@@ -97,7 +95,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
         final authUser = auth.user!;
 
-        final entity = AuthCredentialEntity(
+        final authCredential = AuthCredentialDto(
           idToken: idToken,
           providerId: authUser.id,
           provider: OAuthProvider.apple.name,
@@ -105,9 +103,11 @@ class AuthRepositoryImpl implements AuthRepository {
           displayName: authUser.userMetadata?['name'] ?? '',
           photoURL: authUser.userMetadata?['picture'] ?? '',
         );
-        Logger.info('Apple idToken 획득 성공: $entity', tag: 'AuthRepository');
-        final dto = entity.toDto();
-        return dto;
+        Logger.info(
+          'Apple idToken 획득 성공: $authCredential',
+          tag: 'AuthRepository',
+        );
+        return authCredential;
       },
       operationName: 'Apple Sign-In',
       errorMessage: 'Apple 로그인에 실패했습니다',
@@ -135,8 +135,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final user = data.session?.user;
       if (user != null) {
         Logger.info('인증 상태 변경: 로그인됨 - ${user.email}', tag: 'AuthRepository');
-        final entity = UserEntity.fromJson(user.toJson());
-        return entity.toDto();
+        return UserDto.fromJson(user.toJson());
       }
       Logger.info('인증 상태 변경: 로그아웃됨', tag: 'AuthRepository');
       return null;

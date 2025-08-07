@@ -1,4 +1,5 @@
 import 'package:creet/lib/core/di/service_locator.dart';
+import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
@@ -8,26 +9,33 @@ part 'home_view_model.g.dart';
 
 @riverpod
 class HomeViewModel extends _$HomeViewModel {
+  final getCurrentUserUseCase = serviceLocator.get<GetCurrentUserUseCase>();
+  final signOutUseCase = serviceLocator.get<SignOutUseCase>();
+
   @override
   Future<HomeState> build() async {
-    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
-    final user = await useCase();
-    return HomeState(user: user, isLoading: false);
+    Logger.info('HomeViewModel 초기화', tag: 'HomeViewModel');
+
+    try {
+      final user = await getCurrentUserUseCase();
+      Logger.info('사용자 정보 로드 완료: ${user?.email}', tag: 'HomeViewModel');
+      return HomeState(user: user, isLoading: false);
+    } catch (e) {
+      Logger.error('사용자 정보 로드 실패: $e', tag: 'HomeViewModel');
+      return const HomeState(user: null, isLoading: false);
+    }
   }
 
-  /// 로그아웃
   Future<void> signOut() async {
+    Logger.info('로그아웃 시작', tag: 'HomeViewModel');
+
     try {
-      // 로딩 상태로 변경
-      state = const AsyncValue.loading();
-
-      final useCase = serviceLocator.get<SignOutUseCase>();
-      await useCase();
-
-      // 로그아웃 후 상태를 null로 변경
-      state = AsyncValue.data(const HomeState(user: null, isLoading: false));
-    } catch (error, stackTrace) {
-      state = AsyncValue.error(error, stackTrace);
+      await signOutUseCase();
+      Logger.info('로그아웃 성공', tag: 'HomeViewModel');
+      // 로그아웃 후 상태 업데이트
+      state = const AsyncValue.data(HomeState(user: null, isLoading: false));
+    } catch (e) {
+      Logger.error('로그아웃 실패: $e', tag: 'HomeViewModel');
     }
   }
 }

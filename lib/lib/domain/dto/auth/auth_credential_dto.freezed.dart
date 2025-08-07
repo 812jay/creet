@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'auth_credential_entity.dart';
+part of 'auth_credential_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,12 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-AuthCredentialEntity _$AuthCredentialEntityFromJson(Map<String, dynamic> json) {
-  return _AuthCredentialEntity.fromJson(json);
+AuthCredentialDto _$AuthCredentialDtoFromJson(Map<String, dynamic> json) {
+  return _AuthCredentialDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AuthCredentialEntity {
+mixin _$AuthCredentialDto {
   String get idToken => throw _privateConstructorUsedError;
   String get provider => throw _privateConstructorUsedError;
   String get providerId => throw _privateConstructorUsedError;
@@ -28,22 +28,22 @@ mixin _$AuthCredentialEntity {
   String? get displayName => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
 
-  /// Serializes this AuthCredentialEntity to a JSON map.
+  /// Serializes this AuthCredentialDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of AuthCredentialEntity
+  /// Create a copy of AuthCredentialDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AuthCredentialEntityCopyWith<AuthCredentialEntity> get copyWith =>
+  $AuthCredentialDtoCopyWith<AuthCredentialDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AuthCredentialEntityCopyWith<$Res> {
-  factory $AuthCredentialEntityCopyWith(
-    AuthCredentialEntity value,
-    $Res Function(AuthCredentialEntity) then,
-  ) = _$AuthCredentialEntityCopyWithImpl<$Res, AuthCredentialEntity>;
+abstract class $AuthCredentialDtoCopyWith<$Res> {
+  factory $AuthCredentialDtoCopyWith(
+    AuthCredentialDto value,
+    $Res Function(AuthCredentialDto) then,
+  ) = _$AuthCredentialDtoCopyWithImpl<$Res, AuthCredentialDto>;
   @useResult
   $Res call({
     String idToken,
@@ -56,19 +56,16 @@ abstract class $AuthCredentialEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AuthCredentialEntityCopyWithImpl<
-  $Res,
-  $Val extends AuthCredentialEntity
->
-    implements $AuthCredentialEntityCopyWith<$Res> {
-  _$AuthCredentialEntityCopyWithImpl(this._value, this._then);
+class _$AuthCredentialDtoCopyWithImpl<$Res, $Val extends AuthCredentialDto>
+    implements $AuthCredentialDtoCopyWith<$Res> {
+  _$AuthCredentialDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AuthCredentialEntity
+  /// Create a copy of AuthCredentialDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -119,12 +116,12 @@ class _$AuthCredentialEntityCopyWithImpl<
 }
 
 /// @nodoc
-abstract class _$$AuthCredentialEntityImplCopyWith<$Res>
-    implements $AuthCredentialEntityCopyWith<$Res> {
-  factory _$$AuthCredentialEntityImplCopyWith(
-    _$AuthCredentialEntityImpl value,
-    $Res Function(_$AuthCredentialEntityImpl) then,
-  ) = __$$AuthCredentialEntityImplCopyWithImpl<$Res>;
+abstract class _$$AuthCredentialDtoImplCopyWith<$Res>
+    implements $AuthCredentialDtoCopyWith<$Res> {
+  factory _$$AuthCredentialDtoImplCopyWith(
+    _$AuthCredentialDtoImpl value,
+    $Res Function(_$AuthCredentialDtoImpl) then,
+  ) = __$$AuthCredentialDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -138,15 +135,15 @@ abstract class _$$AuthCredentialEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
-    extends _$AuthCredentialEntityCopyWithImpl<$Res, _$AuthCredentialEntityImpl>
-    implements _$$AuthCredentialEntityImplCopyWith<$Res> {
-  __$$AuthCredentialEntityImplCopyWithImpl(
-    _$AuthCredentialEntityImpl _value,
-    $Res Function(_$AuthCredentialEntityImpl) _then,
+class __$$AuthCredentialDtoImplCopyWithImpl<$Res>
+    extends _$AuthCredentialDtoCopyWithImpl<$Res, _$AuthCredentialDtoImpl>
+    implements _$$AuthCredentialDtoImplCopyWith<$Res> {
+  __$$AuthCredentialDtoImplCopyWithImpl(
+    _$AuthCredentialDtoImpl _value,
+    $Res Function(_$AuthCredentialDtoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of AuthCredentialEntity
+  /// Create a copy of AuthCredentialDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -159,7 +156,7 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
     Object? photoURL = freezed,
   }) {
     return _then(
-      _$AuthCredentialEntityImpl(
+      _$AuthCredentialDtoImpl(
         idToken:
             null == idToken
                 ? _value.idToken
@@ -197,8 +194,8 @@ class __$$AuthCredentialEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
-  const _$AuthCredentialEntityImpl({
+class _$AuthCredentialDtoImpl implements _AuthCredentialDto {
+  const _$AuthCredentialDtoImpl({
     required this.idToken,
     required this.provider,
     required this.providerId,
@@ -207,8 +204,8 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
     this.photoURL,
   });
 
-  factory _$AuthCredentialEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AuthCredentialEntityImplFromJson(json);
+  factory _$AuthCredentialDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AuthCredentialDtoImplFromJson(json);
 
   @override
   final String idToken;
@@ -225,14 +222,14 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
 
   @override
   String toString() {
-    return 'AuthCredentialEntity(idToken: $idToken, provider: $provider, providerId: $providerId, email: $email, displayName: $displayName, photoURL: $photoURL)';
+    return 'AuthCredentialDto(idToken: $idToken, provider: $provider, providerId: $providerId, email: $email, displayName: $displayName, photoURL: $photoURL)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AuthCredentialEntityImpl &&
+            other is _$AuthCredentialDtoImpl &&
             (identical(other.idToken, idToken) || other.idToken == idToken) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
@@ -257,36 +254,35 @@ class _$AuthCredentialEntityImpl implements _AuthCredentialEntity {
     photoURL,
   );
 
-  /// Create a copy of AuthCredentialEntity
+  /// Create a copy of AuthCredentialDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AuthCredentialEntityImplCopyWith<_$AuthCredentialEntityImpl>
-  get copyWith =>
-      __$$AuthCredentialEntityImplCopyWithImpl<_$AuthCredentialEntityImpl>(
+  _$$AuthCredentialDtoImplCopyWith<_$AuthCredentialDtoImpl> get copyWith =>
+      __$$AuthCredentialDtoImplCopyWithImpl<_$AuthCredentialDtoImpl>(
         this,
         _$identity,
       );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AuthCredentialEntityImplToJson(this);
+    return _$$AuthCredentialDtoImplToJson(this);
   }
 }
 
-abstract class _AuthCredentialEntity implements AuthCredentialEntity {
-  const factory _AuthCredentialEntity({
+abstract class _AuthCredentialDto implements AuthCredentialDto {
+  const factory _AuthCredentialDto({
     required final String idToken,
     required final String provider,
     required final String providerId,
     final String? email,
     final String? displayName,
     final String? photoURL,
-  }) = _$AuthCredentialEntityImpl;
+  }) = _$AuthCredentialDtoImpl;
 
-  factory _AuthCredentialEntity.fromJson(Map<String, dynamic> json) =
-      _$AuthCredentialEntityImpl.fromJson;
+  factory _AuthCredentialDto.fromJson(Map<String, dynamic> json) =
+      _$AuthCredentialDtoImpl.fromJson;
 
   @override
   String get idToken;
@@ -301,10 +297,10 @@ abstract class _AuthCredentialEntity implements AuthCredentialEntity {
   @override
   String? get photoURL;
 
-  /// Create a copy of AuthCredentialEntity
+  /// Create a copy of AuthCredentialDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AuthCredentialEntityImplCopyWith<_$AuthCredentialEntityImpl>
-  get copyWith => throw _privateConstructorUsedError;
+  _$$AuthCredentialDtoImplCopyWith<_$AuthCredentialDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

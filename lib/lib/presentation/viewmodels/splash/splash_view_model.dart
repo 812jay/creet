@@ -8,22 +8,22 @@ part 'splash_view_model.g.dart';
 
 @riverpod
 class SplashViewModel extends _$SplashViewModel {
+  final getCurrentUserUseCase = serviceLocator.get<GetCurrentUserUseCase>();
+
   @override
   Future<UserDto?> build() async {
-    Logger.info('SplashViewModel 초기화', tag: 'SplashViewModel');
+    Logger.info('SplashViewModel 시작', tag: 'SplashViewModel');
 
-    // 앱 시작 시 현재 사용자 상태 확인
-    final useCase = serviceLocator.get<GetCurrentUserUseCase>();
     try {
-      final user = await useCase();
+      final user = await getCurrentUserUseCase();
       if (user != null) {
-        Logger.info('자동 로그인 가능: ${user.email}', tag: 'SplashViewModel');
+        Logger.info('자동 로그인 성공: ${user.email}', tag: 'SplashViewModel');
       } else {
         Logger.info('자동 로그인 불가: 사용자 정보 없음', tag: 'SplashViewModel');
       }
       return user;
     } catch (e) {
-      Logger.error('자동 로그인 확인 실패: $e', tag: 'SplashViewModel');
+      Logger.error('자동 로그인 실패: $e', tag: 'SplashViewModel');
       return null;
     }
   }

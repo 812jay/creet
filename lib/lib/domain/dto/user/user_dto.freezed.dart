@@ -205,7 +205,7 @@ class __$$UserDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserDtoImpl implements _UserDto {
+class _$UserDtoImpl extends _UserDto {
   const _$UserDtoImpl({
     required this.id,
     required this.email,
@@ -214,7 +214,7 @@ class _$UserDtoImpl implements _UserDto {
     this.avatarUrl,
     this.createdAt,
     this.updatedAt,
-  });
+  }) : super._();
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDtoImplFromJson(json);
@@ -285,7 +285,7 @@ class _$UserDtoImpl implements _UserDto {
   }
 }
 
-abstract class _UserDto implements UserDto {
+abstract class _UserDto extends UserDto {
   const factory _UserDto({
     required final String id,
     required final String email,
@@ -295,6 +295,7 @@ abstract class _UserDto implements UserDto {
     final DateTime? createdAt,
     final DateTime? updatedAt,
   }) = _$UserDtoImpl;
+  const _UserDto._() : super._();
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
 

@@ -1,9 +1,8 @@
 import 'package:creet/lib/core/service/image_service.dart';
 import 'package:creet/lib/core/utils/exceptions/async_wrapper.dart';
 import 'package:creet/lib/core/utils/logger.dart';
-import 'package:creet/lib/data/datasources/user/user_entity.dart';
-import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
+import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -74,9 +73,9 @@ class UserRepositoryImpl implements UserRepository {
                   .select()
                   .eq('id', providerId) // provider_id 대신 id로 시도
                   .maybeSingle();
-
+          Logger.info('userData: ${userData}', tag: 'UserRepository');
           if (userData != null) {
-            return UserEntity.fromJson(userData).toDto();
+            return UserDto.fromJson(userData);
           }
           throw Exception('사용자 데이터를 찾을 수 없습니다');
         },

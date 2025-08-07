@@ -1,39 +1,27 @@
-class AuthCredentialDto {
-  final String idToken;
-  final String provider; // 'google' or 'apple'
-  final String providerId;
-  final String? email;
-  final String? displayName;
-  final String? photoURL;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const AuthCredentialDto({
-    required this.idToken,
-    required this.provider,
-    required this.providerId,
-    this.email,
-    this.displayName,
-    this.photoURL,
-  });
+part 'auth_credential_dto.freezed.dart';
+part 'auth_credential_dto.g.dart';
 
-  factory AuthCredentialDto.fromJson(Map<String, dynamic> json) {
-    return AuthCredentialDto(
-      idToken: json['idToken'] as String,
-      provider: json['provider'] as String,
-      providerId: json['providerId'] as String,
-      email: json['email'] as String?,
-      displayName: json['displayName'] as String?,
-      photoURL: json['photoURL'] as String?,
-    );
-  }
+@freezed
+class AuthCredentialDto with _$AuthCredentialDto {
+  const factory AuthCredentialDto({
+    required String idToken,
+    required String provider,
+    required String providerId,
+    String? email,
+    String? displayName,
+    String? photoURL,
+  }) = _AuthCredentialDto;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'idToken': idToken,
-      'provider': provider,
-      'providerId': providerId,
-      'email': email,
-      'displayName': displayName,
-      'photoURL': photoURL,
-    };
-  }
+  // 커스텀 fromJson 메서드
+  factory AuthCredentialDto.fromJson(Map<String, dynamic> json) =>
+      AuthCredentialDto(
+        idToken: json['id_token'] as String,
+        provider: json['provider'] as String,
+        providerId: json['provider_id'] as String,
+        email: json['email'] as String?,
+        displayName: json['display_name'] as String?,
+        photoURL: json['photo_url'] as String?,
+      );
 }
