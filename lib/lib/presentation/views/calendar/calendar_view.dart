@@ -6,41 +6,41 @@ import 'package:creet/lib/presentation/viewmodels/calendar/calendar_view_model.d
 import 'package:creet/lib/presentation/views/calendar/widget/calendar_widget.dart';
 import 'package:intl/intl.dart';
 
-class CalendarView extends ConsumerWidget {
+class CalendarView extends StatelessWidget {
   const CalendarView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final calendarState = ref.watch(calendarViewModelProvider);
-
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundGray,
+      backgroundColor: AppColors.backgroundDefault,
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _CalendarAppBar(calendarAsync: calendarState),
-              _CalendarContent(calendarAsync: calendarState),
-              const SizedBox(height: 20),
-              _SelectedDateInfo(calendarAsync: calendarState),
-              Expanded(child: _ConsumptoinHistory()),
-            ],
-          ),
+        child: Column(
+          children: [
+            _CalendarBody(),
+            Container(height: 20, color: AppColors.backgroundGray),
+            Expanded(child: _ConsumptoinHistory()),
+          ],
         ),
       ),
     );
   }
 }
 
-class _CalendarAppBar extends StatelessWidget {
-  final AsyncValue<CalendarState> calendarAsync;
-
-  const _CalendarAppBar({required this.calendarAsync});
-
+class _CalendarBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return calendarAsync.when(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(children: [_CalendarAppBar(), _CalendarContent()]),
+    );
+  }
+}
+
+class _CalendarAppBar extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(calendarViewModelProvider);
+    return state.when(
       data: (calendarState) => _buildAppBar(calendarState.focusedDay),
       loading: () => _buildAppBar(DateTime.now()),
       error: (error, stack) => _buildAppBar(DateTime.now()),
@@ -97,13 +97,10 @@ class _AppBarButton extends StatelessWidget {
 }
 
 class _CalendarContent extends ConsumerWidget {
-  final AsyncValue<CalendarState> calendarAsync;
-
-  const _CalendarContent({required this.calendarAsync});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return calendarAsync.when(
+    final state = ref.watch(calendarViewModelProvider);
+    return state.when(
       data:
           (calendarState) => CalendarWidget(
             selectedDay: calendarState.selectedDay,
@@ -152,13 +149,13 @@ class _ErrorMessage extends StatelessWidget {
 }
 
 class _SelectedDateInfo extends StatelessWidget {
-  final AsyncValue<CalendarState> calendarAsync;
+  final AsyncValue<CalendarState> state;
 
-  const _SelectedDateInfo({required this.calendarAsync});
+  const _SelectedDateInfo({required this.state});
 
   @override
   Widget build(BuildContext context) {
-    return calendarAsync.when(
+    return state.when(
       data:
           (calendarState) =>
               _SelectedDateCard(selectedDay: calendarState.selectedDay),
@@ -203,28 +200,50 @@ class _SelectedDateCard extends StatelessWidget {
   }
 }
 
-class _ConsumptoinHistory extends StatelessWidget {
-  const _ConsumptoinHistory({super.key});
-
+class _ConsumptoinHistory extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemCount: 10,
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 16);
-      },
-      itemBuilder: (context, index) {
-        return Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: AppColors.componentFillPrimary,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.componentLineDefault),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final calendarState = ref.watch(calendarViewModelProvider);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        children: [
+          _SelectedDateInfo(state: calendarState),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
+                print('소비/지출 등록');
+              },
+              child: Text('소비/지출 등록', style: AppTypo.title1Bold),
+            ),
           ),
-          child: Center(child: Text('Item $index', style: AppTypo.body1Medium)),
-        );
-      },
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: 10,
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 16);
+              },
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColors.componentFillPrimary,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.componentLineDefault),
+                  ),
+                  child: Center(
+                    child: Text('Item $index', style: AppTypo.body1Medium),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
