@@ -216,7 +216,10 @@ class _ConsumptoinHistory extends ConsumerWidget {
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: () {
-                context.push('/incomeExpense', extra: {'date': selectedDay});
+                context.push(
+                  '/incomeExpense',
+                  extra: {'initialDay': selectedDay},
+                );
               },
               child: Text('소비/지출 등록', style: AppTypo.title1Bold),
             ),
