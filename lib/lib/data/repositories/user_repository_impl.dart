@@ -71,9 +71,8 @@ class UserRepositoryImpl implements UserRepository {
               await _supabaseClient
                   .from('users')
                   .select()
-                  .eq('id', providerId) // provider_id 대신 id로 시도
+                  .eq('id', providerId)
                   .maybeSingle();
-          Logger.info('userData: ${userData}', tag: 'UserRepository');
           if (userData != null) {
             return UserDto.fromJson(userData);
           }

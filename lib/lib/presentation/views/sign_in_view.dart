@@ -26,7 +26,7 @@ class SignInView extends ConsumerWidget {
           case SignInNavigationState.toTerms:
             authState.whenData((credential) {
               if (credential != null) {
-                context.go('/terms', extra: {'credential': credential});
+                context.push('/terms', extra: {'credential': credential});
               }
             });
             break;

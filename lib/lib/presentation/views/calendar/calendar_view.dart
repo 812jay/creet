@@ -3,7 +3,8 @@ import 'package:creet/lib/core/constants/app_typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:creet/lib/presentation/viewmodels/calendar/calendar_view_model.dart';
-import 'package:creet/lib/presentation/views/calendar/widget/calendar_widget.dart';
+import 'package:creet/lib/presentation/widgets/calendar/calendar_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class CalendarView extends StatelessWidget {
@@ -204,6 +205,7 @@ class _ConsumptoinHistory extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final calendarState = ref.watch(calendarViewModelProvider);
+    final selectedDay = calendarState.value?.selectedDay;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
@@ -214,7 +216,7 @@ class _ConsumptoinHistory extends ConsumerWidget {
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: () {
-                print('소비/지출 등록');
+                context.push('/incomeExpense', extra: {'date': selectedDay});
               },
               child: Text('소비/지출 등록', style: AppTypo.title1Bold),
             ),

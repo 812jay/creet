@@ -61,6 +61,7 @@ class AppColors {
   static const Color backgroundDefault = _white;
   static const Color backgroundGray = _gray50;
   static const Color backgroundAlternative = _neutral100;
+  static const Color backgroundDefaultInButton = _black;
   static const Color backgroundAppleSignInButton = _black;
   static const Color backgroundGoogleSignInButton = _neutral100;
   static const Color backgroundSelectedCalendar = _blue200;

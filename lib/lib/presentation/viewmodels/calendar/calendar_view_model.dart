@@ -85,32 +85,32 @@ class CalendarViewModel extends _$CalendarViewModel {
   }
 
   /// 이벤트 추가
-  void addEvent(CalendarEvent event) {
-    final currentEvents = state.value!.events;
-    final updatedEvents = [...currentEvents, event];
+  // void addEvent(CalendarEvent event) {
+  //   final currentEvents = state.value!.events;
+  //   final updatedEvents = [...currentEvents, event];
 
-    state = AsyncValue.data(state.value!.copyWith(events: updatedEvents));
-  }
+  //   state = AsyncValue.data(state.value!.copyWith(events: updatedEvents));
+  // }
 
   /// 이벤트 삭제
-  void removeEvent(String eventId) {
-    final currentEvents = state.value!.events;
-    final updatedEvents = currentEvents.where((e) => e.id != eventId).toList();
+  // void removeEvent(String eventId) {
+  //   final currentEvents = state.value!.events;
+  //   final updatedEvents = currentEvents.where((e) => e.id != eventId).toList();
 
-    state = AsyncValue.data(state.value!.copyWith(events: updatedEvents));
-  }
+  //   state = AsyncValue.data(state.value!.copyWith(events: updatedEvents));
+  // }
 
   /// 특정 날짜의 이벤트 조회
-  List<CalendarEvent> getEventsForDay(DateTime day) {
-    return state.value!.events.where((event) {
-      return event.date.year == day.year &&
-          event.date.month == day.month &&
-          event.date.day == day.day;
-    }).toList();
-  }
+  // List<CalendarEvent> getEventsForDay(DateTime day) {
+  //   return state.value!.events.where((event) {
+  //     return event.date.year == day.year &&
+  //         event.date.month == day.month &&
+  //         event.date.day == day.day;
+  //   }).toList();
+  // }
 
   /// 로딩 상태 설정
-  void setLoading(bool isLoading) {
-    state = AsyncValue.data(state.value!.copyWith(isLoading: isLoading));
-  }
+  // void setLoading(bool isLoading) {
+  //   state = AsyncValue.data(state.value!.copyWith(isLoading: isLoading));
+  // }
 }

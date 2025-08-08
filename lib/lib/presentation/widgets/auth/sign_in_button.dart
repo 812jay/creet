@@ -29,7 +29,10 @@ class SignInButton extends StatelessWidget {
         width: 343,
         height: 48,
         decoration: BoxDecoration(
-          color: isLoading ? backgroundColor.withOpacity(0.6) : backgroundColor,
+          color:
+              isLoading
+                  ? backgroundColor.withValues(alpha: 0.6)
+                  : backgroundColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.black, width: 1),
         ),

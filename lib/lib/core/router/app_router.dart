@@ -1,5 +1,6 @@
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/presentation/views/calendar/calendar_view.dart';
+import 'package:creet/lib/presentation/views/income_expense/add_income_expense_view.dart';
 import 'package:creet/lib/presentation/views/main_view.dart';
 import 'package:creet/lib/presentation/views/setting_view.dart';
 import 'package:creet/lib/presentation/views/sign_in_view.dart';
@@ -79,6 +80,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           }
 
           return TermsOfServiceView(credential: credential);
+        },
+      ),
+      GoRoute(
+        path: '/incomeExpense',
+        name: 'incomeExpense',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final date =
+              extra != null ? extra['date'] as DateTime : DateTime.now();
+          return AddIncomeExpenseView(date: date);
         },
       ),
     ],
