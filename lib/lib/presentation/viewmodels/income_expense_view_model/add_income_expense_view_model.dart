@@ -13,27 +13,34 @@ class AddIncomeExpenseState {
   final String expenseAmount;
   final String expenseCategory;
   final String expenseMemo;
+  final DateTime expenseDateTime;
   final String incomeAmount;
   final String incomeMemo;
+  final DateTime incomeDateTime;
   final bool isSaving;
 
-  const AddIncomeExpenseState({
+  AddIncomeExpenseState({
     this.selectedType = EntryType.expense,
     this.expenseAmount = '0',
     this.expenseCategory = '',
     this.expenseMemo = '',
+    DateTime? expenseDateTime,
     this.incomeAmount = '0',
     this.incomeMemo = '',
+    DateTime? incomeDateTime,
     this.isSaving = false,
-  });
+  }) : expenseDateTime = expenseDateTime ?? DateTime.now(),
+       incomeDateTime = incomeDateTime ?? DateTime.now();
 
   AddIncomeExpenseState copyWith({
     EntryType? selectedType,
     String? expenseAmount,
     String? expenseCategory,
     String? expenseMemo,
+    DateTime? expenseDateTime,
     String? incomeAmount,
     String? incomeMemo,
+    DateTime? incomeDateTime,
     bool? isSaving,
   }) {
     return AddIncomeExpenseState(
@@ -41,8 +48,10 @@ class AddIncomeExpenseState {
       expenseAmount: expenseAmount ?? this.expenseAmount,
       expenseCategory: expenseCategory ?? this.expenseCategory,
       expenseMemo: expenseMemo ?? this.expenseMemo,
+      expenseDateTime: expenseDateTime ?? this.expenseDateTime,
       incomeAmount: incomeAmount ?? this.incomeAmount,
       incomeMemo: incomeMemo ?? this.incomeMemo,
+      incomeDateTime: incomeDateTime ?? this.incomeDateTime,
       isSaving: isSaving ?? this.isSaving,
     );
   }
@@ -52,12 +61,22 @@ class AddIncomeExpenseState {
 class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
   late final IncomeUseCase _incomeUseCase;
   late final GetCurrentUserUseCase _getCurrentUserUseCase;
+  bool _initialized = false;
 
   @override
   AddIncomeExpenseState build() {
     _incomeUseCase = serviceLocator.get<IncomeUseCase>();
     _getCurrentUserUseCase = serviceLocator.get<GetCurrentUserUseCase>();
-    return const AddIncomeExpenseState();
+    return AddIncomeExpenseState();
+  }
+
+  void initialize(DateTime initialDate) {
+    if (_initialized) return;
+    _initialized = true;
+    state = state.copyWith(
+      expenseDateTime: initialDate,
+      incomeDateTime: initialDate,
+    );
   }
 
   void selectType(EntryType type) {
@@ -76,12 +95,20 @@ class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
     state = state.copyWith(expenseMemo: memo);
   }
 
+  void updateExpenseDateTime(DateTime dateTime) {
+    state = state.copyWith(expenseDateTime: dateTime);
+  }
+
   void updateIncomeAmount(String amount) {
     state = state.copyWith(incomeAmount: amount);
   }
 
   void updateIncomeMemo(String memo) {
     state = state.copyWith(incomeMemo: memo);
+  }
+
+  void updateIncomeDateTime(DateTime dateTime) {
+    state = state.copyWith(incomeDateTime: dateTime);
   }
 
   bool get isCompleteEnabled {
@@ -97,7 +124,7 @@ class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
     }
   }
 
-  Future<void> save(DateTime date) async {
+  Future<void> save() async {
     final current = state;
     if (!isCompleteEnabled) return;
     state = state.copyWith(isSaving: true);
@@ -115,7 +142,7 @@ class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
           categoryId: 'default',
           amount: clean,
           date:
-              '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+              '${current.incomeDateTime.year}-${current.incomeDateTime.month.toString().padLeft(2, '0')}-${current.incomeDateTime.day.toString().padLeft(2, '0')}',
           description: current.incomeMemo.isEmpty ? null : current.incomeMemo,
           createdAt: now,
           updatedAt: now,

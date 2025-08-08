@@ -87,9 +87,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'incomeExpense',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final date =
-              extra != null ? extra['date'] as DateTime : DateTime.now();
-          return AddIncomeExpenseView(date: date);
+          final initialDay =
+              extra != null ? extra['initialDay'] as DateTime : DateTime.now();
+          return AddIncomeExpenseView(initialDay: initialDay);
         },
       ),
     ],

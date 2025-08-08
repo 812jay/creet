@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,8 +9,8 @@ import 'package:creet/lib/core/constants/entry_type.dart';
 import 'package:creet/lib/presentation/viewmodels/income_expense_view_model/add_income_expense_view_model.dart';
 
 class AddIncomeExpenseView extends ConsumerStatefulWidget {
-  final DateTime date;
-  const AddIncomeExpenseView({super.key, required this.date});
+  final DateTime initialDay;
+  const AddIncomeExpenseView({super.key, required this.initialDay});
 
   @override
   ConsumerState<AddIncomeExpenseView> createState() =>
@@ -21,6 +22,11 @@ class _AddIncomeExpenseViewState extends ConsumerState<AddIncomeExpenseView> {
   Widget build(BuildContext context) {
     final viewState = ref.watch(addIncomeExpenseViewModelProvider);
     final viewModel = ref.read(addIncomeExpenseViewModelProvider.notifier);
+
+    // 초기 지출/수입 초기 설정 (1회)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.initialize(widget.initialDay);
+    });
 
     return GestureDetector(
       onTap: () {
@@ -47,12 +53,14 @@ class _AddIncomeExpenseViewState extends ConsumerState<AddIncomeExpenseView> {
                           amount: viewState.expenseAmount,
                           selectedCategory: viewState.expenseCategory,
                           memo: viewState.expenseMemo,
+                          dateTime: viewState.expenseDateTime,
                           onAmountChanged: viewModel.updateExpenseAmount,
                           onCategorySelected: viewModel.updateExpenseCategory,
                           onMemoChanged: viewModel.updateExpenseMemo,
+                          onDateTimeChanged: viewModel.updateExpenseDateTime,
                           isCompleteButtonEnabled: viewModel.isCompleteEnabled,
                           onCompletePressed: () async {
-                            await viewModel.save(widget.date);
+                            await viewModel.save();
                             if (context.mounted) Navigator.of(context).pop();
                           },
                         )
@@ -60,11 +68,13 @@ class _AddIncomeExpenseViewState extends ConsumerState<AddIncomeExpenseView> {
                           amount: viewState.incomeAmount,
                           selectedCategory: '',
                           memo: viewState.incomeMemo,
+                          dateTime: viewState.incomeDateTime,
                           onAmountChanged: viewModel.updateIncomeAmount,
                           onMemoChanged: viewModel.updateIncomeMemo,
+                          onDateTimeChanged: viewModel.updateIncomeDateTime,
                           isCompleteButtonEnabled: viewModel.isCompleteEnabled,
                           onCompletePressed: () async {
-                            await viewModel.save(widget.date);
+                            await viewModel.save();
                             if (context.mounted) Navigator.of(context).pop();
                           },
                         ),
@@ -170,9 +180,11 @@ class _ExpenseView extends StatelessWidget {
   final String amount;
   final String selectedCategory;
   final String memo;
+  final DateTime dateTime;
   final Function(String) onAmountChanged;
   final Function(String) onCategorySelected;
   final Function(String) onMemoChanged;
+  final Function(DateTime) onDateTimeChanged;
   final bool isCompleteButtonEnabled;
   final VoidCallback onCompletePressed;
 
@@ -180,9 +192,11 @@ class _ExpenseView extends StatelessWidget {
     required this.amount,
     required this.selectedCategory,
     required this.memo,
+    required this.dateTime,
     required this.onAmountChanged,
     required this.onCategorySelected,
     required this.onMemoChanged,
+    required this.onDateTimeChanged,
     required this.isCompleteButtonEnabled,
     required this.onCompletePressed,
   });
@@ -211,6 +225,12 @@ class _ExpenseView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
+          _DateTimeSection(
+            selectedType: EntryType.expense,
+            dateTime: dateTime,
+            onChanged: onDateTimeChanged,
+          ),
+          const SizedBox(height: 20),
           _MemoSection(memo: memo, onMemoChanged: onMemoChanged),
           const Spacer(),
           _CompleteButton(
@@ -228,8 +248,10 @@ class _IncomeView extends StatelessWidget {
   final String amount;
   final String selectedCategory;
   final String memo;
+  final DateTime dateTime;
   final Function(String) onAmountChanged;
   final Function(String) onMemoChanged;
+  final Function(DateTime) onDateTimeChanged;
   final bool isCompleteButtonEnabled;
   final VoidCallback onCompletePressed;
 
@@ -237,8 +259,10 @@ class _IncomeView extends StatelessWidget {
     required this.amount,
     required this.selectedCategory,
     required this.memo,
+    required this.dateTime,
     required this.onAmountChanged,
     required this.onMemoChanged,
+    required this.onDateTimeChanged,
     required this.isCompleteButtonEnabled,
     required this.onCompletePressed,
   });
@@ -251,6 +275,12 @@ class _IncomeView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _AmountSection(amount: amount, onAmountChanged: onAmountChanged),
+          const SizedBox(height: 20),
+          _DateTimeSection(
+            selectedType: EntryType.income,
+            dateTime: dateTime,
+            onChanged: onDateTimeChanged,
+          ),
           const SizedBox(height: 20),
           _MemoSection(memo: memo, onMemoChanged: onMemoChanged),
           const Spacer(),
@@ -529,7 +559,7 @@ class _MemoSection extends StatelessWidget {
             TextPosition(offset: memo.length),
           ),
         onChanged: onMemoChanged,
-        maxLength: 300,
+        maxLength: 100,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: '메모를 입력하세요 (선택사항)',
@@ -544,6 +574,112 @@ class _MemoSection extends StatelessWidget {
         maxLines: 3,
         minLines: 1,
       ),
+    );
+  }
+}
+
+class _DateTimeSection extends StatelessWidget {
+  final EntryType selectedType;
+  final DateTime dateTime;
+  final ValueChanged<DateTime> onChanged;
+
+  const _DateTimeSection({
+    required this.selectedType,
+    required this.dateTime,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _showCupertinoDateTimePicker(context),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.componentLineDefault),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                selectedType == EntryType.expense ? '지출 일시' : '수입 일시',
+                style: AppTypo.body1Medium,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Text(
+              '${_formatDate(context, dateTime)}  ${_formatTime(context, dateTime)}',
+              style: AppTypo.body1Medium.copyWith(color: AppColors.textPrimary),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatDate(BuildContext context, DateTime dt) {
+    final l10n = MaterialLocalizations.of(context);
+    return l10n.formatMediumDate(dt);
+  }
+
+  String _formatTime(BuildContext context, DateTime dt) {
+    final l10n = MaterialLocalizations.of(context);
+    return l10n.formatTimeOfDay(
+      TimeOfDay.fromDateTime(dt),
+      alwaysUse24HourFormat: false,
+    );
+  }
+
+  void _showCupertinoDateTimePicker(BuildContext context) {
+    DateTime temp = dateTime;
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext ctx) {
+        return Container(
+          height: 300,
+          color: AppColors.backgroundDefault,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 44,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text('취소', style: AppTypo.body1Medium),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                      CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text('완료', style: AppTypo.body1Medium),
+                        onPressed: () {
+                          onChanged(temp);
+                          Navigator.of(ctx).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.dateAndTime,
+                    initialDateTime: dateTime,
+                    use24hFormat: false,
+                    onDateTimeChanged: (val) {
+                      temp = val;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

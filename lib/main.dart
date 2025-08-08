@@ -3,6 +3,7 @@ import 'package:creet/lib/core/config/supabase_config.dart';
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/core/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -37,6 +38,12 @@ class MyApp extends ConsumerWidget {
         title: 'Creet',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        supportedLocales: const [Locale('ko', 'KR'), Locale('en', 'US')],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         routerConfig: router,
       ),
     );
