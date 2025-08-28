@@ -7,7 +7,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 
 class ImageService {
-  static const String _bucketName = 'images';
   static const int _maxFileSizeInBytes = 5 * 1024 * 1024; // 5MB
   static const Duration _downloadTimeout = Duration(seconds: 30);
   static const int _maxImageSize = 400;
@@ -28,60 +27,6 @@ class ImageService {
     }
   }
 
-  /// File을 Supabase Storage에 업로드하고 파일명 반환
-  Future<String?> uploadImageToStorage(File image, String userId) async {
-    try {
-      final user = _getCurrentUser();
-      if (user == null) return null;
-
-      final filePath = _generateAvatarPath(userId);
-
-      // 기존 파일 삭제 시도
-      await _deleteExistingAvatar(userId);
-
-      // 이미지 최적화 및 업로드
-      final optimizedBytes = await _optimizeImageFile(image);
-      if (optimizedBytes == null) return null;
-
-      await _uploadToStorage(filePath, optimizedBytes);
-
-      Logger.info('이미지 업로드 성공: $filePath', tag: 'ImageService');
-      return filePath;
-    } catch (e) {
-      Logger.error('이미지 업로드 실패', tag: 'ImageService');
-      return null;
-    }
-  }
-
-  /// 파일명으로 공개 URL 생성
-  String getPublicUrl(String fileName) {
-    return _supabase.storage.from(_bucketName).getPublicUrl(fileName);
-  }
-
-  /// 파일명이 저장된 avatar_url을 실제 이미지 URL로 변환
-  String? getAvatarUrl(String? avatarFileName) {
-    if (avatarFileName == null || avatarFileName.isEmpty) return null;
-    return getPublicUrl(avatarFileName);
-  }
-
-  // Private helper methods
-
-  /// 현재 로그인된 사용자 확인
-  User? _getCurrentUser() {
-    final user = _supabase.auth.currentUser;
-    if (user == null) {
-      Logger.error('사용자가 로그인되어 있지 않습니다.', tag: 'ImageService');
-      return null;
-    }
-    Logger.info('현재 로그인된 사용자: ${user.id}', tag: 'ImageService');
-    return user;
-  }
-
-  /// 아바타 파일 경로 생성
-  String _generateAvatarPath(String userId) {
-    return 'avatars/$userId.jpg';
-  }
-
   /// 임시 파일로 저장
   Future<File> _saveToTempFile(Uint8List imageData) async {
     final tempDir = await getTemporaryDirectory();
@@ -91,16 +36,79 @@ class ImageService {
     return file;
   }
 
-  /// 기존 아바타 이미지 삭제
-  Future<void> _deleteExistingAvatar(String userId) async {
+  /// File을 Supabase Storage에 업로드하고 파일명 반환
+  Future<String?> uploadImageToStorage({
+    required String bucketName,
+    required String imagePath,
+    required File image,
+  }) async {
     try {
-      final filePath = _generateAvatarPath(userId);
-      await _supabase.storage.from(_bucketName).remove([filePath]);
-      Logger.info('기존 아바타 이미지 삭제 완료: $filePath', tag: 'ImageService');
+      // 이미지 최적화 및 업로드
+      final optimizedBytes = await _optimizeImageFile(image);
+      if (optimizedBytes == null) return null;
+
+      // 버킷 존재 여부 확인 (선택사항)
+      try {
+        await _supabase.storage.from(bucketName).list();
+        Logger.info('버킷 확인됨: $bucketName', tag: 'ImageService');
+      } catch (e) {
+        Logger.error('버킷을 찾을 수 없습니다: $bucketName', tag: 'ImageService');
+        Logger.error('에러 상세: $e', tag: 'ImageService');
+        return null;
+      }
+
+      Logger.info(
+        'bucketName: $bucketName, imagePath: $imagePath',
+        tag: 'ImageService',
+      );
+
+      await _supabase.storage
+          .from(bucketName)
+          .upload(imagePath, image, fileOptions: FileOptions(upsert: true));
+
+      Logger.info(
+        '이미지 업로드 성공: bucketName: $bucketName, imagePath: $imagePath',
+        tag: 'ImageService',
+      );
+      return imagePath;
     } catch (e) {
-      // 파일이 없으면 무시 (정상적인 경우)
-      Logger.info('기존 아바타 이미지가 없습니다: avatars/$userId.jpg', tag: 'ImageService');
+      Logger.error('이미지 업로드 실패: $e', tag: 'ImageService');
+      Logger.error('버킷: $bucketName, 경로: $imagePath', tag: 'ImageService');
+      return null;
     }
+  }
+
+  /// 이미지 다운로드
+  Future<Uint8List?> _downloadImageFromUrl(String url) async {
+    try {
+      final downloadUrl = _optimizeImageUrl(url);
+      final response = await Dio()
+          .get(downloadUrl, options: Options(responseType: ResponseType.bytes))
+          .timeout(_downloadTimeout);
+
+      if (response.statusCode == 200) {
+        return _validateImageResponse(response);
+      } else {
+        Logger.error(
+          '이미지 다운로드 실패: ${response.statusCode}',
+          tag: 'ImageService',
+        );
+        return null;
+      }
+    } catch (e) {
+      Logger.error('이미지 다운로드 에러', tag: 'ImageService');
+      return null;
+    }
+  }
+
+  /// 이미지 URL 최적화 (Google 프로필 이미지 등)
+  String _optimizeImageUrl(String url) {
+    if (url.contains('googleusercontent.com')) {
+      final uri = Uri.parse(url);
+      final pathWithoutQuery = uri.replace(query: '').toString();
+      return '$pathWithoutQuery?sz=400'; // 400x400 크기
+    }
+    return url;
   }
 
   /// 이미지 파일 최적화
@@ -148,50 +156,6 @@ class ImageService {
     }
   }
 
-  /// Storage에 업로드
-  Future<void> _uploadToStorage(String filePath, List<int> imageBytes) async {
-    await _supabase.storage
-        .from(_bucketName)
-        .uploadBinary(
-          filePath,
-          Uint8List.fromList(imageBytes),
-          fileOptions: FileOptions(contentType: 'image/jpeg', upsert: true),
-        );
-  }
-
-  /// 이미지 다운로드
-  Future<Uint8List?> _downloadImageFromUrl(String url) async {
-    try {
-      final downloadUrl = _optimizeImageUrl(url);
-      final response = await Dio()
-          .get(downloadUrl, options: Options(responseType: ResponseType.bytes))
-          .timeout(_downloadTimeout);
-
-      if (response.statusCode == 200) {
-        return _validateImageResponse(response);
-      } else {
-        Logger.error(
-          '이미지 다운로드 실패: ${response.statusCode}',
-          tag: 'ImageService',
-        );
-        return null;
-      }
-    } catch (e) {
-      Logger.error('이미지 다운로드 에러', tag: 'ImageService');
-      return null;
-    }
-  }
-
-  /// 이미지 URL 최적화 (Google 프로필 이미지 등)
-  String _optimizeImageUrl(String url) {
-    if (url.contains('googleusercontent.com')) {
-      final uri = Uri.parse(url);
-      final pathWithoutQuery = uri.replace(query: '').toString();
-      return '$pathWithoutQuery?sz=400'; // 400x400 크기
-    }
-    return url;
-  }
-
   /// 이미지 응답 검증
   Uint8List? _validateImageResponse(Response response) {
     final contentType = response.headers['content-type'];
@@ -203,4 +167,39 @@ class ImageService {
       return null;
     }
   }
+
+  /// 파일명이 저장된 avatar_url을 실제 이미지 URL로 변환
+  String? getImageUrl({required String bucketName, required String imagePath}) {
+    if (imagePath.isEmpty) return null;
+    final imageUrl = _supabase.storage.from(bucketName).getPublicUrl(imagePath);
+    return imageUrl;
+  }
+
+  //   /// 현재 로그인된 사용자 확인
+  //   User? _getCurrentUser() {
+  //     final user = _supabase.auth.currentUser;
+  //     if (user == null) {
+  //       Logger.error('사용자가 로그인되어 있지 않습니다.', tag: 'ImageService');
+  //       return null;
+  //     }
+  //     Logger.info('현재 로그인된 사용자: ${user.id}', tag: 'ImageService');
+  //     return user;
+  //   }
+
+  //   /// 기존 아바타 이미지 삭제
+  //   Future<void> _deleteExistingImage({
+  //     required String bucketName,
+  //     required String imagePath,
+  //   }) async {
+  //     try {
+  //       await _supabase.storage.from(bucketName).remove([imagePath]);
+  //       Logger.info('기존 아바타 이미지 삭제 완료: $imagePath', tag: 'ImageService');
+  //     } catch (e) {
+  //       // 파일이 없으면 무시 (정상적인 경우)
+  //       Logger.info('기존 아바타 이미지가 없습니다: $imagePath', tag: 'ImageService');
+  //     }
+  //   }
+
+  //   /// Storage에 업로드
+  //   Future<void> _uploadToStorage(String filePath, List<int> imageBytes) async {}
 }

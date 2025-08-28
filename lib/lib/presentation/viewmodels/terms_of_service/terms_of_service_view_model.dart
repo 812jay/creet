@@ -1,6 +1,7 @@
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/core/utils/logger.dart';
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
+import 'package:creet/lib/domain/usecases/category_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -85,8 +86,8 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
     try {
       state = state.copyWith(isLoading: true);
 
-      final useCase = serviceLocator.get<SignUpUseCase>();
-      await useCase(credential);
+      final useCase = serviceLocator.get<UserUseCase>();
+      await useCase.signUp(credential);
 
       // 성공 시 상태 초기화 및 네비게이션 플래그 설정
       state = state.copyWith(isLoading: false, shouldNavigate: true);
@@ -96,6 +97,18 @@ class TermsOfServiceViewModel extends _$TermsOfServiceViewModel {
       Logger.error('SignUp 실패: $e', tag: 'TermsOfServiceViewModel');
       // 에러 처리 (필요시)
     }
+  }
+
+  Future<void> addDefaultCategories(String userId) async {
+    final useCase = serviceLocator.get<CategoryUseCase>();
+    await useCase.addCategory(
+      userId: userId,
+      name: '기본 카테고리',
+      imageFileName: 'default_category.png',
+      isFixed: true,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
   }
 
   // 네비게이션 플래그 리셋

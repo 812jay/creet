@@ -51,7 +51,10 @@ class _ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageService = ImageService();
-    final avatarUrl = imageService.getAvatarUrl(user.avatarUrl);
+    final avatarUrl = imageService.getImageUrl(
+      bucketName: 'avatars',
+      imagePath: user.avatarUrl ?? '',
+    );
 
     return CircleAvatar(
       radius: 40,

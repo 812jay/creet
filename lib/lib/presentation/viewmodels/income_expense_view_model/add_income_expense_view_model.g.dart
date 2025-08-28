@@ -7,7 +7,7 @@ part of 'add_income_expense_view_model.dart';
 // **************************************************************************
 
 String _$addIncomeExpenseViewModelHash() =>
-    r'c8ed6596d524171e20daa08b5f91351088df62d8';
+    r'7411a019a8563b9b7ac38330be444f3c2666ac09';
 
 /// See also [AddIncomeExpenseViewModel].
 @ProviderFor(AddIncomeExpenseViewModel)

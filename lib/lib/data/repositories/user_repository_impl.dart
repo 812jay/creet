@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:creet/lib/core/service/image_service.dart';
 import 'package:creet/lib/core/utils/exceptions/async_wrapper.dart';
 import 'package:creet/lib/core/utils/logger.dart';
@@ -16,25 +18,47 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> signUp(AuthCredentialDto credential) async {
     await AsyncWrapper.wrap(
       () async {
-        String? avatarFileName;
+        String? avatarPath;
 
         // 프로필 이미지가 있으면 처리
         if (credential.photoURL != null) {
+          Logger.info(
+            '프로필 이미지 처리 시작: ${credential.photoURL}',
+            tag: 'UserRepository',
+          );
+
           // 1. photoUrl을 File로 변환
-          final imageFile = await _imageService.convertUrlToFile(
+          final File? imageFile = await _imageService.convertUrlToFile(
             credential.photoURL!,
           );
 
           if (imageFile != null) {
-            // 2. Supabase Storage에 업로드하고 파일명 받기
-            avatarFileName = await _imageService.uploadImageToStorage(
-              imageFile,
-              credential.providerId,
+            Logger.info(
+              '이미지 파일 변환 성공: ${imageFile.path}',
+              tag: 'UserRepository',
             );
+
+            // 2. Supabase Storage에 업로드하고 파일명 받기
+            avatarPath = await _imageService.uploadImageToStorage(
+              bucketName: 'avatars',
+              imagePath: credential.providerId,
+              image: imageFile,
+            );
+
+            if (avatarPath != null) {
+              Logger.info('이미지 업로드 성공, 경로: $avatarPath', tag: 'UserRepository');
+            } else {
+              Logger.error('이미지 업로드 실패', tag: 'UserRepository');
+            }
 
             // 3. 임시 파일 삭제
             await imageFile.delete();
+            Logger.info('임시 파일 삭제 완료', tag: 'UserRepository');
+          } else {
+            Logger.error('이미지 파일 변환 실패', tag: 'UserRepository');
           }
+        } else {
+          Logger.info('프로필 이미지가 없습니다', tag: 'UserRepository');
         }
 
         // 3. 사용자 정보 저장 (avatar_url에 파일명 저장)
@@ -43,7 +67,7 @@ class UserRepositoryImpl implements UserRepository {
           'email': credential.email,
           'provider': credential.provider,
           'nickname': credential.displayName,
-          'avatar_url': avatarFileName,
+          'avatar_url': avatarPath,
           'created_at': DateTime.now().toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
         });
@@ -85,4 +109,15 @@ class UserRepositoryImpl implements UserRepository {
     Logger.info('현재 사용자 없음', tag: 'UserRepository');
     return null;
   }
+
+  // @override
+  // Future<void> uploadAvatar(String userId, File image) async {
+  //   await AsyncWrapper.wrap(() async {
+  //     await _imageService.uploadImageToStorage(
+  //       bucketName: 'avatars',
+  //       imagePath: userId,
+  //       image: image,
+  //     );
+  //   });
+  // }
 }

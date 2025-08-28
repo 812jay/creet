@@ -69,11 +69,6 @@ class HomeAppBar extends ConsumerWidget {
         height: 26,
       ),
       actions: [
-        // IconButton(
-        //   onPressed: () => homeViewModel.signOut(),
-        //   icon: const Icon(Icons.logout),
-        //   tooltip: '로그아웃',
-        // ),
         GestureDetector(
           onTap: () {},
           child: Text(

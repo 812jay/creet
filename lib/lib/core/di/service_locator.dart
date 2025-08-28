@@ -1,10 +1,13 @@
 import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
+import 'package:creet/lib/data/repositories/category_repository_impl.dart';
 import 'package:creet/lib/data/repositories/income_repository_impl.dart';
 import 'package:creet/lib/data/repositories/user_repository_impl.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
+import 'package:creet/lib/domain/repositories/category_repository.dart';
 import 'package:creet/lib/domain/repositories/income_repository.dart';
 import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
+import 'package:creet/lib/domain/usecases/category_usecases.dart';
 import 'package:creet/lib/domain/usecases/income_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:dio/dio.dart';
@@ -66,6 +69,11 @@ class ServiceLocator {
     serviceLocator.registerLazySingleton<IncomeRepository>(
       () => IncomeRepositoryImpl(serviceLocator<SupabaseClient>()),
     );
+
+    // Category Repository
+    serviceLocator.registerLazySingleton<CategoryRepository>(
+      () => CategoryRepositoryImpl(serviceLocator<SupabaseClient>()),
+    );
   }
 
   /// Use Cases 등록
@@ -79,8 +87,11 @@ class ServiceLocator {
       () => SignInWithAppleUseCase(serviceLocator<AuthRepository>()),
     );
 
-    serviceLocator.registerLazySingleton<SignUpUseCase>(
-      () => SignUpUseCase(serviceLocator<UserRepository>()),
+    serviceLocator.registerLazySingleton<UserUseCase>(
+      () => UserUseCase(
+        serviceLocator<UserRepository>(),
+        serviceLocator<CategoryRepository>(),
+      ),
     );
 
     serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(
@@ -98,6 +109,11 @@ class ServiceLocator {
     //income
     serviceLocator.registerLazySingleton<IncomeUseCase>(
       () => IncomeUseCase(serviceLocator<IncomeRepository>()),
+    );
+
+    // Category Use Cases
+    serviceLocator.registerLazySingleton<CategoryUseCase>(
+      () => CategoryUseCase(serviceLocator<CategoryRepository>()),
     );
   }
 
