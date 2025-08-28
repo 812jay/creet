@@ -58,12 +58,12 @@ enum EventType { general, important, reminder, meeting }
 @riverpod
 class CalendarViewModel extends _$CalendarViewModel {
   final incomeUsecases = serviceLocator.get<IncomeUseCase>();
-  final userUsecases = serviceLocator.get<GetCurrentUserUseCase>();
+  final userUsecases = serviceLocator.get<UserUseCase>();
   final now = DateTime.now();
   @override
   Future<CalendarState> build() async {
     // 초기 상태 설정
-    final user = await userUsecases();
+    final user = await userUsecases.getCurrentUser();
     final incomes = await incomeUsecases.fetchIncomes(
       user!.id,
       '${now.year}-${now.month}',

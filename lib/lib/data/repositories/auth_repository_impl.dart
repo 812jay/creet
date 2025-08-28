@@ -16,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._supabaseClient);
 
   @override
-  Future<AuthCredentialDto?> signinWithGoogle() async {
+  Future<AuthCredentialDto?> signInWithGoogle() async {
     return AsyncWrapper.wrap(
       () async {
         Logger.info('Google Sign-In 시작', tag: 'AuthRepository');
@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthCredentialDto?> signinWithApple() async {
+  Future<AuthCredentialDto?> signInWithApple() async {
     return AsyncWrapper.wrap(
       () async {
         Logger.info('Apple Sign-In 시작', tag: 'AuthRepository');

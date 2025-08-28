@@ -31,10 +31,10 @@ class SignInViewModel extends _$SignInViewModel {
     state = const AsyncValue.loading();
 
     try {
-      final signInWithGoogleUseCase =
-          serviceLocator.get<SignInWithGoogleUseCase>();
-      final userUseCase = serviceLocator.get<GetCurrentUserUseCase>();
-      final credential = await signInWithGoogleUseCase();
+      final authUseCase = serviceLocator.get<AuthUseCase>();
+
+      final userUseCase = serviceLocator.get<UserUseCase>();
+      final credential = await authUseCase.signInWithGoogle();
 
       if (credential == null) {
         Logger.error('Google 인증 실패', tag: 'SignInViewModel');
@@ -49,7 +49,7 @@ class SignInViewModel extends _$SignInViewModel {
       );
 
       // users 테이블에서 기존 사용자인지 확인
-      final existingUser = await userUseCase();
+      final existingUser = await userUseCase.getCurrentUser();
 
       if (existingUser != null) {
         // 기존 사용자: 메인 페이지로 이동
@@ -90,10 +90,9 @@ class SignInViewModel extends _$SignInViewModel {
     state = const AsyncValue.loading();
 
     try {
-      final signInWithAppleUseCase =
-          serviceLocator.get<SignInWithAppleUseCase>();
-      final userUseCase = serviceLocator.get<GetCurrentUserUseCase>();
-      final credential = await signInWithAppleUseCase();
+      final authUseCase = serviceLocator.get<AuthUseCase>();
+      final userUseCase = serviceLocator.get<UserUseCase>();
+      final credential = await authUseCase.signInWithApple();
 
       if (credential == null) {
         Logger.error('Apple 인증 실패', tag: 'SignInViewModel');
@@ -105,7 +104,7 @@ class SignInViewModel extends _$SignInViewModel {
       Logger.info('Apple 인증 성공: ${credential.email}', tag: 'SignInViewModel');
 
       // users 테이블에서 기존 사용자인지 확인
-      final existingUser = await userUseCase();
+      final existingUser = await userUseCase.getCurrentUser();
 
       if (existingUser != null) {
         // 기존 사용자: 메인 페이지로 이동

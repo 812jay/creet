@@ -60,13 +60,13 @@ class AddIncomeExpenseState {
 @riverpod
 class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
   late final IncomeUseCase _incomeUseCase;
-  late final GetCurrentUserUseCase _getCurrentUserUseCase;
+  late final UserUseCase _userUseCase;
   bool _initialized = false;
 
   @override
   AddIncomeExpenseState build() {
     _incomeUseCase = serviceLocator.get<IncomeUseCase>();
-    _getCurrentUserUseCase = serviceLocator.get<GetCurrentUserUseCase>();
+    _userUseCase = serviceLocator.get<UserUseCase>();
     return AddIncomeExpenseState();
   }
 
@@ -130,7 +130,7 @@ class AddIncomeExpenseViewModel extends _$AddIncomeExpenseViewModel {
     state = state.copyWith(isSaving: true);
 
     try {
-      final user = await _getCurrentUserUseCase();
+      final user = await _userUseCase.getCurrentUser();
       if (user == null) throw Exception('User not signed in');
 
       if (current.selectedType == EntryType.income) {

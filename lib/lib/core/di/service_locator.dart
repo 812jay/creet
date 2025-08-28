@@ -79,12 +79,8 @@ class ServiceLocator {
   /// Use Cases 등록
   static void _registerUseCases() {
     // Auth Use Cases
-    serviceLocator.registerLazySingleton<SignInWithGoogleUseCase>(
-      () => SignInWithGoogleUseCase(serviceLocator<AuthRepository>()),
-    );
-
-    serviceLocator.registerLazySingleton<SignInWithAppleUseCase>(
-      () => SignInWithAppleUseCase(serviceLocator<AuthRepository>()),
+    serviceLocator.registerLazySingleton<AuthUseCase>(
+      () => AuthUseCase(serviceLocator<AuthRepository>()),
     );
 
     serviceLocator.registerLazySingleton<UserUseCase>(
@@ -92,18 +88,6 @@ class ServiceLocator {
         serviceLocator<UserRepository>(),
         serviceLocator<CategoryRepository>(),
       ),
-    );
-
-    serviceLocator.registerLazySingleton<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(serviceLocator<UserRepository>()),
-    );
-
-    serviceLocator.registerLazySingleton<GetAuthStateChangesUseCase>(
-      () => GetAuthStateChangesUseCase(serviceLocator<AuthRepository>()),
-    );
-
-    serviceLocator.registerLazySingleton<SignOutUseCase>(
-      () => SignOutUseCase(serviceLocator<AuthRepository>()),
     );
 
     //income

@@ -2,42 +2,26 @@ import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/domain/dto/user/user_dto.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 
-class SignInWithGoogleUseCase {
+class AuthUseCase {
   final AuthRepository _authRepository;
 
-  SignInWithGoogleUseCase(this._authRepository);
+  AuthUseCase(this._authRepository);
 
-  Future<AuthCredentialDto?> call() async {
-    return await _authRepository.signinWithGoogle();
+  Future<AuthCredentialDto?> signInWithGoogle() async {
+    final result = await _authRepository.signInWithGoogle();
+    return result;
   }
-}
 
-class SignInWithAppleUseCase {
-  final AuthRepository _authRepository;
-
-  SignInWithAppleUseCase(this._authRepository);
-
-  Future<AuthCredentialDto?> call() async {
-    return await _authRepository.signinWithApple();
+  Future<AuthCredentialDto?> signInWithApple() async {
+    final result = await _authRepository.signInWithApple();
+    return result;
   }
-}
 
-class SignOutUseCase {
-  final AuthRepository _authRepository;
-
-  SignOutUseCase(this._authRepository);
-
-  Future<void> call() async {
+  Future<void> signOut() async {
     await _authRepository.signOut();
   }
-}
 
-class GetAuthStateChangesUseCase {
-  final AuthRepository _authRepository;
-
-  GetAuthStateChangesUseCase(this._authRepository);
-
-  Stream<UserDto?> call() {
+  Stream<UserDto?> getAuthStateChanges() {
     return _authRepository.authStateChanges;
   }
 }

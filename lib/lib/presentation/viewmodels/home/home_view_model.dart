@@ -9,15 +9,15 @@ part 'home_view_model.g.dart';
 
 @riverpod
 class HomeViewModel extends _$HomeViewModel {
-  final getCurrentUserUseCase = serviceLocator.get<GetCurrentUserUseCase>();
-  final signOutUseCase = serviceLocator.get<SignOutUseCase>();
+  final userUseCase = serviceLocator.get<UserUseCase>();
+  final authUseCase = serviceLocator.get<AuthUseCase>();
 
   @override
   Future<HomeState> build() async {
     Logger.info('HomeViewModel 초기화', tag: 'HomeViewModel');
 
     try {
-      final user = await getCurrentUserUseCase();
+      final user = await userUseCase.getCurrentUser();
       Logger.info('사용자 정보 로드 완료: ${user?.email}', tag: 'HomeViewModel');
       return HomeState(user: user, isLoading: false);
     } catch (e) {
@@ -30,7 +30,7 @@ class HomeViewModel extends _$HomeViewModel {
     Logger.info('로그아웃 시작', tag: 'HomeViewModel');
 
     try {
-      await signOutUseCase();
+      await authUseCase.signOut();
       Logger.info('로그아웃 성공', tag: 'HomeViewModel');
       // 로그아웃 후 상태 업데이트
       state = const AsyncValue.data(HomeState(user: null, isLoading: false));
