@@ -24,8 +24,12 @@ mixin _$CategoryDto {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  String? get imageFileName => throw _privateConstructorUsedError;
+  String get templateId => throw _privateConstructorUsedError;
+  String? get customIconUrl => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  bool get isActive => throw _privateConstructorUsedError;
   bool get isFixed => throw _privateConstructorUsedError;
+  int get sortOrder => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -50,8 +54,12 @@ abstract class $CategoryDtoCopyWith<$Res> {
     String id,
     String name,
     String userId,
-    String? imageFileName,
+    String templateId,
+    String? customIconUrl,
+    String type,
+    bool isActive,
     bool isFixed,
+    int sortOrder,
     DateTime createdAt,
     DateTime updatedAt,
   });
@@ -75,8 +83,12 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
     Object? id = null,
     Object? name = null,
     Object? userId = null,
-    Object? imageFileName = freezed,
+    Object? templateId = null,
+    Object? customIconUrl = freezed,
+    Object? type = null,
+    Object? isActive = null,
     Object? isFixed = null,
+    Object? sortOrder = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -97,16 +109,36 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
                     ? _value.userId
                     : userId // ignore: cast_nullable_to_non_nullable
                         as String,
-            imageFileName:
-                freezed == imageFileName
-                    ? _value.imageFileName
-                    : imageFileName // ignore: cast_nullable_to_non_nullable
+            templateId:
+                null == templateId
+                    ? _value.templateId
+                    : templateId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            customIconUrl:
+                freezed == customIconUrl
+                    ? _value.customIconUrl
+                    : customIconUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
+            type:
+                null == type
+                    ? _value.type
+                    : type // ignore: cast_nullable_to_non_nullable
+                        as String,
+            isActive:
+                null == isActive
+                    ? _value.isActive
+                    : isActive // ignore: cast_nullable_to_non_nullable
+                        as bool,
             isFixed:
                 null == isFixed
                     ? _value.isFixed
                     : isFixed // ignore: cast_nullable_to_non_nullable
                         as bool,
+            sortOrder:
+                null == sortOrder
+                    ? _value.sortOrder
+                    : sortOrder // ignore: cast_nullable_to_non_nullable
+                        as int,
             createdAt:
                 null == createdAt
                     ? _value.createdAt
@@ -136,8 +168,12 @@ abstract class _$$CategoryDtoImplCopyWith<$Res>
     String id,
     String name,
     String userId,
-    String? imageFileName,
+    String templateId,
+    String? customIconUrl,
+    String type,
+    bool isActive,
     bool isFixed,
+    int sortOrder,
     DateTime createdAt,
     DateTime updatedAt,
   });
@@ -160,8 +196,12 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? userId = null,
-    Object? imageFileName = freezed,
+    Object? templateId = null,
+    Object? customIconUrl = freezed,
+    Object? type = null,
+    Object? isActive = null,
     Object? isFixed = null,
+    Object? sortOrder = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -182,16 +222,36 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
                     as String,
-        imageFileName:
-            freezed == imageFileName
-                ? _value.imageFileName
-                : imageFileName // ignore: cast_nullable_to_non_nullable
+        templateId:
+            null == templateId
+                ? _value.templateId
+                : templateId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        customIconUrl:
+            freezed == customIconUrl
+                ? _value.customIconUrl
+                : customIconUrl // ignore: cast_nullable_to_non_nullable
                     as String?,
+        type:
+            null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                    as String,
+        isActive:
+            null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                    as bool,
         isFixed:
             null == isFixed
                 ? _value.isFixed
                 : isFixed // ignore: cast_nullable_to_non_nullable
                     as bool,
+        sortOrder:
+            null == sortOrder
+                ? _value.sortOrder
+                : sortOrder // ignore: cast_nullable_to_non_nullable
+                    as int,
         createdAt:
             null == createdAt
                 ? _value.createdAt
@@ -214,8 +274,12 @@ class _$CategoryDtoImpl implements _CategoryDto {
     required this.id,
     required this.name,
     required this.userId,
-    this.imageFileName,
+    required this.templateId,
+    this.customIconUrl,
+    required this.type,
+    required this.isActive,
     required this.isFixed,
+    required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -230,9 +294,17 @@ class _$CategoryDtoImpl implements _CategoryDto {
   @override
   final String userId;
   @override
-  final String? imageFileName;
+  final String templateId;
+  @override
+  final String? customIconUrl;
+  @override
+  final String type;
+  @override
+  final bool isActive;
   @override
   final bool isFixed;
+  @override
+  final int sortOrder;
   @override
   final DateTime createdAt;
   @override
@@ -240,7 +312,7 @@ class _$CategoryDtoImpl implements _CategoryDto {
 
   @override
   String toString() {
-    return 'CategoryDto(id: $id, name: $name, userId: $userId, imageFileName: $imageFileName, isFixed: $isFixed, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'CategoryDto(id: $id, name: $name, userId: $userId, templateId: $templateId, customIconUrl: $customIconUrl, type: $type, isActive: $isActive, isFixed: $isFixed, sortOrder: $sortOrder, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -251,9 +323,16 @@ class _$CategoryDtoImpl implements _CategoryDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.imageFileName, imageFileName) ||
-                other.imageFileName == imageFileName) &&
+            (identical(other.templateId, templateId) ||
+                other.templateId == templateId) &&
+            (identical(other.customIconUrl, customIconUrl) ||
+                other.customIconUrl == customIconUrl) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
             (identical(other.isFixed, isFixed) || other.isFixed == isFixed) &&
+            (identical(other.sortOrder, sortOrder) ||
+                other.sortOrder == sortOrder) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -267,8 +346,12 @@ class _$CategoryDtoImpl implements _CategoryDto {
     id,
     name,
     userId,
-    imageFileName,
+    templateId,
+    customIconUrl,
+    type,
+    isActive,
     isFixed,
+    sortOrder,
     createdAt,
     updatedAt,
   );
@@ -292,8 +375,12 @@ abstract class _CategoryDto implements CategoryDto {
     required final String id,
     required final String name,
     required final String userId,
-    final String? imageFileName,
+    required final String templateId,
+    final String? customIconUrl,
+    required final String type,
+    required final bool isActive,
     required final bool isFixed,
+    required final int sortOrder,
     required final DateTime createdAt,
     required final DateTime updatedAt,
   }) = _$CategoryDtoImpl;
@@ -308,9 +395,17 @@ abstract class _CategoryDto implements CategoryDto {
   @override
   String get userId;
   @override
-  String? get imageFileName;
+  String get templateId;
+  @override
+  String? get customIconUrl;
+  @override
+  String get type;
+  @override
+  bool get isActive;
   @override
   bool get isFixed;
+  @override
+  int get sortOrder;
   @override
   DateTime get createdAt;
   @override

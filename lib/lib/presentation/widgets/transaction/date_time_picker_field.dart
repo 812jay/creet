@@ -1,11 +1,11 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/core/constants/app_typo.dart';
-import 'package:creet/lib/core/constants/entry_type.dart';
+import 'package:creet/lib/core/constants/enum/transaction_enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DateTimePickerField extends StatelessWidget {
-  final EntryType type;
+  final TransactionType type;
   final DateTime dateTime;
   final ValueChanged<DateTime> onChanged;
 
@@ -30,7 +30,7 @@ class DateTimePickerField extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                type == EntryType.expense ? '지출 일시' : '수입 일시',
+                type == TransactionType.expense ? '지출 일시' : '수입 일시',
                 style: AppTypo.body1Medium,
               ),
             ),

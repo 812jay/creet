@@ -1,11 +1,11 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/core/constants/app_typo.dart';
-import 'package:creet/lib/core/constants/entry_type.dart';
+import 'package:creet/lib/core/constants/enum/transaction_enum.dart';
 import 'package:flutter/material.dart';
 
 class EntryTypeTabBar extends StatelessWidget {
-  final EntryType selectedType;
-  final ValueChanged<EntryType> onChanged;
+  final TransactionType selectedType;
+  final ValueChanged<TransactionType> onChanged;
 
   const EntryTypeTabBar({
     super.key,
@@ -21,14 +21,14 @@ class EntryTypeTabBar extends StatelessWidget {
         children: [
           _TabButton(
             text: '지출',
-            isSelected: selectedType == EntryType.expense,
-            onTap: () => onChanged(EntryType.expense),
+            isSelected: selectedType == TransactionType.expense,
+            onTap: () => onChanged(TransactionType.expense),
           ),
           const SizedBox(width: 32),
           _TabButton(
             text: '수입',
-            isSelected: selectedType == EntryType.income,
-            onTap: () => onChanged(EntryType.income),
+            isSelected: selectedType == TransactionType.income,
+            onTap: () => onChanged(TransactionType.income),
           ),
         ],
       ),

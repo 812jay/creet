@@ -48,7 +48,7 @@ class CategoryRepositoryImpl extends CategoryRepository {
   @override
   Future<List<CategoryDto>> fetchCategories(String userId) async {
     final response = await _supabaseClient
-        .from('categories')
+        .from('user_categories')
         .select('*')
         .eq('user_id', userId);
 

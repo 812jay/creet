@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'income_dto.dart';
+part of 'expense_res_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,42 +15,44 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-IncomeDto _$IncomeDtoFromJson(Map<String, dynamic> json) {
-  return _IncomeDto.fromJson(json);
+ExpenseResDto _$ExpenseResDtoFromJson(Map<String, dynamic> json) {
+  return _ExpenseResDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$IncomeDto {
+mixin _$ExpenseResDto {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get categoryId => throw _privateConstructorUsedError;
   String get amount => throw _privateConstructorUsedError;
-  String get date => throw _privateConstructorUsedError;
+  DateTime get date => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
-  /// Serializes this IncomeDto to a JSON map.
+  /// Serializes this ExpenseResDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of IncomeDto
+  /// Create a copy of ExpenseResDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $IncomeDtoCopyWith<IncomeDto> get copyWith =>
+  $ExpenseResDtoCopyWith<ExpenseResDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $IncomeDtoCopyWith<$Res> {
-  factory $IncomeDtoCopyWith(IncomeDto value, $Res Function(IncomeDto) then) =
-      _$IncomeDtoCopyWithImpl<$Res, IncomeDto>;
+abstract class $ExpenseResDtoCopyWith<$Res> {
+  factory $ExpenseResDtoCopyWith(
+    ExpenseResDto value,
+    $Res Function(ExpenseResDto) then,
+  ) = _$ExpenseResDtoCopyWithImpl<$Res, ExpenseResDto>;
   @useResult
   $Res call({
     String id,
     String userId,
     String categoryId,
     String amount,
-    String date,
+    DateTime date,
     String? description,
     DateTime createdAt,
     DateTime updatedAt,
@@ -58,16 +60,16 @@ abstract class $IncomeDtoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$IncomeDtoCopyWithImpl<$Res, $Val extends IncomeDto>
-    implements $IncomeDtoCopyWith<$Res> {
-  _$IncomeDtoCopyWithImpl(this._value, this._then);
+class _$ExpenseResDtoCopyWithImpl<$Res, $Val extends ExpenseResDto>
+    implements $ExpenseResDtoCopyWith<$Res> {
+  _$ExpenseResDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of IncomeDto
+  /// Create a copy of ExpenseResDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -107,7 +109,7 @@ class _$IncomeDtoCopyWithImpl<$Res, $Val extends IncomeDto>
                 null == date
                     ? _value.date
                     : date // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as DateTime,
             description:
                 freezed == description
                     ? _value.description
@@ -130,12 +132,12 @@ class _$IncomeDtoCopyWithImpl<$Res, $Val extends IncomeDto>
 }
 
 /// @nodoc
-abstract class _$$IncomeDtoImplCopyWith<$Res>
-    implements $IncomeDtoCopyWith<$Res> {
-  factory _$$IncomeDtoImplCopyWith(
-    _$IncomeDtoImpl value,
-    $Res Function(_$IncomeDtoImpl) then,
-  ) = __$$IncomeDtoImplCopyWithImpl<$Res>;
+abstract class _$$ExpenseResDtoImplCopyWith<$Res>
+    implements $ExpenseResDtoCopyWith<$Res> {
+  factory _$$ExpenseResDtoImplCopyWith(
+    _$ExpenseResDtoImpl value,
+    $Res Function(_$ExpenseResDtoImpl) then,
+  ) = __$$ExpenseResDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -143,7 +145,7 @@ abstract class _$$IncomeDtoImplCopyWith<$Res>
     String userId,
     String categoryId,
     String amount,
-    String date,
+    DateTime date,
     String? description,
     DateTime createdAt,
     DateTime updatedAt,
@@ -151,15 +153,15 @@ abstract class _$$IncomeDtoImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$IncomeDtoImplCopyWithImpl<$Res>
-    extends _$IncomeDtoCopyWithImpl<$Res, _$IncomeDtoImpl>
-    implements _$$IncomeDtoImplCopyWith<$Res> {
-  __$$IncomeDtoImplCopyWithImpl(
-    _$IncomeDtoImpl _value,
-    $Res Function(_$IncomeDtoImpl) _then,
+class __$$ExpenseResDtoImplCopyWithImpl<$Res>
+    extends _$ExpenseResDtoCopyWithImpl<$Res, _$ExpenseResDtoImpl>
+    implements _$$ExpenseResDtoImplCopyWith<$Res> {
+  __$$ExpenseResDtoImplCopyWithImpl(
+    _$ExpenseResDtoImpl _value,
+    $Res Function(_$ExpenseResDtoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of IncomeDto
+  /// Create a copy of ExpenseResDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -174,7 +176,7 @@ class __$$IncomeDtoImplCopyWithImpl<$Res>
     Object? updatedAt = null,
   }) {
     return _then(
-      _$IncomeDtoImpl(
+      _$ExpenseResDtoImpl(
         id:
             null == id
                 ? _value.id
@@ -199,7 +201,7 @@ class __$$IncomeDtoImplCopyWithImpl<$Res>
             null == date
                 ? _value.date
                 : date // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as DateTime,
         description:
             freezed == description
                 ? _value.description
@@ -222,8 +224,8 @@ class __$$IncomeDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$IncomeDtoImpl implements _IncomeDto {
-  const _$IncomeDtoImpl({
+class _$ExpenseResDtoImpl implements _ExpenseResDto {
+  const _$ExpenseResDtoImpl({
     required this.id,
     required this.userId,
     required this.categoryId,
@@ -234,8 +236,8 @@ class _$IncomeDtoImpl implements _IncomeDto {
     required this.updatedAt,
   });
 
-  factory _$IncomeDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$IncomeDtoImplFromJson(json);
+  factory _$ExpenseResDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ExpenseResDtoImplFromJson(json);
 
   @override
   final String id;
@@ -246,7 +248,7 @@ class _$IncomeDtoImpl implements _IncomeDto {
   @override
   final String amount;
   @override
-  final String date;
+  final DateTime date;
   @override
   final String? description;
   @override
@@ -256,14 +258,14 @@ class _$IncomeDtoImpl implements _IncomeDto {
 
   @override
   String toString() {
-    return 'IncomeDto(id: $id, userId: $userId, categoryId: $categoryId, amount: $amount, date: $date, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ExpenseResDto(id: $id, userId: $userId, categoryId: $categoryId, amount: $amount, date: $date, description: $description, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$IncomeDtoImpl &&
+            other is _$ExpenseResDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.categoryId, categoryId) ||
@@ -292,34 +294,34 @@ class _$IncomeDtoImpl implements _IncomeDto {
     updatedAt,
   );
 
-  /// Create a copy of IncomeDto
+  /// Create a copy of ExpenseResDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$IncomeDtoImplCopyWith<_$IncomeDtoImpl> get copyWith =>
-      __$$IncomeDtoImplCopyWithImpl<_$IncomeDtoImpl>(this, _$identity);
+  _$$ExpenseResDtoImplCopyWith<_$ExpenseResDtoImpl> get copyWith =>
+      __$$ExpenseResDtoImplCopyWithImpl<_$ExpenseResDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$IncomeDtoImplToJson(this);
+    return _$$ExpenseResDtoImplToJson(this);
   }
 }
 
-abstract class _IncomeDto implements IncomeDto {
-  const factory _IncomeDto({
+abstract class _ExpenseResDto implements ExpenseResDto {
+  const factory _ExpenseResDto({
     required final String id,
     required final String userId,
     required final String categoryId,
     required final String amount,
-    required final String date,
+    required final DateTime date,
     final String? description,
     required final DateTime createdAt,
     required final DateTime updatedAt,
-  }) = _$IncomeDtoImpl;
+  }) = _$ExpenseResDtoImpl;
 
-  factory _IncomeDto.fromJson(Map<String, dynamic> json) =
-      _$IncomeDtoImpl.fromJson;
+  factory _ExpenseResDto.fromJson(Map<String, dynamic> json) =
+      _$ExpenseResDtoImpl.fromJson;
 
   @override
   String get id;
@@ -330,7 +332,7 @@ abstract class _IncomeDto implements IncomeDto {
   @override
   String get amount;
   @override
-  String get date;
+  DateTime get date;
   @override
   String? get description;
   @override
@@ -338,10 +340,10 @@ abstract class _IncomeDto implements IncomeDto {
   @override
   DateTime get updatedAt;
 
-  /// Create a copy of IncomeDto
+  /// Create a copy of ExpenseResDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$IncomeDtoImplCopyWith<_$IncomeDtoImpl> get copyWith =>
+  _$$ExpenseResDtoImplCopyWith<_$ExpenseResDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

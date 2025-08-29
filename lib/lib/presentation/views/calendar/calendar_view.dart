@@ -217,11 +217,11 @@ class _ConsumptoinHistory extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 context.push(
-                  '/incomeExpense',
+                  '/transaction',
                   extra: {'initialDay': selectedDay},
                 );
               },
-              child: Text('소비/지출 등록', style: AppTypo.title1Bold),
+              child: Text('거래내역 등록', style: AppTypo.title1Bold),
             ),
           ),
           const SizedBox(height: 16),

@@ -1,14 +1,14 @@
 import 'package:creet/lib/data/repositories/auth_repository_impl.dart';
 import 'package:creet/lib/data/repositories/category_repository_impl.dart';
-import 'package:creet/lib/data/repositories/income_repository_impl.dart';
+import 'package:creet/lib/data/repositories/expense_repository_impl.dart';
 import 'package:creet/lib/data/repositories/user_repository_impl.dart';
 import 'package:creet/lib/domain/repositories/auth_repository.dart';
 import 'package:creet/lib/domain/repositories/category_repository.dart';
-import 'package:creet/lib/domain/repositories/income_repository.dart';
+import 'package:creet/lib/domain/repositories/expense_repository.dart';
 import 'package:creet/lib/domain/repositories/user_repository.dart';
 import 'package:creet/lib/domain/usecases/auth_usecases.dart';
 import 'package:creet/lib/domain/usecases/category_usecases.dart';
-import 'package:creet/lib/domain/usecases/income_usecases.dart';
+import 'package:creet/lib/domain/usecases/expense_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -65,9 +65,9 @@ class ServiceLocator {
       () => UserRepositoryImpl(serviceLocator<SupabaseClient>()),
     );
 
-    // Income Repository
-    serviceLocator.registerLazySingleton<IncomeRepository>(
-      () => IncomeRepositoryImpl(serviceLocator<SupabaseClient>()),
+    // Expense Repository
+    serviceLocator.registerLazySingleton<ExpenseRepository>(
+      () => ExpenseRepositoryImpl(serviceLocator<SupabaseClient>()),
     );
 
     // Category Repository
@@ -90,9 +90,9 @@ class ServiceLocator {
       ),
     );
 
-    //income
-    serviceLocator.registerLazySingleton<IncomeUseCase>(
-      () => IncomeUseCase(serviceLocator<IncomeRepository>()),
+    //expense
+    serviceLocator.registerLazySingleton<ExpenseUseCase>(
+      () => ExpenseUseCase(serviceLocator<ExpenseRepository>()),
     );
 
     // Category Use Cases

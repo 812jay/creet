@@ -1,27 +1,27 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'income_dto.freezed.dart';
-part 'income_dto.g.dart';
+part 'expense_res_dto.freezed.dart';
+part 'expense_res_dto.g.dart';
 
 @freezed
-class IncomeDto with _$IncomeDto {
-  const factory IncomeDto({
+class ExpenseResDto with _$ExpenseResDto {
+  const factory ExpenseResDto({
     required String id,
     required String userId,
     required String categoryId,
     required String amount,
-    required String date,
+    required DateTime date,
     String? description,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _IncomeDto;
+  }) = _ExpenseResDto;
 
-  factory IncomeDto.fromJson(Map<String, dynamic> json) => IncomeDto(
+  factory ExpenseResDto.fromJson(Map<String, dynamic> json) => ExpenseResDto(
     id: json['id'] as String,
     userId: json['user_id'] as String,
     categoryId: json['category_id'] as String,
     amount: json['amount'] as String,
-    date: json['date'] as String,
+    date: json['date'] as DateTime,
     description: json['description'] as String?,
     createdAt: DateTime.parse(json['created_at'] as String),
     updatedAt: DateTime.parse(json['updated_at'] as String),

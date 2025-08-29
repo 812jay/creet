@@ -7,7 +7,7 @@ part of 'terms_of_service_view_model.dart';
 // **************************************************************************
 
 String _$termsOfServiceViewModelHash() =>
-    r'590bf6fca35c916d0509ac0f63c9b606b908ef66';
+    r'367510042c4a2a16064d00270dbbd40824921412';
 
 /// See also [TermsOfServiceViewModel].
 @ProviderFor(TermsOfServiceViewModel)

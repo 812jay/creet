@@ -1,1 +1,0 @@
-enum EntryType { expense, income }

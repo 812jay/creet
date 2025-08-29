@@ -1,6 +1,6 @@
 import 'package:creet/lib/core/di/service_locator.dart';
 import 'package:creet/lib/core/utils/logger.dart';
-import 'package:creet/lib/domain/usecases/income_usecases.dart';
+import 'package:creet/lib/domain/usecases/expense_usecases.dart';
 import 'package:creet/lib/domain/usecases/user_usecases.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -57,18 +57,18 @@ enum EventType { general, important, reminder, meeting }
 
 @riverpod
 class CalendarViewModel extends _$CalendarViewModel {
-  final incomeUsecases = serviceLocator.get<IncomeUseCase>();
+  final expenseUsecases = serviceLocator.get<ExpenseUseCase>();
   final userUsecases = serviceLocator.get<UserUseCase>();
   final now = DateTime.now();
   @override
   Future<CalendarState> build() async {
     // 초기 상태 설정
     final user = await userUsecases.getCurrentUser();
-    final incomes = await incomeUsecases.fetchIncomes(
+    final expenseList = await expenseUsecases.fetchExpenseList(
       user!.id,
       '${now.year}-${now.month}',
     );
-    Logger.debug('incomes: $incomes');
+    Logger.debug('expenseList: $expenseList');
     return CalendarState(selectedDay: now, focusedDay: now, events: []);
   }
 

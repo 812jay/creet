@@ -1,16 +1,17 @@
 import 'package:creet/lib/core/constants/app_colors.dart';
 import 'package:creet/lib/core/constants/app_typo.dart';
+import 'package:creet/lib/domain/dto/category/category_dto.dart';
 import 'package:flutter/material.dart';
 
 class CategorySelector extends StatelessWidget {
-  final String selectedCategory;
-  final List<String> categories;
-  final ValueChanged<String> onSelected;
+  final CategoryDto? selectedCategory;
+  final List<CategoryDto> categorieList;
+  final ValueChanged<CategoryDto> onSelected;
 
   const CategorySelector({
     super.key,
     required this.selectedCategory,
-    required this.categories,
+    required this.categorieList,
     required this.onSelected,
   });
 
@@ -29,9 +30,11 @@ class CategorySelector extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                selectedCategory.isEmpty ? '카테고리를 선택해 주세요' : selectedCategory,
+                selectedCategory == null
+                    ? '카테고리를 선택해 주세요'
+                    : selectedCategory!.name,
                 style:
-                    selectedCategory.isEmpty
+                    selectedCategory == null
                         ? AppTypo.body1Medium.copyWith(
                           color: AppColors.textSecondary,
                         )
@@ -57,12 +60,15 @@ class CategorySelector extends StatelessWidget {
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: categories.length,
+              itemCount: categorieList.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(categories[index], style: AppTypo.body1Medium),
+                  title: Text(
+                    categorieList[index].name,
+                    style: AppTypo.body1Medium,
+                  ),
                   onTap: () {
-                    onSelected(categories[index]);
+                    onSelected(categorieList[index]);
                     Navigator.of(context).pop();
                   },
                 );

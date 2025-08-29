@@ -1,6 +1,6 @@
 import 'package:creet/lib/domain/dto/auth/auth_credential_dto.dart';
 import 'package:creet/lib/presentation/views/calendar/calendar_view.dart';
-import 'package:creet/lib/presentation/views/income_expense/add_income_expense_view.dart';
+import 'package:creet/lib/presentation/views/transaction/add_transaction_view.dart';
 import 'package:creet/lib/presentation/views/main_view.dart';
 import 'package:creet/lib/presentation/views/setting_view.dart';
 import 'package:creet/lib/presentation/views/sign_in_view.dart';
@@ -83,13 +83,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/incomeExpense',
-        name: 'incomeExpense',
+        path: '/transaction',
+        name: 'transaction',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           final initialDay =
               extra != null ? extra['initialDay'] as DateTime : DateTime.now();
-          return AddIncomeExpenseView(initialDay: initialDay);
+          return AddTransactionView(initialDay: initialDay);
         },
       ),
     ],
