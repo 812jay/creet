@@ -11,7 +11,7 @@ _$ExpenseResDtoImpl _$$ExpenseResDtoImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       userId: json['userId'] as String,
       categoryId: json['categoryId'] as String,
-      amount: json['amount'] as String,
+      amount: (json['amount'] as num).toDouble(),
       date: DateTime.parse(json['date'] as String),
       description: json['description'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),

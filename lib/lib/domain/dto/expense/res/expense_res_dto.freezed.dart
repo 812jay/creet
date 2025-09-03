@@ -24,7 +24,7 @@ mixin _$ExpenseResDto {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get categoryId => throw _privateConstructorUsedError;
-  String get amount => throw _privateConstructorUsedError;
+  double get amount => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -51,7 +51,7 @@ abstract class $ExpenseResDtoCopyWith<$Res> {
     String id,
     String userId,
     String categoryId,
-    String amount,
+    double amount,
     DateTime date,
     String? description,
     DateTime createdAt,
@@ -104,7 +104,7 @@ class _$ExpenseResDtoCopyWithImpl<$Res, $Val extends ExpenseResDto>
                 null == amount
                     ? _value.amount
                     : amount // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as double,
             date:
                 null == date
                     ? _value.date
@@ -144,7 +144,7 @@ abstract class _$$ExpenseResDtoImplCopyWith<$Res>
     String id,
     String userId,
     String categoryId,
-    String amount,
+    double amount,
     DateTime date,
     String? description,
     DateTime createdAt,
@@ -196,7 +196,7 @@ class __$$ExpenseResDtoImplCopyWithImpl<$Res>
             null == amount
                 ? _value.amount
                 : amount // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as double,
         date:
             null == date
                 ? _value.date
@@ -246,7 +246,7 @@ class _$ExpenseResDtoImpl implements _ExpenseResDto {
   @override
   final String categoryId;
   @override
-  final String amount;
+  final double amount;
   @override
   final DateTime date;
   @override
@@ -313,7 +313,7 @@ abstract class _ExpenseResDto implements ExpenseResDto {
     required final String id,
     required final String userId,
     required final String categoryId,
-    required final String amount,
+    required final double amount,
     required final DateTime date,
     final String? description,
     required final DateTime createdAt,
@@ -330,7 +330,7 @@ abstract class _ExpenseResDto implements ExpenseResDto {
   @override
   String get categoryId;
   @override
-  String get amount;
+  double get amount;
   @override
   DateTime get date;
   @override

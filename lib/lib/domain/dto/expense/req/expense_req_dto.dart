@@ -11,7 +11,7 @@ class ExpenseReqDto {
 
   final String userId;
   final String categoryId;
-  final String amount;
+  final double amount;
   final DateTime date;
   final String? description;
   final DateTime createdAt;

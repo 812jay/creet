@@ -176,12 +176,13 @@ class AddTransactionViewModel extends _$AddTransactionViewModel {
     final user = await _userUseCase.getCurrentUser();
     if (user == null) throw Exception('User not signed in');
 
-    final parsedAmount = amount.replaceAll(',', '');
+    final String amountStr = amount.replaceAll(',', '');
+    final double amountDouble = double.parse(amountStr);
     final now = DateTime.now();
     final req = ExpenseReqDto(
       userId: user.id,
       categoryId: categoryId,
-      amount: parsedAmount,
+      amount: amountDouble,
       date: date,
       description: memo,
       createdAt: now,
